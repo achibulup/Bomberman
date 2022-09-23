@@ -2,6 +2,7 @@ package com.uet.int2204.group2;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -23,8 +24,12 @@ public class Bomberman extends Application {
         scene.setRoot(loadFXML(fxml));
     }
 
+    static void setRoot(Parent node) {
+      scene.setRoot(node);
+    }
+
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Bomberman.class.getResource(fxml + ".fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Bomberman.class.getResource("/fxml/" + fxml + ".fxml"));
         return fxmlLoader.load();
     }
 

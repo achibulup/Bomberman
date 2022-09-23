@@ -12,6 +12,7 @@ public class Grass extends StaticEntity {
   }
 
   @Override public Sprite getSprite() {
+    // System.out.println("Grass");
     if (isShadowed) {
       return ResourceManager.grassShadowed;
     }

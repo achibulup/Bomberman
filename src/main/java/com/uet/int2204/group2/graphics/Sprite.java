@@ -83,6 +83,7 @@ public class Sprite {
    * @param destY : the y position of the destination rectangle
    */
   public void drawTo(GraphicsContext target, int destX, int destY) {
+    // System.out.println("draw");
     target.drawImage(getSourceImage(), 
         getX(), getY(), getWidth(), getHeight(),
         destX, destY, getWidth(), getHeight());
@@ -95,6 +96,7 @@ public class Sprite {
     for (int i = 0; i < numOfSprites; ++i) {
       result[i] = new Sprite(image, i * spriteWidth, 0, spriteWidth, spriteHeight);
     }
+    System.out.println(numOfSprites);
     return result;
   }
 }
