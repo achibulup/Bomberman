@@ -5,10 +5,10 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class Sprite {
   private Image source = null; // the source image
-  private int x; // x position of the source rectangle;
-  private int y; // y position of the source rectangle;
-  private int width; // width of the source rectangle;
-  private int height; // height of the source rectangle;
+  private int x; // x position of the source rectangle
+  private int y; // y position of the source rectangle
+  private int width; // width of the source rectangle
+  private int height; // height of the source rectangle
 
   public Sprite() {
   }
@@ -83,7 +83,6 @@ public class Sprite {
    * @param destY : the y position of the destination rectangle
    */
   public void drawTo(GraphicsContext target, int destX, int destY) {
-    // System.out.println("draw");
     target.drawImage(getSourceImage(), 
         getX(), getY(), getWidth(), getHeight(),
         destX, destY, getWidth(), getHeight());
@@ -96,7 +95,6 @@ public class Sprite {
     for (int i = 0; i < numOfSprites; ++i) {
       result[i] = new Sprite(image, i * spriteWidth, 0, spriteWidth, spriteHeight);
     }
-    System.out.println(numOfSprites);
     return result;
   }
 }

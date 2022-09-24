@@ -22,14 +22,17 @@ public class GameCanvas {
   private AnimationTimer timer;
 
   public GameCanvas() {
+    int width = Constants.TILE_SIZE * 12;
+    int height = Constants.TILE_SIZE * 12;
     this.world = new World(10, 10);
-    this.canvas = new Canvas(Constants.TILE_SIZE * 12, Constants.TILE_SIZE * 12);
+    this.canvas = new Canvas(width, height);
     this.group = new Group();
     this.group.getChildren().add(this.canvas);
+    group.setAutoSizeChildren(true);
 
     Random rand = new Random();
-    for (int i = 0; i < 10; ++i) {
-      for (int j = 0; j < 10; ++j) {
+    for (int i = 1; i <= 10; ++i) {
+      for (int j = 1; j <= 10; ++j) {
         int r = rand.nextInt(3);
         if (r == 0) {
           world.setTile(i, j, new Brick(i, j));
@@ -40,6 +43,7 @@ public class GameCanvas {
         }
       }
     }
+    world.setTile(1, 1, new Grass(1, 1));
 
     this.timer = new AnimationTimer() {
       long lastTime = -1;

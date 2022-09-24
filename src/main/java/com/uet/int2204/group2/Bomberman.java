@@ -9,13 +9,15 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import com.uet.int2204.group2.utils.Constants;
+
 public class Bomberman extends Application {
 
     private static Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        scene = new Scene(loadFXML("primary"), Constants.TILE_SIZE * 12, Constants.TILE_SIZE * 12);
         stage.setScene(scene);
         stage.show();
     }

@@ -12,7 +12,6 @@ public class Grass extends StaticEntity {
   }
 
   @Override public Sprite getSprite() {
-    // System.out.println("Grass");
     if (isShadowed) {
       return ResourceManager.grassShadowed;
     }
@@ -20,7 +19,7 @@ public class Grass extends StaticEntity {
   }
 
   @Override public void update(long dt, World world) {
-    if (getTileY() == 0) isShadowed = false;
+    if (getTileY() == 1) isShadowed = false;
     else {
       StaticEntity tileAbove = world.getTile(getTileX(), getTileY() - 1);
       isShadowed = !(tileAbove instanceof Grass || tileAbove instanceof Item);

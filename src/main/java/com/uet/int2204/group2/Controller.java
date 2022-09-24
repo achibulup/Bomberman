@@ -10,7 +10,6 @@ public class Controller {
 
     @FXML
     private void switchToGame() throws IOException {
-      System.out.println("dflskgjow;irjtglrdkfngbo;erigthjo;iesrjglergnkmm");
       GameCanvas game = new GameCanvas();
       Bomberman.setRoot(game.getRoot());
       game.start();
