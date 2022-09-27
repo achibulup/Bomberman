@@ -58,7 +58,7 @@ public class Animation {
   public void update(long dt) {
     if (!this.isEnded()) {
       this.timer += dt;
-      if (this.timer >= delay) {
+      while (this.timer >= delay) {
         this.timer -= delay;
         this.iter++;
         if (this.remainingLoops != 0 && this.iter == this.spriteSheet.length) {
