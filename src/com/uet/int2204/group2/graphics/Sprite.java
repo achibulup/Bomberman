@@ -82,7 +82,7 @@ public class Sprite {
    * @param destX : the x position of the destination rectangle
    * @param destY : the y position of the destination rectangle
    */
-  public void drawTo(GraphicsContext target, int destX, int destY) {
+  public void drawTo(GraphicsContext target, double destX, double destY) {
     target.drawImage(getSourceImage(), 
         getX(), getY(), getWidth(), getHeight(),
         destX, destY, getWidth(), getHeight());

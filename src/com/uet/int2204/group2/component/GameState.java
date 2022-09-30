@@ -7,26 +7,24 @@ import java.util.Random;
 import com.uet.int2204.group2.World;
 import com.uet.int2204.group2.controller.EntityController;
 import com.uet.int2204.group2.controller.KeyBoardPlayerController;
+import com.uet.int2204.group2.controller.KeyInputHandler;
 import com.uet.int2204.group2.entity.Brick;
-import com.uet.int2204.group2.entity.Grass;
 import com.uet.int2204.group2.entity.Player;
 import com.uet.int2204.group2.entity.Wall;
 import com.uet.int2204.group2.utils.Constants;
 
 import javafx.animation.AnimationTimer;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyEvent;
 
 public class GameState {
   private World world;
   private Canvas canvas;
   private Group root;
   private AnimationTimer timer;
-  private Collection<EventHandler<KeyEvent>> inputHandlers = new ArrayList<>();
+  private Collection<KeyInputHandler> inputHandlers = new ArrayList<>();
 
   public GameState() {
     int width = Constants.TILE_SIZE * 12;
@@ -42,17 +40,17 @@ public class GameState {
     Random rand = new Random();
     for (int i = 1; i <= 10; ++i) {
       for (int j = 1; j <= 10; ++j) {
+        if (i == 1 && j == 1) {
+          continue;
+        }
         int r = rand.nextInt(3);
         if (r == 0) {
-          world.setTile(i, j, new Brick(i, j));
+          world.addTile(i, j, Brick.class);
         } else if (r == 1) {
-          world.setTile(i, j, new Wall(i, j));
-        } else {
-          world.setTile(i, j, new Grass(i, j));
+          world.addTile(i, j, Wall.class);
         }
       }
     }
-    world.setTile(1, 1, new Grass(1, 1));
 
     this.timer = new AnimationTimer() {
       long lastTime = -1;
@@ -83,7 +81,7 @@ public class GameState {
     return this.root;
   }
 
-  public Iterable<EventHandler<KeyEvent>> getInputHandlers() {
+  public Iterable<KeyInputHandler> getInputHandlers() {
     return this.inputHandlers;
   }
 

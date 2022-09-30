@@ -13,10 +13,10 @@ public abstract class Entity {
   public abstract int getTileY();
 
   // get the x position in pixels.
-  public abstract int getPixelX();
+  public abstract double getPixelX();
 
   // get the y position in pixels.
-  public abstract int getPixelY();
+  public abstract double getPixelY();
   
   // get the current sprite of the entity.
   public abstract Sprite getSprite();

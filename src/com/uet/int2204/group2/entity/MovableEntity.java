@@ -9,8 +9,8 @@ public abstract class MovableEntity extends Entity {
 
   protected int tileX;
   protected int tileY;
-  protected int pixelX;
-  protected int pixelY;
+  protected double pixelX;
+  protected double pixelY;
 
   protected Direction direction = Direction.DOWN;
 
@@ -20,10 +20,10 @@ public abstract class MovableEntity extends Entity {
   // |        |        |
   // +--------+--------+
 
-  protected int fromX;
-  protected int fromY;
-  protected int toX;
-  protected int toY;
+  // protected int fromX;
+  // protected int fromY;
+  // protected int toX;
+  // protected int toY;
 
   public MovableEntity(int tileX, int tileY) {
     this.tileX = tileX;
@@ -33,12 +33,12 @@ public abstract class MovableEntity extends Entity {
   }
 
   
-  @Override public int getPixelX() {
-    return pixelX;
+  @Override public double getPixelX() {
+    return this.pixelX;
   }
 
-  @Override public int getPixelY() {
-    return pixelY;
+  @Override public double getPixelY() {
+    return this.pixelY;
   }
 
   @Override public int getTileX() {
@@ -53,7 +53,34 @@ public abstract class MovableEntity extends Entity {
     return true;
   }
 
+  public void move(double dx, double dy) {
+    this.pixelX += dx;
+    this.pixelY += dy;
+    this.tileX = (int) ((this.pixelX / Constants.TILE_SIZE) + 0.5); 
+    this.tileY = (int) ((this.pixelY / Constants.TILE_SIZE) + 0.5); 
+  }
+
   public void move(Direction direction) {
     this.direction = direction;
+  }
+
+  public static double calcDx(Direction dir, double speed, long dt) {
+    if (dir == Direction.LEFT) {
+      return -speed * dt / 1000000000;
+    }
+    if (dir == Direction.RIGHT) {
+      return speed * dt / 1000000000;
+    }
+    return 0;
+  }
+
+  public static double calcDy(Direction dir, double speed, long dt) {
+    if (dir == Direction.UP) {
+      return -speed * dt / 1000000000;
+    }
+    if (dir == Direction.DOWN) {
+      return speed * dt / 1000000000;
+    }
+    return 0;
   }
 }

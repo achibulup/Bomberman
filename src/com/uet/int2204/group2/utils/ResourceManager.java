@@ -23,6 +23,8 @@ public class ResourceManager {
   public static final Sprite rightEdge;
   public static final Sprite bottomEdge;
 
+  public static final AnimationData bomb;
+
   public static final Sprite playerIdleUp;
   public static final Sprite playerIdleDown;
   public static final Sprite playerIdleLeft;
@@ -73,6 +75,9 @@ public class ResourceManager {
     leftEdge = edgesSheet[0];
     rightEdge = edgesSheet[4];
     bottomEdge = edgesSheet[5];
+
+    Sprite[] bombSheet = tryLoadSpriteSheet("sprites/bomb@4.png");
+    bomb = new AnimationData(bombSheet, 400000000);
 
     playerIdleUp = new Sprite(tryLoadImage("sprites/player/idle_up@1.png"));
     playerIdleDown = new Sprite(tryLoadImage("sprites/player/idle_down@1.png"));

@@ -22,7 +22,7 @@ public class Grass extends StaticEntity {
     if (getTileY() == 1) isShadowed = false;
     else {
       StaticEntity tileAbove = world.getTile(getTileX(), getTileY() - 1);
-      isShadowed = !(tileAbove instanceof Grass || tileAbove instanceof Item);
+      isShadowed = (tileAbove instanceof Brick || tileAbove instanceof Wall);
     }
   }
 }
