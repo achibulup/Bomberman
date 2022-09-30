@@ -12,7 +12,7 @@ public class ResourceManager {
   public static final Sprite grassShadowed;
 
   public static final Sprite brick;
-  public static final Sprite brickSparky;
+  public static final AnimationData brickSparky;
 
   public static final Sprite wall;
 
@@ -25,10 +25,10 @@ public class ResourceManager {
 
   public static final AnimationData bomb;
 
-  public static final Sprite playerIdleUp;
-  public static final Sprite playerIdleDown;
-  public static final Sprite playerIdleLeft;
-  public static final Sprite playerIdleRight;
+  public static final AnimationData playerIdleUp;
+  public static final AnimationData playerIdleDown;
+  public static final AnimationData playerIdleLeft;
+  public static final AnimationData playerIdleRight;
 
   public static final AnimationData playerWalkUp;
   public static final AnimationData playerWalkDown;
@@ -63,7 +63,7 @@ public class ResourceManager {
 
     Sprite[] bricks = tryLoadSpriteSheet("sprites/map/brick_sparky@2.png");
     brick = bricks[0];
-    brickSparky = bricks[1];
+    brickSparky = new AnimationData(bricks, 600000000);
 
     Sprite wallImg = new Sprite(tryLoadImage("sprites/map/wall@1.png"));
     wall = wallImg;
@@ -79,10 +79,10 @@ public class ResourceManager {
     Sprite[] bombSheet = tryLoadSpriteSheet("sprites/bomb@4.png");
     bomb = new AnimationData(bombSheet, 400000000);
 
-    playerIdleUp = new Sprite(tryLoadImage("sprites/player/idle_up@1.png"));
-    playerIdleDown = new Sprite(tryLoadImage("sprites/player/idle_down@1.png"));
-    playerIdleLeft = new Sprite(tryLoadImage("sprites/player/idle_left@1.png"));
-    playerIdleRight = new Sprite(tryLoadImage("sprites/player/idle_right@1.png"));
+    playerIdleUp = new AnimationData(tryLoadSpriteSheet("sprites/player/idle_up@1.png"));
+    playerIdleDown = new AnimationData(tryLoadSpriteSheet("sprites/player/idle_down@1.png"));
+    playerIdleLeft = new AnimationData(tryLoadSpriteSheet("sprites/player/idle_left@1.png"));
+    playerIdleRight = new AnimationData(tryLoadSpriteSheet("sprites/player/idle_right@1.png"));
     
     Sprite[] playerWalkUpSheet = tryLoadSpriteSheet("sprites/player/walking_up@4.png");
     playerWalkUp = new AnimationData(playerWalkUpSheet);

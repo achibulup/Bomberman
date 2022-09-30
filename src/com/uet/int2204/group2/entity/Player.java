@@ -15,7 +15,7 @@ public class Player extends MovableEntity {
 
   public static double START_SPEED = 120; // pixels per second.
 
-  private Direction faceDirection = Direction.DOWN; // should not be NONE.
+  // private Direction faceDirection = Direction.DOWN; // should not be NONE.
 
   private Animation currentAnimation = new Animation(ResourceManager.playerWalkDown);
   private EntityController<? super Player> controller = EntityController.doNothingController;
@@ -33,25 +33,42 @@ public class Player extends MovableEntity {
   }
 
   @Override public void move(Direction direction) {
-    this.direction = direction;
-    if (direction != Direction.NONE && direction != faceDirection) {
-      this.faceDirection = direction;
-      switch (this.direction) {
-        case UP:
-          this.currentAnimation = new Animation(ResourceManager.playerWalkUp);
-          break;
-        case DOWN:
-          this.currentAnimation = new Animation(ResourceManager.playerWalkDown);
-          break;
-        case LEFT: 
-          this.currentAnimation = new Animation(ResourceManager.playerWalkLeft);
-          break;
-        case RIGHT:
-          this.currentAnimation = new Animation(ResourceManager.playerWalkRight);
-          break;
-        default:
+    if (this.direction != direction) {
+      if (direction == Direction.NONE) {
+        switch (this.direction) {
+          case UP:
+            this.currentAnimation = new Animation(ResourceManager.playerIdleUp);
+            break;
+          case DOWN:
+            this.currentAnimation = new Animation(ResourceManager.playerIdleDown);
+            break;
+          case LEFT: 
+            this.currentAnimation = new Animation(ResourceManager.playerIdleLeft);
+            break;
+          case RIGHT:
+            this.currentAnimation = new Animation(ResourceManager.playerIdleRight);
+            break;
+          default:
+        }
+      } else {
+        switch (direction) {
+          case UP:
+            this.currentAnimation = new Animation(ResourceManager.playerWalkUp);
+            break;
+          case DOWN:
+            this.currentAnimation = new Animation(ResourceManager.playerWalkDown);
+            break;
+          case LEFT: 
+            this.currentAnimation = new Animation(ResourceManager.playerWalkLeft);
+            break;
+          case RIGHT:
+            this.currentAnimation = new Animation(ResourceManager.playerWalkRight);
+            break;
+          default:
+        }
       }
     }
+    this.direction = direction;
   }
 
   @Override public void update(long dt, World world) {
@@ -62,7 +79,7 @@ public class Player extends MovableEntity {
   }
   
   @Override public void renderTo(GraphicsContext target) {
-    this.getSprite().drawTo(target, getPixelX(), getPixelY() - Constants.TILE_SIZE / 3);
+    this.getSprite().drawTo(target, getPixelX(), getPixelY() - Constants.TILE_SIZE / 5);
   }
 
   public void placeBomb(World world) {
