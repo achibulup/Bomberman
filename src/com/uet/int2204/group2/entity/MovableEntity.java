@@ -48,4 +48,12 @@ public abstract class MovableEntity extends Entity {
   @Override public int getTileY() {
     return this.tileY;
   }
+
+  public boolean isMovable(Direction dir) {
+    return true;
+  }
+
+  public void move(Direction direction) {
+    this.direction = direction;
+  }
 }

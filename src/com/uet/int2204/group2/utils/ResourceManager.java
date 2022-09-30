@@ -2,6 +2,7 @@ package com.uet.int2204.group2.utils;
 
 import java.nio.file.FileSystemNotFoundException;
 
+import com.uet.int2204.group2.graphics.AnimationData;
 import com.uet.int2204.group2.graphics.Sprite;
 
 import javafx.scene.image.Image;
@@ -27,7 +28,10 @@ public class ResourceManager {
   public static final Sprite playerIdleLeft;
   public static final Sprite playerIdleRight;
 
-  public static final Sprite[] playerWalkDown;
+  public static final AnimationData playerWalkUp;
+  public static final AnimationData playerWalkDown;
+  public static final AnimationData playerWalkLeft;
+  public static final AnimationData playerWalkRight;
 
   // call this function to force initialization of the class, thereby load all the resources
   public static void load() {
@@ -46,37 +50,45 @@ public class ResourceManager {
     return image;
   }
 
+  public static Sprite[] tryLoadSpriteSheet(String path) {
+    return Sprite.makeSpriteSheet(tryLoadImage(path), Constants.TILE_SIZE, Constants.TILE_SIZE);
+  }
+
   static {
-    Sprite[] grassSheet = Sprite.makeSpriteSheet(
-      tryLoadImage("sprites/map/grass@2.png"), Constants.TILE_SIZE, Constants.TILE_SIZE);
-    Sprite[] bricks = Sprite.makeSpriteSheet(
-        tryLoadImage("sprites/map/brick_sparky@2.png"), Constants.TILE_SIZE, Constants.TILE_SIZE);
-    Sprite wallImg = new Sprite(tryLoadImage("sprites/map/wall@1.png"));
-    Sprite[] edgesSheet = Sprite.makeSpriteSheet(
-      tryLoadImage("sprites/map/edges@10.png"), Constants.TILE_SIZE, Constants.TILE_SIZE);
-    Sprite playerIdleUpImg = new Sprite(tryLoadImage("sprites/player/idle_up@1.png"));
-    Sprite playerIdleDownImg = new Sprite(tryLoadImage("sprites/player/idle_down@1.png"));
-    Sprite playerIdleLeftImg = new Sprite(tryLoadImage("sprites/player/idle_left@1.png"));
-    Sprite playerIdleRightImg = new Sprite(tryLoadImage("sprites/player/idle_right@1.png"));
-    Sprite[] playerWalkDownSheet = Sprite.makeSpriteSheet(
-      tryLoadImage("sprites/player/walking_down@4.png"), Constants.TILE_SIZE, Constants.TILE_SIZE);
-
-
+    Sprite[] grassSheet = tryLoadSpriteSheet("sprites/map/grass@2.png");
     grassNormal = grassSheet[0];
     grassShadowed = grassSheet[1];
+
+    Sprite[] bricks = tryLoadSpriteSheet("sprites/map/brick_sparky@2.png");
     brick = bricks[0];
     brickSparky = bricks[1];
+
+    Sprite wallImg = new Sprite(tryLoadImage("sprites/map/wall@1.png"));
     wall = wallImg;
+    
+    Sprite[] edgesSheet = tryLoadSpriteSheet("sprites/map/edges@10.png");
     topEdge = edgesSheet[2];
     topLeftEdge = edgesSheet[1];
     topRightEdge = edgesSheet[3];
     leftEdge = edgesSheet[0];
     rightEdge = edgesSheet[4];
     bottomEdge = edgesSheet[5];
-    playerIdleUp = playerIdleUpImg;
-    playerIdleDown = playerIdleDownImg;
-    playerIdleLeft = playerIdleLeftImg;
-    playerIdleRight = playerIdleRightImg;
-    playerWalkDown = playerWalkDownSheet;
+
+    playerIdleUp = new Sprite(tryLoadImage("sprites/player/idle_up@1.png"));
+    playerIdleDown = new Sprite(tryLoadImage("sprites/player/idle_down@1.png"));
+    playerIdleLeft = new Sprite(tryLoadImage("sprites/player/idle_left@1.png"));
+    playerIdleRight = new Sprite(tryLoadImage("sprites/player/idle_right@1.png"));
+    
+    Sprite[] playerWalkUpSheet = tryLoadSpriteSheet("sprites/player/walking_up@4.png");
+    playerWalkUp = new AnimationData(playerWalkUpSheet);
+
+    Sprite[] playerWalkDownSheet = tryLoadSpriteSheet("sprites/player/walking_down@4.png");
+    playerWalkDown = new AnimationData(playerWalkDownSheet);
+    
+    Sprite[] playerWalkLeftSheet = tryLoadSpriteSheet("sprites/player/walking_left@4.png");
+    playerWalkLeft = new AnimationData(playerWalkLeftSheet);
+    
+    Sprite[] playerWalkRightSheet = tryLoadSpriteSheet("sprites/player/walking_right@4.png");
+    playerWalkRight = new AnimationData(playerWalkRightSheet);
   }
 }

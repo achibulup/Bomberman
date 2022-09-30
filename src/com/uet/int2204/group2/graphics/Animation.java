@@ -1,67 +1,49 @@
 package com.uet.int2204.group2.graphics;
 
-public class Animation {
-  public static int ENDLESS = -1;
+import static com.uet.int2204.group2.graphics.AnimationData.ENDLESS;
 
-  private Sprite[] spriteSheet;
-  private int remainingLoops = ENDLESS;
-  private long delay = 200000000; // delay between frames in nanoseconds
+public class Animation {
+  private AnimationData data;
 
   private long timer = 0; // timer for current frame in nanoseconds
   private int iter = 0;
+  private int remainingLoops;
 
-  public Animation(Sprite[] spriteSheet) {
-    setSpriteSheet(spriteSheet);
+  public Animation(AnimationData data) {
+    setData(data);
+    setLoopCount(data.getLoopCount());
   }
 
-  public Animation(Sprite[] spriteSheet, long delay) {
-    this(spriteSheet);
-    setDelay(delay);
-  } 
-
-  public Animation(Sprite[] spriteSheet, long delay, int loopCount) {
-    this(spriteSheet, delay);
-    setLoopCount(loopCount);
+  public AnimationData getData() {
+    return this.data;
   }
 
-  public Sprite[] getSpriteSheet() {
-    return spriteSheet;
+  public void setData(AnimationData data) {
+    this.data = data;
   }
 
   public int getRemainingLoops() {
     return remainingLoops;
   }
 
-  public long getDelay() {
-    return delay;
-  }
-
-  public void setSpriteSheet(Sprite[] spriteSheet) {
-    this.spriteSheet = spriteSheet;
-  }
-
   public void setLoopCount(int loopCount) {
     this.remainingLoops = loopCount;
-  }
-
-  public void setDelay(long delay) {
-    this.delay = delay;
   }
   
   public Sprite currentSprite() {
     if (isEnded()) {
-      return this.spriteSheet[this.spriteSheet.length - 1];
+      return getSpriteSheet()[getSpriteSheet().length - 1];
     }
-    return this.spriteSheet[this.iter];
+    return getSpriteSheet()[this.iter];
   }
 
   public void update(long dt) {
     if (!this.isEnded()) {
       this.timer += dt;
-      while (this.timer >= delay) {
-        this.timer -= delay;
+      while (this.timer >= getAnimationDelay()) {
+        this.timer -= getAnimationDelay();
         this.iter++;
-        if (this.remainingLoops != 0 && this.iter == this.spriteSheet.length) {
+        if (this.remainingLoops != 0 && this.iter == getSpriteSheet().length) {
           if (this.remainingLoops != ENDLESS) {
             --this.remainingLoops;
           }
@@ -72,6 +54,14 @@ public class Animation {
   }
 
   public boolean isEnded() {
-    return this.remainingLoops == 0 && this.iter == this.spriteSheet.length;
+    return this.remainingLoops == 0 && this.iter == getSpriteSheet().length;
+  }
+
+  private Sprite[] getSpriteSheet() {
+    return getData().getSpriteSheet();
+  }
+
+  private long getAnimationDelay() {
+    return getData().getDelay();
   }
 }

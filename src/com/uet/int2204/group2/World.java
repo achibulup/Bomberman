@@ -58,6 +58,10 @@ public class World {
     map[tileX][tileY] = tile;
   }
 
+  public Player getPlayer() {
+    return this.player;
+  }
+
   public void update(long dt) {
     player.update(dt, this);
     for (StaticEntity[] row : map) {

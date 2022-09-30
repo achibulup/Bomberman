@@ -1,33 +1,43 @@
 package com.uet.int2204.group2.component;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Random;
 
 import com.uet.int2204.group2.World;
+import com.uet.int2204.group2.controller.EntityController;
+import com.uet.int2204.group2.controller.KeyBoardPlayerController;
 import com.uet.int2204.group2.entity.Brick;
 import com.uet.int2204.group2.entity.Grass;
+import com.uet.int2204.group2.entity.Player;
 import com.uet.int2204.group2.entity.Wall;
 import com.uet.int2204.group2.utils.Constants;
 
 import javafx.animation.AnimationTimer;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyEvent;
 
-public class GameCanvas {
+public class GameState {
   private World world;
   private Canvas canvas;
-  private Group group;
+  private Group root;
   private AnimationTimer timer;
+  private Collection<EventHandler<KeyEvent>> inputHandlers = new ArrayList<>();
 
-  public GameCanvas() {
+  public GameState() {
     int width = Constants.TILE_SIZE * 12;
     int height = Constants.TILE_SIZE * 12;
     this.world = new World(10, 10);
     this.canvas = new Canvas(width, height);
-    this.group = new Group();
-    this.group.getChildren().add(this.canvas);
-    group.setAutoSizeChildren(true);
+    this.root = new Group();
+    this.root.getChildren().add(this.canvas);
+    this.root.setAutoSizeChildren(true);
+    EntityController<? super Player> playerController = new KeyBoardPlayerController(inputHandlers);
+    this.world.getPlayer().setController(playerController);
 
     Random rand = new Random();
     for (int i = 1; i <= 10; ++i) {
@@ -70,7 +80,11 @@ public class GameCanvas {
   }
 
   public Parent getRoot() {
-    return this.group;
+    return this.root;
+  }
+
+  public Iterable<EventHandler<KeyEvent>> getInputHandlers() {
+    return this.inputHandlers;
   }
 
   public void start() {
