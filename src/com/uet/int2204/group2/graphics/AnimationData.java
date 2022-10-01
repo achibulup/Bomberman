@@ -25,16 +25,6 @@ public class AnimationData {
     setSpriteSheet(new Sprite[] {sprite});
   }
 
-  public AnimationData(Sprite sprite, long delay) {
-    this(sprite);
-    setDelay(delay);
-  } 
-
-  public AnimationData(Sprite sprite, long delay, int loopCount) {
-    this(sprite, delay);
-    setLoopCount(loopCount);
-  }
-
   public Sprite[] getSpriteSheet() {
     return spriteSheet;
   }

@@ -15,7 +15,8 @@ public class Edge extends StaticEntity {
     this.type = type;
   }
 
-  @Override public Sprite getSprite() {
+  @Override
+  public Sprite getSprite() {
     switch(this.type) {
       case TOP :
         return ResourceManager.topEdge;
@@ -32,6 +33,7 @@ public class Edge extends StaticEntity {
     }
   }
 
-  @Override public void update(long dt, World world) {
+  @Override
+  public void update(long dt, World world) {
   }
 }

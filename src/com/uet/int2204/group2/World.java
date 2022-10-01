@@ -25,7 +25,6 @@ public class World {
   public World(int mapWidth, int mapHeight) {
     this.mapWidth = mapWidth;
     this.mapHeight = mapHeight;
-    this.player = new Player(1, 1);
 
     this.map = new TileStack[mapWidth + 2][mapHeight + 2];
     for (int i = 0; i < mapWidth + 2; ++i) {
@@ -88,6 +87,14 @@ public class World {
 
   public Player getPlayer() {
     return this.player;
+  }
+
+  public void setPlayer(Player player) {
+    this.player = player;
+  }
+
+  public List<Enemy> getEnemies() {
+    return this.enemies;
   }
 
   public void update(long dt) {

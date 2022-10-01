@@ -3,6 +3,7 @@ package com.uet.int2204.group2.entity;
 import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.Constants;
+import com.uet.int2204.group2.utils.Conversions;
 import com.uet.int2204.group2.utils.ResourceManager;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -24,7 +25,13 @@ public class Player extends MovableEntity {
     super(tileX, tileY);
   }
 
-  @Override public Sprite getSprite() {
+  public Player(int tileX, int tileY, EntityController<? super Player> controller) {
+    super(tileX, tileY);
+    setController(controller);
+  }
+
+  @Override
+  public Sprite getSprite() {
     return currentAnimation.currentSprite();
   }
 
@@ -32,7 +39,8 @@ public class Player extends MovableEntity {
     this.controller = controller;
   }
 
-  @Override public void move(Direction direction) {
+  @Override
+  public void setDirection(Direction direction) {
     if (this.direction != direction) {
       if (direction == Direction.NONE) {
         switch (this.direction) {
@@ -71,14 +79,16 @@ public class Player extends MovableEntity {
     this.direction = direction;
   }
 
-  @Override public void update(long dt, World world) {
+  @Override
+  public void update(long dt, World world) {
     this.controller.control(this, world);
-    this.move(calcDx(this.direction, START_SPEED, dt),
-              calcDy(this.direction, START_SPEED, dt));
+    double moveDist = START_SPEED * Conversions.nanostoSeconds(dt);
+    this.move(moveDist);
     this.currentAnimation.update(dt);
   }
   
-  @Override public void renderTo(GraphicsContext target) {
+  @Override
+  public void renderTo(GraphicsContext target) {
     this.getSprite().drawTo(target, getPixelX(), getPixelY() - Constants.TILE_SIZE / 5);
   }
 

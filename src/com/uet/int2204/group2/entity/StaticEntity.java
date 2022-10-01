@@ -12,19 +12,23 @@ public abstract class StaticEntity extends Entity {
     this.tileY = y;
   }
 
-  @Override public double getPixelX() {
+  @Override
+  public double getPixelX() {
     return getTileX() * Constants.TILE_SIZE;
   }
 
-  @Override public double getPixelY() {
+  @Override
+  public double getPixelY() {
     return getTileY() * Constants.TILE_SIZE;
   }
 
-  @Override public int getTileX() {
+  @Override
+  public int getTileX() {
     return this.tileX;
   }
 
-  @Override public int getTileY() {
+  @Override
+  public int getTileY() {
     return this.tileY;
   }
 }

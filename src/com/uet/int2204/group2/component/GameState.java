@@ -7,24 +7,29 @@ import java.util.Random;
 import com.uet.int2204.group2.World;
 import com.uet.int2204.group2.controller.EntityController;
 import com.uet.int2204.group2.controller.KeyBoardPlayerController;
-import com.uet.int2204.group2.controller.KeyInputHandler;
+import com.uet.int2204.group2.controller.KeyboardEnemyController;
+import com.uet.int2204.group2.controller.RandomController;
+import com.uet.int2204.group2.entity.Balloom;
 import com.uet.int2204.group2.entity.Brick;
+import com.uet.int2204.group2.entity.Enemy;
 import com.uet.int2204.group2.entity.Player;
 import com.uet.int2204.group2.entity.Wall;
 import com.uet.int2204.group2.utils.Constants;
 
 import javafx.animation.AnimationTimer;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyEvent;
 
 public class GameState {
   private World world;
   private Canvas canvas;
   private Group root;
   private AnimationTimer timer;
-  private Collection<KeyInputHandler> inputHandlers = new ArrayList<>();
+  private Collection<EventHandler<KeyEvent>> inputHandlers = new ArrayList<>();
 
   public GameState() {
     int width = Constants.TILE_SIZE * 12;
@@ -34,8 +39,13 @@ public class GameState {
     this.root = new Group();
     this.root.getChildren().add(this.canvas);
     this.root.setAutoSizeChildren(true);
+
     EntityController<? super Player> playerController = new KeyBoardPlayerController(inputHandlers);
-    this.world.getPlayer().setController(playerController);
+    this.world.setPlayer(new Player(1, 1, playerController));
+    EntityController<? super Enemy> balloom1Controller = RandomController.INSTANCE;
+    world.getEnemies().add(new Balloom(5, 5, balloom1Controller));
+    EntityController<? super Enemy> balloom2Controller = new KeyboardEnemyController(inputHandlers);
+    world.getEnemies().add(new Balloom(10, 10, balloom2Controller));
 
     Random rand = new Random();
     for (int i = 1; i <= 10; ++i) {
@@ -56,7 +66,8 @@ public class GameState {
       long lastTime = -1;
       World world = getWorld();
       GraphicsContext target = graphicsContext2D();
-      @Override public void handle(long now) {
+      @Override
+  public void handle(long now) {
         if (lastTime == -1) {
           world.update(0);
         }
@@ -81,7 +92,7 @@ public class GameState {
     return this.root;
   }
 
-  public Iterable<KeyInputHandler> getInputHandlers() {
+  public Iterable<EventHandler<KeyEvent>> getInputHandlers() {
     return this.inputHandlers;
   }
 

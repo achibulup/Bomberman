@@ -8,78 +8,80 @@ import com.uet.int2204.group2.World;
 import com.uet.int2204.group2.entity.Player;
 import com.uet.int2204.group2.entity.MovableEntity.Direction;
 
+import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 
 public class KeyBoardPlayerController extends KeyBoardEntityController<Player> {
-  public List<Direction> directions = new ArrayList<>();
-  boolean placeBomb = false;
+  private List<Direction> directions = new ArrayList<>();
+  private boolean placeBomb = false;
 
   public KeyBoardPlayerController() {
     super();
   }
 
-  public KeyBoardPlayerController(Collection<KeyInputHandler> handlerList) {
+  public KeyBoardPlayerController(Collection<EventHandler<KeyEvent>> handlerList) {
     super(handlerList);
   }
 
-  @Override public void control(Player player, World world) {
+  @Override
+  public void control(Player player, World world) {
     if (this.placeBomb) {
       player.placeBomb(world);
     }
     if (this.directions.isEmpty()) {
-      player.move(Direction.NONE);
+      player.setDirection(Direction.NONE);
     } else {
-      player.move(this.directions.get(directions.size() - 1));
+      player.setDirection(this.directions.get(directions.size() - 1));
     }
   }
 
-  @Override public void onKeyPressed(KeyEvent event) {
-    System.out.println(event.getCode() + " pressed");
-    Direction dir = Direction.NONE;
-    switch (event.getCode()) {
-      case UP:
-        dir = Direction.UP;
-        break;
-      case DOWN:
-        dir = Direction.DOWN;
-        break;
-      case LEFT:
-        dir = Direction.LEFT;
-        break;
-      case RIGHT:
-        dir = Direction.RIGHT;
-        break;
-      case SPACE:
-        placeBomb = true;
-        break;
-      default:
+  @Override
+  public void handle(KeyEvent event) {
+    if (event.getEventType().equals(KeyEvent.KEY_PRESSED)) {
+      Direction dir = Direction.NONE;
+      switch (event.getCode()) {
+        case UP:
+          dir = Direction.UP;
+          break;
+        case DOWN:
+          dir = Direction.DOWN;
+          break;
+        case LEFT:
+          dir = Direction.LEFT;
+          break;
+        case RIGHT:
+          dir = Direction.RIGHT;
+          break;
+        case SPACE:
+          placeBomb = true;
+          break;
+        default:
+      }
+      if (dir != Direction.NONE && !this.directions.contains(dir)) {
+        this.directions.add(dir);
+      }
     }
-    if (dir != Direction.NONE && !this.directions.contains(dir)) {
-      this.directions.add(dir);
+    if (event.getEventType().equals(KeyEvent.KEY_RELEASED)) {
+      Direction dir = Direction.NONE;
+      switch (event.getCode()) {
+        case UP:
+          dir = Direction.UP;
+          break;
+        case DOWN:
+          dir = Direction.DOWN;
+          break;
+        case LEFT:
+          dir = Direction.LEFT;
+          break;
+        case RIGHT:
+          dir = Direction.RIGHT;
+          break;
+        case SPACE:
+          placeBomb = false;
+          break;
+        default:
+      }
+      this.directions.remove(dir);
     }
-  }
-
-  @Override public void onKeyReleased(KeyEvent event) {
-    System.out.println(event.getCode() + " released");
-    Direction dir = Direction.NONE;
-    switch (event.getCode()) {
-      case UP:
-        dir = Direction.UP;
-        break;
-      case DOWN:
-        dir = Direction.DOWN;
-        break;
-      case LEFT:
-        dir = Direction.LEFT;
-        break;
-      case RIGHT:
-        dir = Direction.RIGHT;
-        break;
-      case SPACE:
-        placeBomb = false;
-        break;
-      default:
-    }
-    this.directions.remove(dir);
   }
 }

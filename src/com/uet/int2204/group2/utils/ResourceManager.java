@@ -35,6 +35,8 @@ public class ResourceManager {
   public static final AnimationData playerWalkLeft;
   public static final AnimationData playerWalkRight;
 
+  public static final AnimationData balloom;
+
   // call this function to force initialization of the class, thereby load all the resources
   public static void load() {
   }
@@ -63,7 +65,7 @@ public class ResourceManager {
 
     Sprite[] bricks = tryLoadSpriteSheet("sprites/map/brick_sparky@2.png");
     brick = bricks[0];
-    brickSparky = new AnimationData(bricks, 600000000);
+    brickSparky = new AnimationData(bricks, Conversions.secondsToNanos(0.6));
 
     Sprite wallImg = new Sprite(tryLoadImage("sprites/map/wall@1.png"));
     wall = wallImg;
@@ -77,7 +79,7 @@ public class ResourceManager {
     bottomEdge = edgesSheet[5];
 
     Sprite[] bombSheet = tryLoadSpriteSheet("sprites/bomb@4.png");
-    bomb = new AnimationData(bombSheet, 400000000);
+    bomb = new AnimationData(bombSheet, Conversions.secondsToNanos(0.4));
 
     playerIdleUp = new AnimationData(tryLoadSpriteSheet("sprites/player/idle_up@1.png"));
     playerIdleDown = new AnimationData(tryLoadSpriteSheet("sprites/player/idle_down@1.png"));
@@ -95,5 +97,8 @@ public class ResourceManager {
     
     Sprite[] playerWalkRightSheet = tryLoadSpriteSheet("sprites/player/walking_right@4.png");
     playerWalkRight = new AnimationData(playerWalkRightSheet);
+
+    Sprite[] balloomSheet = tryLoadSpriteSheet("sprites/enemy/balloom@3.png");
+    balloom = new AnimationData(balloomSheet);
   }
 }

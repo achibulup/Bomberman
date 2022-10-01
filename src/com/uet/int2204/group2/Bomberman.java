@@ -1,10 +1,12 @@
 package com.uet.int2204.group2;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -12,14 +14,16 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.uet.int2204.group2.controller.KeyInputHandler;
 import com.uet.int2204.group2.utils.Constants;
 import com.uet.int2204.group2.utils.ResourceManager;
 
 public class Bomberman extends Application {
+  public static final int WIDTH = Constants.TILE_SIZE * 12;
+  public static final int HEIGHT = Constants.TILE_SIZE * 12;
+
   private static Scene scene;
   private static Set<KeyCode> pressedKeys = new HashSet<>();
-  private static Iterable<KeyInputHandler> inputHandlers = Collections.emptyList();
+  private static Iterable<EventHandler<KeyEvent>> inputHandlers = Collections.emptyList();
 
   public static void main(String[] args) {
     ResourceManager.load();
@@ -28,19 +32,19 @@ public class Bomberman extends Application {
 
   @Override
   public void start(Stage stage) throws IOException {
-    scene = new Scene(loadFXML("menu"), Constants.TILE_SIZE * 12, Constants.TILE_SIZE * 12);
+    scene = new Scene(loadFXML("menu"), WIDTH, HEIGHT);
     scene.setOnKeyPressed((keyEvent) -> {
       if (!pressedKeys.contains(keyEvent.getCode())) {
         pressedKeys.add(keyEvent.getCode());
         for (var handler : inputHandlers) {
-          handler.onKeyPressed(keyEvent);
+          handler.handle(keyEvent);
         }
       }
     });
     scene.setOnKeyReleased((keyEvent) -> {
       pressedKeys.remove(keyEvent.getCode());
       for (var handler : inputHandlers) {
-        handler.onKeyReleased(keyEvent);
+        handler.handle(keyEvent);
       }
     });
     stage.setScene(scene);
@@ -55,7 +59,7 @@ public class Bomberman extends Application {
     scene.setRoot(node);
   }
 
-  public static void setInputHandlers(Iterable<KeyInputHandler> handlers) {
+  public static void setInputHandlers(Iterable<EventHandler<KeyEvent>> handlers) {
     inputHandlers = handlers;
   }
 

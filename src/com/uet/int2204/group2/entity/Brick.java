@@ -1,10 +1,12 @@
 package com.uet.int2204.group2.entity;
 
 import com.uet.int2204.group2.World;
+import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
 
 public class Brick extends StaticEntity {
+  private Animation animation = new Animation(ResourceManager.brickSparky);
 
   public Brick(int x, int y) {
     super(x, y);
@@ -13,13 +15,17 @@ public class Brick extends StaticEntity {
 
   @Override
   public Sprite getSprite() {
-    // TODO Auto-generated method stub
-    return ResourceManager.brick;
+    if (this.animation == null) {
+      return ResourceManager.brick;
+    }
+    return this.animation.currentSprite();
   }
 
   @Override
   public void update(long dt, World world) {
-    // TODO Auto-generated method stub
+    if (this.animation != null) {
+      this.animation.update(dt);
+    }
   }
   
 }

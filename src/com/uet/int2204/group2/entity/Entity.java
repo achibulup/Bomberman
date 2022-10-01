@@ -21,6 +21,10 @@ public abstract class Entity {
   // get the current sprite of the entity.
   public abstract Sprite getSprite();
 
+  public boolean collidesWith(Class<? extends StaticEntity> tile) {
+    return !(tile == Grass.class || tile.isAssignableFrom(Item.class));
+  }
+
   /**
    * update the state of the entity.
    * @param dt : the mount of time has passed since last update, in nanoseconds
