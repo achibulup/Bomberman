@@ -8,7 +8,7 @@ import com.uet.int2204.group2.World;
 import com.uet.int2204.group2.controller.EntityController;
 import com.uet.int2204.group2.controller.KeyBoardPlayerController;
 import com.uet.int2204.group2.controller.KeyboardEnemyController;
-import com.uet.int2204.group2.controller.RandomController;
+import com.uet.int2204.group2.controller.RandomMoveController;
 import com.uet.int2204.group2.entity.Balloom;
 import com.uet.int2204.group2.entity.Brick;
 import com.uet.int2204.group2.entity.Enemy;
@@ -42,7 +42,7 @@ public class GameState {
 
     EntityController<? super Player> playerController = new KeyBoardPlayerController(inputHandlers);
     this.world.setPlayer(new Player(1, 1, playerController));
-    EntityController<? super Enemy> balloom1Controller = RandomController.INSTANCE;
+    EntityController<? super Enemy> balloom1Controller = RandomMoveController.INSTANCE;
     world.getEnemies().add(new Balloom(5, 5, balloom1Controller));
     EntityController<? super Enemy> balloom2Controller = new KeyboardEnemyController(inputHandlers);
     world.getEnemies().add(new Balloom(10, 10, balloom2Controller));
@@ -56,9 +56,10 @@ public class GameState {
         int r = rand.nextInt(3);
         if (r == 0) {
           world.addTile(i, j, Brick.class);
-        } else if (r == 1) {
-          world.addTile(i, j, Wall.class);
-        }
+        } 
+        // else if (r == 1) {
+        //   world.addTile(i, j, Wall.class);
+        // }
       }
     }
 

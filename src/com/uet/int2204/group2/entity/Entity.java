@@ -6,10 +6,10 @@ import com.uet.int2204.group2.World;
 import javafx.scene.canvas.GraphicsContext;
 
 public abstract class Entity {
-  // get the x position of the main tile the entity is currently in.
+  // get the x position of the main tile the entity is in.
   public abstract int getTileX();
   
-  // get the y position of the main tile the entity is currently in.
+  // get the y position of the main tile the entity is in.
   public abstract int getTileY();
 
   // get the x position in pixels.

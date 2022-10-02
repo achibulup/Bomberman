@@ -2,7 +2,7 @@ package com.uet.int2204.group2.entity;
 
 import com.uet.int2204.group2.utils.Constants;
 
-// static entities are tied to a tile
+// static entities are tied to a tile.
 public abstract class StaticEntity extends Entity {
   private int tileX;
   private int tileY;

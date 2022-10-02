@@ -42,11 +42,6 @@ public class ResourceManager {
   }
 
   public static Image tryLoadImage(String path) {
-    // try {
-    //   return new Image(new FileInputStream(path));
-    // } catch (Exception e) {
-    //   throw new RuntimeException("cannot open file: " + path, e);
-    // }
     Image image = new Image("file:target/classes/" + path);
     if (image.isError()) {
       throw new FileSystemNotFoundException("file: " + path + " not found.");

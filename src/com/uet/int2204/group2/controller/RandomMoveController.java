@@ -6,8 +6,8 @@ import com.uet.int2204.group2.World;
 import com.uet.int2204.group2.entity.MovableEntity;
 import com.uet.int2204.group2.entity.MovableEntity.Direction;
 
-public class RandomController implements EntityController<MovableEntity> {
-  public static final RandomController INSTANCE = new RandomController();
+public class RandomMoveController implements EntityController<MovableEntity> {
+  public static final RandomMoveController INSTANCE = new RandomMoveController();
 
   private static final Random rand = new Random();
 

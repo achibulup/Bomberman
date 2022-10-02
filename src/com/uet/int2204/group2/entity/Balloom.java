@@ -6,7 +6,7 @@ import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
 
-public class Balloom extends Enemy implements ControllableEnemy {
+public class Balloom extends Enemy implements BasicEnemy {
   public static final double SPEED = 60;
 
   private Animation animation = new Animation(ResourceManager.balloom);
@@ -46,7 +46,7 @@ public class Balloom extends Enemy implements ControllableEnemy {
 
   @Override
   public void update(long dt, World world) {
-    ControllableEnemy.super.update(dt, world);
+    BasicEnemy.super.update(dt, world);
     this.animation.update(dt);
   }
 

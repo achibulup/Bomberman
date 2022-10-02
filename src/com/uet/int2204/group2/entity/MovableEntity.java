@@ -2,6 +2,9 @@ package com.uet.int2204.group2.entity;
 
 import static com.uet.int2204.group2.utils.Constants.TILE_SIZE;
 
+import com.uet.int2204.group2.World;
+import com.uet.int2204.group2.utils.Constants;
+
 public abstract class MovableEntity extends Entity {
   public static enum Direction {
     NONE, UP, DOWN, LEFT, RIGHT
@@ -15,7 +18,7 @@ public abstract class MovableEntity extends Entity {
   protected Direction direction = Direction.DOWN;
 
   // +--------+--------+
-  // |       direction       |
+  // |       dir       |
   // |  from -->  to   |
   // |        |        |
   // +--------+--------+
@@ -32,6 +35,7 @@ public abstract class MovableEntity extends Entity {
     this.pixelY = tileY * TILE_SIZE;
   }
 
+  public abstract double getSpeed();
   
   @Override
   public double getPixelX() {
@@ -53,24 +57,113 @@ public abstract class MovableEntity extends Entity {
     return this.tileY;
   }
 
-  public boolean isMovable(Direction direction) {
-    return true;
+  public Direction getDirection() {
+    return this.direction;
   }
 
   public void setDirection(Direction direction) {
     this.direction = direction;
   }
 
+  public boolean isMovable(Direction direction, World world) {
+    switch (direction) {
+      case UP:
+        if (!isYAligned()) {
+          return true;
+        }
+        if (collidesWith(world.getTile(getTileX(), getTileY() - 1).getClass())) {
+          return false;
+        }
+        if (getPixelX() < getTileX() * Constants.TILE_SIZE
+         && collidesWith(world.getTile(getTileX() - 1, getTileY() - 1).getClass())) {
+          return false;
+        }
+        if (getPixelX() > getTileX() * Constants.TILE_SIZE
+         && collidesWith(world.getTile(getTileX() + 1, getTileY() - 1).getClass())) {
+          return false;
+        }
+        return true;
+      case DOWN:
+        if (!isYAligned()) {
+          return true;
+        }
+        if (collidesWith(world.getTile(getTileX(), getTileY() + 1).getClass())) {
+          return false;
+        }
+        if (getPixelX() < getTileX() * Constants.TILE_SIZE
+         && collidesWith(world.getTile(getTileX() - 1, getTileY() + 1).getClass())) {
+          return false;
+        }
+        if (getPixelX() > getTileX() * Constants.TILE_SIZE
+         && collidesWith(world.getTile(getTileX() + 1, getTileY() + 1).getClass())) {
+          return false;
+        }
+        return true;
+      case LEFT:
+        if (!isXAligned()) {
+          return true;
+        }
+        if (collidesWith(world.getTile(getTileX() - 1, getTileY()).getClass())) {
+          return false;
+        }
+        if (getPixelY() < getTileY() * Constants.TILE_SIZE
+        && collidesWith(world.getTile(getTileX() - 1, getTileY() - 1).getClass())) {
+          return false;
+        }
+        if (getPixelY() > getTileY() * Constants.TILE_SIZE
+        && collidesWith(world.getTile(getTileX() - 1, getTileY() + 1).getClass())) {
+          return false;
+        }
+        return true;
+      case RIGHT:
+        if (!isXAligned()) {
+          return true;
+        }
+        if (collidesWith(world.getTile(getTileX() + 1, getTileY()).getClass())) {
+          return false;
+        }
+        if (getPixelY() < getTileY() * Constants.TILE_SIZE
+        && collidesWith(world.getTile(getTileX() + 1, getTileY() - 1).getClass())) {
+          return false;
+        }
+        if (getPixelY() > getTileY() * Constants.TILE_SIZE
+        && collidesWith(world.getTile(getTileX() + 1, getTileY() + 1).getClass())) {
+          return false;
+        }
+        return true;
+      default:
+    }
+    return false;
+  }
+
+  // checks if this entity is perfectly aligned with a tile.
+  public boolean isAligned() {
+    return isXAligned() && isYAligned();
+  }
+
+  // checks if this entity is perfectly aligned with a tile in the x axis.
+  public boolean isXAligned() {
+    return getPixelX() == getTileX() * TILE_SIZE;
+  }
+
+  // checks if this entity is perfectly aligned with a tile in the y axis.
+  public boolean isYAligned() {
+    return getPixelY() == getTileY() * TILE_SIZE;
+  }
+
   public void move(double dx, double dy) {
     moveTo(pixelX + dx, pixelY + dy);
   }
 
+  // move in this.direction with a distance 
+  // shouldn't be used because it makes other mechanics more complex, see {@code adjustedMove} below.
   public void move(double distance) {
     move(calcDx(this.direction, distance), calcDy(this.direction, distance));
   }
 
-  // snaps into a tile when appropriate
-  public void correctedMove(double distance) {
+  // like {@code move} but will snap into an alignment when possible.
+  // when adjustment happens actual distance traveled might be shortened.
+  public void adjustedMove(double distance) {
     if (this.direction == Direction.NONE) {
       return;
     }
@@ -94,17 +187,11 @@ public abstract class MovableEntity extends Entity {
   public void moveTo(double pixelX, double pixelY) {
     this.pixelX = pixelX;
     this.pixelY = pixelY;
-    this.tileX = (int) ((this.pixelX / TILE_SIZE) + 0.5); 
-    this.tileY = (int) ((this.pixelY / TILE_SIZE) + 0.5); 
+    this.tileX = (int) Math.floor((this.pixelX / TILE_SIZE) + 0.5); 
+    this.tileY = (int) Math.floor((this.pixelY / TILE_SIZE) + 0.5); 
   }
 
-  // checks if this entity is perfectly aligned with a tile
-  public boolean isAligned() {
-    return getPixelX() == getTileX() * TILE_SIZE
-        && getPixelY() == getTileY() * TILE_SIZE;
-  }
-
-  public static double calcDx(Direction direction, double distance) {
+  protected static double calcDx(Direction direction, double distance) {
     if (direction == Direction.LEFT) {
       return -distance;
     }
@@ -114,7 +201,7 @@ public abstract class MovableEntity extends Entity {
     return 0;
   }
 
-  public static double calcDy(Direction direction, double distance) {
+  protected static double calcDy(Direction direction, double distance) {
     if (direction == Direction.UP) {
       return -distance;
     }

@@ -14,7 +14,7 @@ import com.uet.int2204.group2.controller.EntityController;
 public class Player extends MovableEntity {
   // the field MovableEntity.direction is the moving direction of the player.
 
-  public static double START_SPEED = 120; // pixels per second.
+  public static double START_SPEED = 330; // pixels per second.
 
   // private Direction faceDirection = Direction.DOWN; // should not be NONE.
 
@@ -30,13 +30,22 @@ public class Player extends MovableEntity {
     setController(controller);
   }
 
-  @Override
-  public Sprite getSprite() {
-    return currentAnimation.currentSprite();
+  public EntityController<? super Player> getController() {
+    return this.controller;
   }
 
   public void setController(EntityController<? super Player> controller) {
     this.controller = controller;
+  }
+
+  @Override
+  public double getSpeed() {
+    return START_SPEED;
+  }
+
+  @Override
+  public Sprite getSprite() {
+    return currentAnimation.currentSprite();
   }
 
   @Override
@@ -82,17 +91,21 @@ public class Player extends MovableEntity {
   @Override
   public void update(long dt, World world) {
     this.controller.control(this, world);
-    double moveDist = START_SPEED * Conversions.nanostoSeconds(dt);
-    this.move(moveDist);
+    if (isMovable(getDirection(), world)) {
+      double moveDist = getSpeed() * Conversions.nanostoSeconds(dt);
+      this.adjustedMove(moveDist);
+    }
     this.currentAnimation.update(dt);
   }
   
   @Override
   public void renderTo(GraphicsContext target) {
-    this.getSprite().drawTo(target, getPixelX(), getPixelY() - Constants.TILE_SIZE / 5);
+    this.getSprite().drawTo(target, getPixelX(), getPixelY() - Constants.TILE_SIZE / 6);
   }
 
   public void placeBomb(World world) {
-    world.addTile(getTileX(), getTileY(), Bomb.class);
+    if (world.getTile(getTileX(), getTileY()) instanceof Grass) {
+      world.addTile(getTileX(), getTileY(), Bomb.class);
+    }
   }
 }

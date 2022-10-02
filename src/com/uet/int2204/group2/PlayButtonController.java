@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import javafx.fxml.FXML;
 
-public class Controller {
+public class PlayButtonController {
 
     @FXML
     private void switchToGame() throws IOException {

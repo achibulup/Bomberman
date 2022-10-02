@@ -21,5 +21,11 @@ public class Oneal extends Enemy {
     // TODO Auto-generated method stub
     
   }
+
+  @Override
+  public double getSpeed() {
+    // TODO Auto-generated method stub
+    return 0;
+  }
   
 }
