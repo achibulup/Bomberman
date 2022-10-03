@@ -1,10 +1,9 @@
 package com.uet.int2204.group2.entity;
 
-import com.uet.int2204.group2.World;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
 
-public class Edge extends StaticEntity {
+public class Edge extends Tile {
   public static enum Type {
     TOP, TOP_LEFT, TOP_RIGHT, LEFT, RIGHT, BOTTOM
   }
@@ -34,6 +33,6 @@ public class Edge extends StaticEntity {
   }
 
   @Override
-  public void update(long dt, World world) {
+  public void update(long dt) {
   }
 }

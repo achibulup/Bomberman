@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.uet.int2204.group2.World;
 import com.uet.int2204.group2.entity.Player;
 import com.uet.int2204.group2.entity.MovableEntity.Direction;
 
@@ -24,9 +23,9 @@ public class KeyBoardPlayerController extends KeyBoardEntityController<Player> {
   }
 
   @Override
-  public void control(Player player, World world) {
+  public void control(Player player) {
     if (this.placeBomb) {
-      player.placeBomb(world);
+      player.placeBomb();
     }
     if (this.directions.isEmpty()) {
       player.setDirection(Direction.NONE);

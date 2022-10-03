@@ -65,7 +65,8 @@ public abstract class MovableEntity extends Entity {
     this.direction = direction;
   }
 
-  public boolean isMovable(Direction direction, World world) {
+  public boolean isMovable(Direction direction) {
+    World world = getWorld();
     switch (direction) {
       case UP:
         if (!isYAligned()) {

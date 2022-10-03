@@ -43,23 +43,23 @@ public class GameState {
     EntityController<? super Player> playerController = new KeyBoardPlayerController(inputHandlers);
     this.world.setPlayer(new Player(1, 1, playerController));
     EntityController<? super Enemy> balloom1Controller = RandomMoveController.INSTANCE;
-    world.getEnemies().add(new Balloom(5, 5, balloom1Controller));
+    world.addEnemy(new Balloom(5, 5, balloom1Controller));
     EntityController<? super Enemy> balloom2Controller = new KeyboardEnemyController(inputHandlers);
-    world.getEnemies().add(new Balloom(10, 10, balloom2Controller));
+    world.addEnemy(new Balloom(10, 10, balloom2Controller));
 
     Random rand = new Random();
     for (int i = 1; i <= 10; ++i) {
       for (int j = 1; j <= 10; ++j) {
-        if (i == 1 && j == 1) {
+        if (i + j <= 3) {
           continue;
         }
-        int r = rand.nextInt(3);
+        int r = rand.nextInt(5);
         if (r == 0) {
           world.addTile(i, j, Brick.class);
         } 
-        // else if (r == 1) {
-        //   world.addTile(i, j, Wall.class);
-        // }
+        else if (r == 1) {
+          world.addTile(i, j, Wall.class);
+        }
       }
     }
 

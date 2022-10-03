@@ -1,6 +1,5 @@
 package com.uet.int2204.group2.entity;
 
-import com.uet.int2204.group2.World;
 import com.uet.int2204.group2.graphics.Sprite;
 
 public class Oneal extends Enemy {
@@ -17,7 +16,7 @@ public class Oneal extends Enemy {
   }
 
   @Override
-  public void update(long dt, World world) {
+  public void update(long dt) {
     // TODO Auto-generated method stub
     
   }

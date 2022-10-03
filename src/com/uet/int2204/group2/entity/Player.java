@@ -1,20 +1,15 @@
 package com.uet.int2204.group2.entity;
 
+import com.uet.int2204.group2.controller.EntityController;
 import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
-import com.uet.int2204.group2.utils.Constants;
 import com.uet.int2204.group2.utils.Conversions;
 import com.uet.int2204.group2.utils.ResourceManager;
-
-import javafx.scene.canvas.GraphicsContext;
-
-import com.uet.int2204.group2.World;
-import com.uet.int2204.group2.controller.EntityController;
 
 public class Player extends MovableEntity {
   // the field MovableEntity.direction is the moving direction of the player.
 
-  public static double START_SPEED = 330; // pixels per second.
+  public static double START_SPEED = 290; // pixels per second.
 
   // private Direction faceDirection = Direction.DOWN; // should not be NONE.
 
@@ -88,24 +83,19 @@ public class Player extends MovableEntity {
     this.direction = direction;
   }
 
+  public void placeBomb() {
+    if (getWorld().getTile(getTileX(), getTileY()) instanceof Grass) {
+      getWorld().addTile(getTileX(), getTileY(), Bomb.class);
+    }
+  }
+
   @Override
-  public void update(long dt, World world) {
-    this.controller.control(this, world);
-    if (isMovable(getDirection(), world)) {
+  public void update(long dt) {
+    this.controller.control(this);
+    if (isMovable(getDirection())) {
       double moveDist = getSpeed() * Conversions.nanostoSeconds(dt);
       this.adjustedMove(moveDist);
     }
     this.currentAnimation.update(dt);
-  }
-  
-  @Override
-  public void renderTo(GraphicsContext target) {
-    this.getSprite().drawTo(target, getPixelX(), getPixelY() - Constants.TILE_SIZE / 6);
-  }
-
-  public void placeBomb(World world) {
-    if (world.getTile(getTileX(), getTileY()) instanceof Grass) {
-      world.addTile(getTileX(), getTileY(), Bomb.class);
-    }
   }
 }

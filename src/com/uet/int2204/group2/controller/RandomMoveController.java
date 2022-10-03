@@ -2,7 +2,6 @@ package com.uet.int2204.group2.controller;
 
 import java.util.Random;
 
-import com.uet.int2204.group2.World;
 import com.uet.int2204.group2.entity.MovableEntity;
 import com.uet.int2204.group2.entity.MovableEntity.Direction;
 
@@ -12,7 +11,7 @@ public class RandomMoveController implements EntityController<MovableEntity> {
   private static final Random rand = new Random();
 
   @Override
-  public void control(MovableEntity entity, World world) {
+  public void control(MovableEntity entity) {
     entity.setDirection(randDir());
   }
 

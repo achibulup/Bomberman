@@ -1,6 +1,5 @@
 package com.uet.int2204.group2.entity;
 
-import com.uet.int2204.group2.World;
 import com.uet.int2204.group2.controller.EntityController;
 import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
@@ -40,13 +39,13 @@ public class Balloom extends Enemy implements BasicEnemy {
   }
 
   @Override
-  public void control(World world) {
-    getController().control(this, world);
+  public void control() {
+    getController().control(this);
   }
 
   @Override
-  public void update(long dt, World world) {
-    BasicEnemy.super.update(dt, world);
+  public void update(long dt) {
+    BasicEnemy.super.update(dt);
     this.animation.update(dt);
   }
 

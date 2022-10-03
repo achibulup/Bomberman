@@ -2,7 +2,6 @@ package com.uet.int2204.group2.controller;
 
 import java.util.Collection;
 
-import com.uet.int2204.group2.World;
 import com.uet.int2204.group2.entity.Enemy;
 import com.uet.int2204.group2.entity.MovableEntity.Direction;
 
@@ -21,7 +20,7 @@ public class KeyboardEnemyController extends KeyBoardEntityController<Enemy> {
   }
 
   @Override
-  public void control(Enemy enemy, World world) {
+  public void control(Enemy enemy) {
     enemy.setDirection(this.direction);
     this.direction = Direction.NONE;
   }

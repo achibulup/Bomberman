@@ -6,6 +6,16 @@ import com.uet.int2204.group2.World;
 import javafx.scene.canvas.GraphicsContext;
 
 public abstract class Entity {
+  protected World world; // the world this entity is in.
+
+  public World getWorld() {
+    return this.world;
+  }
+
+  public void setWorld(World world) {
+    this.world = world;
+  }
+
   // get the x position of the main tile the entity is in.
   public abstract int getTileX();
   
@@ -21,7 +31,7 @@ public abstract class Entity {
   // get the current sprite of the entity.
   public abstract Sprite getSprite();
 
-  public boolean collidesWith(Class<? extends StaticEntity> tile) {
+  public boolean collidesWith(Class<? extends Tile> tile) {
     return !(tile == Grass.class || tile.isAssignableFrom(Item.class));
   }
 
@@ -30,7 +40,7 @@ public abstract class Entity {
    * @param dt : the mount of time has passed since last update, in nanoseconds
    * @param world : the world the entity is in
    */
-  public abstract void update(long dt, World world);
+  public abstract void update(long dt);
 
   public void renderTo(GraphicsContext target) {
     getSprite().drawTo(target, getPixelX(), getPixelY());
