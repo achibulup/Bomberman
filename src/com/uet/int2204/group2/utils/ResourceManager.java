@@ -51,7 +51,7 @@ public class ResourceManager {
   public static final AnimationData balloom;
 
   public static final AnimationData oneal;
-
+  
   // call this function to force initialization of the class, thereby load all the resources
   public static void load() {
   }
