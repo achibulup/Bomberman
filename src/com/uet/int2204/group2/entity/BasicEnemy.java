@@ -6,7 +6,6 @@ import com.uet.int2204.group2.utils.Conversions;
 // a template for writing move implementation for enemies.
 public interface BasicEnemy {
   Direction getDirection();
-
   boolean isMovable(Direction dir);
 
   void adjustedMove(double distance);

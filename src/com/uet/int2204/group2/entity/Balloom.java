@@ -1,6 +1,7 @@
 package com.uet.int2204.group2.entity;
 
 import com.uet.int2204.group2.controller.EntityController;
+import com.uet.int2204.group2.controller.RandomMoveController;
 import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
