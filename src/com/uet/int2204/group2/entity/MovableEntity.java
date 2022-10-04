@@ -153,34 +153,48 @@ public abstract class MovableEntity extends Entity {
   }
 
   public void move(double dx, double dy) {
-    moveTo(pixelX + dx, pixelY + dy);
+    moveTo(getPixelX() + dx, getPixelY() + dy);
   }
 
-  // move in this.direction with a distance 
+  // move in this direction with a distance 
   // shouldn't be used because it makes other mechanics more complex, see {@code adjustedMove} below.
   public void move(double distance) {
-    move(calcDx(this.direction, distance), calcDy(this.direction, distance));
+    move(getDirection(), distance);
+  }
+  
+  // move in a direction with a distance 
+  // shouldn't be used because it makes other mechanics more complex, see {@code adjustedMove} below.
+  public void move(Direction dir, double distance) {
+    move(calcDx(dir, distance), calcDy(dir, distance));
   }
 
   // like {@code move} but will snap into an alignment when possible.
-  // when adjustment happens actual distance traveled might be shortened.
+  // when adjustment happens actual distance traveled might be shorter.
   public void adjustedMove(double distance) {
-    if (this.direction == Direction.NONE) {
+    adjustedMove(getDirection(), distance);
+  }
+
+  // like {@code move} but will snap into an alignment when possible.
+  // when adjustment happens actual distance traveled might be shorter.
+  public void adjustedMove(Direction dir, double distance) {
+    if (dir == Direction.NONE) {
       return;
     }
-    double newX = this.pixelX + calcDx(this.direction, distance);
-    if (this.pixelX < this.tileX * TILE_SIZE && newX > this.tileX * TILE_SIZE) {
-      newX = this.tileX * TILE_SIZE;
+    double newX = getPixelX() + calcDx(dir, distance);
+    double alignX = getTileX() * TILE_SIZE;
+    if (getPixelX() < alignX && newX > alignX) {
+      newX = alignX;
     }
-    if (this.pixelX > this.tileX * TILE_SIZE && newX < this.tileX * TILE_SIZE) {
-      newX = this.tileX * TILE_SIZE;
+    if (getPixelX() > alignX && newX < alignX) {
+      newX = alignX;
     }
-    double newY = this.pixelY + calcDy(this.direction, distance);
-    if (this.pixelY < this.tileY * TILE_SIZE && newY > this.tileY * TILE_SIZE) {
-      newY = this.tileY * TILE_SIZE;
+    double newY = getPixelY() + calcDy(dir, distance);
+    double alignY = getTileY() * TILE_SIZE;
+    if (getPixelY() < alignY && newY > alignY) {
+      newY = alignY;
     }
-    if (this.pixelY > this.tileY * TILE_SIZE && newY < this.tileY * TILE_SIZE) {
-      newY = this.tileY * TILE_SIZE;
+    if (getPixelY() > alignY && newY < alignY) {
+      newY = alignY;
     }
     moveTo(newX, newY);
   }
