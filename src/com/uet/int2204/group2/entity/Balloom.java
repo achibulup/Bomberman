@@ -6,7 +6,7 @@ import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
 
 public class Balloom extends Enemy implements BasicEnemy {
-  public static final double SPEED = 60;
+  public static final double SPEED = 70;
 
   private Animation animation = new Animation(ResourceManager.balloom);
   private EntityController<? super Balloom> controller = EntityController.doNothingController;

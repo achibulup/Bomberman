@@ -5,11 +5,15 @@ import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
 
 public class Brick extends Tile {
-  private Animation animation = new Animation(ResourceManager.brickSparky);
+  private Animation animation = null;
 
   public Brick(int x, int y) {
     super(x, y);
-    //TODO Auto-generated constructor stub
+  }
+
+  public Brick(int x, int y, boolean sparky) {
+    super(x, y);
+    setSparky(sparky);
   }
 
   @Override
@@ -27,4 +31,17 @@ public class Brick extends Tile {
     }
   }
   
+  public boolean isSparky() {
+    return this.animation != null;
+  }
+
+  public void setSparky(boolean sparky) {
+    if (!sparky) {
+      this.animation = null;
+    } else {
+      if (this.animation == null) {
+        this.animation = new Animation(ResourceManager.brickSparky);
+      }
+    }
+  }
 }

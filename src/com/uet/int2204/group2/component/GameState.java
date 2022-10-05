@@ -12,7 +12,9 @@ import com.uet.int2204.group2.controller.RandomMoveController;
 import com.uet.int2204.group2.entity.Balloom;
 import com.uet.int2204.group2.entity.Brick;
 import com.uet.int2204.group2.entity.Enemy;
+import com.uet.int2204.group2.entity.Oneal;
 import com.uet.int2204.group2.entity.Player;
+import com.uet.int2204.group2.entity.SpeedItem;
 import com.uet.int2204.group2.entity.Wall;
 import com.uet.int2204.group2.utils.Constants;
 
@@ -42,10 +44,10 @@ public class GameState {
 
     EntityController<? super Player> playerController = new KeyBoardPlayerController(inputHandlers);
     this.world.setPlayer(new Player(1, 1, playerController));
-    EntityController<? super Enemy> balloom1Controller = RandomMoveController.INSTANCE;
-    world.addEnemy(new Balloom(5, 5, balloom1Controller));
-    EntityController<? super Enemy> balloom2Controller = new KeyboardEnemyController(inputHandlers);
-    world.addEnemy(new Balloom(10, 10, balloom2Controller));
+    EntityController<? super Enemy> balloomController = RandomMoveController.INSTANCE;
+    world.addEnemy(new Balloom(5, 5, balloomController));
+    EntityController<? super Enemy> onealController = new KeyboardEnemyController(inputHandlers);
+    world.addEnemy(new Oneal(10, 10, onealController));
 
     Random rand = new Random();
     for (int i = 1; i <= 10; ++i) {
@@ -53,12 +55,17 @@ public class GameState {
         if (i + j <= 3) {
           continue;
         }
-        int r = rand.nextInt(5);
-        if (r == 0) {
-          world.addTile(i, j, Brick.class);
-        } 
-        else if (r == 1) {
+        if (i % 2 == 0 && j % 2 == 0) {
           world.addTile(i, j, Wall.class);
+          continue;
+        }
+        int r = rand.nextInt(10);
+        if (r < 2) {
+          Brick brick = new Brick(i, j, r == 0);
+          world.addTile(i, j, brick);
+        } 
+        if (r == 9) {
+          world.addTile(i, j, SpeedItem.class);
         }
       }
     }

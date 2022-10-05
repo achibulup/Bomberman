@@ -23,6 +23,8 @@ public class ResourceManager {
   public static final Sprite rightEdge;
   public static final Sprite bottomEdge;
 
+  public static final AnimationData speedItem;
+
   public static final AnimationData bomb;
 
   public static final AnimationData playerIdleUp;
@@ -74,6 +76,9 @@ public class ResourceManager {
     leftEdge = edgesSheet[0];
     rightEdge = edgesSheet[4];
     bottomEdge = edgesSheet[5];
+
+    Sprite[] speedItemSheet = tryLoadSpriteSheet("sprites/powerup/bonus_speed@2.png");
+    speedItem = new AnimationData(speedItemSheet, Conversions.secondsToNanos(0.4));
 
     Sprite[] bombSheet = tryLoadSpriteSheet("sprites/bomb@4.png");
     bomb = new AnimationData(bombSheet, Conversions.secondsToNanos(0.4));

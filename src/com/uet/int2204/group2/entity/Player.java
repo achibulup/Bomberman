@@ -11,12 +11,13 @@ public class Player extends MovableEntity {
   // the field MovableEntity.direction is the moving direction of the player.
 
   private static double NUDGE_TOLERANCE = Constants.TILE_SIZE / 3.;
-  public static double START_SPEED = 120; // pixels per second.
+  public static double INITIAL_SPEED = 120; // pixels per second.
 
   // private Direction faceDirection = Direction.DOWN; // should not be NONE.
 
   private Animation currentAnimation = new Animation(ResourceManager.playerWalkDown);
   private EntityController<? super Player> controller = EntityController.doNothingController;
+  private double speed = INITIAL_SPEED;
 
   public Player(int tileX, int tileY) {
     super(tileX, tileY);
@@ -37,12 +38,40 @@ public class Player extends MovableEntity {
 
   @Override
   public double getSpeed() {
-    return START_SPEED;
+    return this.speed;
+  }
+
+  public void setSpeed(double speed) {
+    this.speed = speed;
+  }
+
+  public int getFlameLength() {
+    return 1;
+  }
+
+  public int getMaxBombCount() {
+    return 1;
   }
 
   @Override
   public Sprite getSprite() {
     return currentAnimation.currentSprite();
+  };
+
+  @Override
+  public void update(long dt) {
+    this.controller.control(this);
+    if (getWorld().getTile(getTileX(), getTileY()) instanceof Item) {
+      collect((Item) getWorld().getTile(getTileX(), getTileY()));
+      getWorld().popTile(getTileX(), getTileY());
+    }
+    double moveDist = getSpeed() * Conversions.nanostoSeconds(dt);
+    if (isMovable(getDirection())) {
+      adjustedMove(moveDist);
+    } else {
+      cornerCorrection(moveDist);
+    }
+    this.currentAnimation.update(dt);
   }
 
   @Override
@@ -91,16 +120,8 @@ public class Player extends MovableEntity {
     }
   }
 
-  @Override
-  public void update(long dt) {
-    this.controller.control(this);
-    double moveDist = getSpeed() * Conversions.nanostoSeconds(dt);
-    if (isMovable(getDirection())) {
-      adjustedMove(moveDist);
-    } else {
-      cornerCorrection(moveDist);
-    }
-    this.currentAnimation.update(dt);
+  public void collect(Item item) {
+    item.onCollect(this);
   }
 
   /**

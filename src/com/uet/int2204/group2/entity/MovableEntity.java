@@ -65,6 +65,10 @@ public abstract class MovableEntity extends Entity {
     this.direction = direction;
   }
 
+  public boolean collidesWith(Class<? extends Tile> tile) {
+    return !(tile == Grass.class || Item.class.isAssignableFrom(tile));
+  }
+
   public boolean isMovable(Direction direction) {
     World world = getWorld();
     switch (direction) {
