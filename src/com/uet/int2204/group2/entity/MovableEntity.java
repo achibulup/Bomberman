@@ -66,7 +66,7 @@ public abstract class MovableEntity extends Entity {
   }
 
   public boolean collidesWith(Class<? extends Tile> tile) {
-    return !(tile == Grass.class || Item.class.isAssignableFrom(tile));
+    return SolidTile.class.isAssignableFrom(tile);
   }
 
   public boolean isMovable(Direction direction) {

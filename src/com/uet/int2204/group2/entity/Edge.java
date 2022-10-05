@@ -3,7 +3,7 @@ package com.uet.int2204.group2.entity;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
 
-public class Edge extends Tile {
+public class Edge extends Tile implements SolidTile {
   public static enum Type {
     TOP, TOP_LEFT, TOP_RIGHT, LEFT, RIGHT, BOTTOM
   }
@@ -33,6 +33,6 @@ public class Edge extends Tile {
   }
 
   @Override
-  public void update(long dt) {
+  public void update(double dt) {
   }
 }

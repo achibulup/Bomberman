@@ -2,7 +2,7 @@ package com.uet.int2204.group2.utils;
 
 public class Conversions {
   // from nanoseconds to seconds.
-  public static double nanostoSeconds(long nano) {
+  public static double nanosToSeconds(long nano) {
     return ((double) nano) / 1000000000;
   }
 

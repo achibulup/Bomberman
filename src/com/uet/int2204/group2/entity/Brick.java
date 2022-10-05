@@ -4,7 +4,7 @@ import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
 
-public class Brick extends Tile {
+public class Brick extends Tile implements SolidTile, DestroyableTile {
   private Animation animation = null;
 
   public Brick(int x, int y) {
@@ -25,10 +25,15 @@ public class Brick extends Tile {
   }
 
   @Override
-  public void update(long dt) {
+  public void update(double dt) {
     if (this.animation != null) {
       this.animation.update(dt);
     }
+  }
+
+  @Override
+  public void destroy() {
+    markExpired();
   }
   
   public boolean isSparky() {

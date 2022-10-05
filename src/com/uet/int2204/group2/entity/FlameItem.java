@@ -4,10 +4,10 @@ import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
 
-public class SpeedItem extends Item {
-  private Animation animation = new Animation(ResourceManager.speedItem);
+public class FlameItem extends Item {
+  private Animation animation = new Animation(ResourceManager.flameItem);
 
-  public SpeedItem(int tileX, int tileY) {
+  public FlameItem(int tileX, int tileY) {
     super(tileX, tileY);
   }
 
@@ -23,6 +23,6 @@ public class SpeedItem extends Item {
   
   @Override
   public void onCollect(Player player) {
-    player.setSpeed(player.getSpeed() + 90);
+    player.setFlameLength(player.getFlameLength() + 1);
   }
 }

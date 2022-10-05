@@ -6,6 +6,7 @@ import java.util.Stack;
 
 import com.uet.int2204.group2.entity.Edge;
 import com.uet.int2204.group2.entity.Enemy;
+import com.uet.int2204.group2.entity.Entity;
 import com.uet.int2204.group2.entity.Grass;
 import com.uet.int2204.group2.entity.Player;
 import com.uet.int2204.group2.entity.Tile;
@@ -81,12 +82,13 @@ public class World {
    * Construct a tile layer of class @param tileClass on top of the tile stack at the position (tileX, tileY).
    * This will also set the tile's world to this world.
    */
-  public void addTile(int tileX, int tileY, Class<? extends Tile> tileClass) {
+  public Tile addTile(int tileX, int tileY, Class<? extends Tile> tileClass) {
     try {
       var constructor = tileClass.getConstructor(int.class, int.class);
       Tile newTile = constructor.newInstance(tileX, tileY);
       newTile.setWorld(this);
       this.map[tileX][tileY].push(newTile);
+      return newTile;
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -124,16 +126,38 @@ public class World {
     this.enemies.add(enemy);
   }
 
-  public void update(long dt) {
-    player.update(dt);
+  public void update(double dt) {
+    if (player != null) {
+      player.update(dt);
+    }
     for (var col : this.map) {
       for (var tiles : col) {
-        tiles.peek().update(dt);
+        for (var tile : tiles) {
+          tile.update(dt);
+        }
       }
     }
     for (Enemy enemy : enemies) {
       enemy.update(dt);
     }
+
+    if (player.isExpired()) {
+      Entity removed = player;
+      player = null;
+      removed.onRemoval();
+    }
+    for (var col : this.map) {
+      for (var tiles : col) {
+        for (int i = tiles.size(); i --> 0;) {
+          Tile tile = tiles.get(i);
+          if (tile.isExpired()) {
+            tiles.remove(i);
+            tile.onRemoval();
+          }
+        }
+      }
+    }
+    this.enemies.removeIf((enemy) -> enemy.isExpired());
   }
 
   public void renderTo(GraphicsContext target) {
@@ -147,6 +171,8 @@ public class World {
     for (Enemy enemy : enemies) {
       enemy.renderTo(target);
     }
-    player.renderTo(target);
+    if (player != null) {
+      player.renderTo(target);
+    }
   }
 }

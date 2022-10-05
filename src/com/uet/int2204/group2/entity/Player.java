@@ -4,13 +4,13 @@ import com.uet.int2204.group2.controller.EntityController;
 import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.Constants;
-import com.uet.int2204.group2.utils.Conversions;
 import com.uet.int2204.group2.utils.ResourceManager;
 
+// TODO:
 public class Player extends MovableEntity {
   // the field MovableEntity.direction is the moving direction of the player.
 
-  private static double NUDGE_TOLERANCE = Constants.TILE_SIZE / 3.;
+  private static double NUDGE_TOLERANCE = Constants.TILE_SIZE / 2.5;
   public static double INITIAL_SPEED = 120; // pixels per second.
 
   // private Direction faceDirection = Direction.DOWN; // should not be NONE.
@@ -18,6 +18,10 @@ public class Player extends MovableEntity {
   private Animation currentAnimation = new Animation(ResourceManager.playerWalkDown);
   private EntityController<? super Player> controller = EntityController.doNothingController;
   private double speed = INITIAL_SPEED;
+  private int flameLength = 1;
+  private int maxBombCount = 2;
+
+  private int remainingBombs = maxBombCount;
 
   public Player(int tileX, int tileY) {
     super(tileX, tileY);
@@ -46,11 +50,20 @@ public class Player extends MovableEntity {
   }
 
   public int getFlameLength() {
-    return 1;
+    return this.flameLength;
+  }
+
+  public void setFlameLength(int flameLength) {
+    this.flameLength = flameLength;
   }
 
   public int getMaxBombCount() {
-    return 1;
+    return this.maxBombCount;
+  }
+
+  public void setMaxBombCount(int maxBombCount) {
+    this.maxBombCount = maxBombCount;
+    this.remainingBombs = maxBombCount;
   }
 
   @Override
@@ -59,13 +72,12 @@ public class Player extends MovableEntity {
   };
 
   @Override
-  public void update(long dt) {
+  public void update(double dt) {
     this.controller.control(this);
     if (getWorld().getTile(getTileX(), getTileY()) instanceof Item) {
       collect((Item) getWorld().getTile(getTileX(), getTileY()));
-      getWorld().popTile(getTileX(), getTileY());
     }
-    double moveDist = getSpeed() * Conversions.nanostoSeconds(dt);
+    double moveDist = getSpeed() * dt;
     if (isMovable(getDirection())) {
       adjustedMove(moveDist);
     } else {
@@ -115,13 +127,19 @@ public class Player extends MovableEntity {
   }
 
   public void placeBomb() {
-    if (getWorld().getTile(getTileX(), getTileY()) instanceof Grass) {
-      getWorld().addTile(getTileX(), getTileY(), Bomb.class);
+    // TODO:
+    if (this.remainingBombs == 0 
+     || getWorld().getTile(getTileX(), getTileY()) instanceof SolidTile) {
+      return;
     }
+    this.remainingBombs--;
+    Bomb bomb = new Bomb(getTileX(), getTileY(), this);
+    getWorld().addTile(getTileX(), getTileY(), bomb);
   }
 
   public void collect(Item item) {
     item.onCollect(this);
+    item.markExpired();
   }
 
   /**

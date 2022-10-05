@@ -18,8 +18,8 @@ import com.uet.int2204.group2.utils.Constants;
 import com.uet.int2204.group2.utils.ResourceManager;
 
 public class Bomberman extends Application {
-  public static final int WIDTH = Constants.TILE_SIZE * 12;
-  public static final int HEIGHT = Constants.TILE_SIZE * 12;
+  public static final int WIDTH = Constants.TILE_SIZE * 13;
+  public static final int HEIGHT = Constants.TILE_SIZE * 13;
 
   private static Scene scene;
   private static Set<KeyCode> pressedKeys = new HashSet<>();

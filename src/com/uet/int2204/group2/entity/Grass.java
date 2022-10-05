@@ -13,7 +13,7 @@ public class Grass extends Tile {
     boolean isShadowed;
     if (getTileY() == 1) isShadowed = false;
     else {
-      Tile tileAbove = world.getTile(getTileX(), getTileY() - 1);
+      Tile tileAbove = getWorld().getTile(getTileX(), getTileY() - 1);
       isShadowed = (tileAbove instanceof Brick || tileAbove instanceof Wall);
     }
     if (isShadowed) {
@@ -23,6 +23,6 @@ public class Grass extends Tile {
   }
 
   @Override
-  public void update(long dt) {
+  public void update(double dt) {
   }
 }

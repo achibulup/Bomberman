@@ -23,9 +23,9 @@ public class ResourceManager {
   public static final Sprite rightEdge;
   public static final Sprite bottomEdge;
 
+  public static final AnimationData flameItem;
+  public static final AnimationData bombItem;
   public static final AnimationData speedItem;
-
-  public static final AnimationData bomb;
 
   public static final AnimationData playerIdleUp;
   public static final AnimationData playerIdleDown;
@@ -36,6 +36,15 @@ public class ResourceManager {
   public static final AnimationData playerWalkDown;
   public static final AnimationData playerWalkLeft;
   public static final AnimationData playerWalkRight;
+
+  public static final AnimationData bomb;
+  public static final AnimationData upFlame;
+  public static final AnimationData downFlame;
+  public static final AnimationData leftFlame;
+  public static final AnimationData rightFlame;
+  public static final AnimationData horizontalFlame;
+  public static final AnimationData verticalFlame;
+  public static final AnimationData centerFlame;
 
   public static final AnimationData balloom;
 
@@ -64,7 +73,7 @@ public class ResourceManager {
 
     Sprite[] bricks = tryLoadSpriteSheet("sprites/map/brick_sparky@2.png");
     brick = bricks[0];
-    brickSparky = new AnimationData(bricks, Conversions.secondsToNanos(0.6));
+    brickSparky = new AnimationData(bricks, 0.6);
 
     Sprite wallImg = new Sprite(tryLoadImage("sprites/map/wall@1.png"));
     wall = wallImg;
@@ -77,11 +86,14 @@ public class ResourceManager {
     rightEdge = edgesSheet[4];
     bottomEdge = edgesSheet[5];
 
-    Sprite[] speedItemSheet = tryLoadSpriteSheet("sprites/powerup/bonus_speed@2.png");
-    speedItem = new AnimationData(speedItemSheet, Conversions.secondsToNanos(0.4));
+    Sprite[] flameItemSheet = tryLoadSpriteSheet("sprites/powerup/longer_flame@2.png");
+    flameItem = new AnimationData(flameItemSheet, 0.4);
 
-    Sprite[] bombSheet = tryLoadSpriteSheet("sprites/bomb@4.png");
-    bomb = new AnimationData(bombSheet, Conversions.secondsToNanos(0.4));
+    Sprite[] bombItemSheet = tryLoadSpriteSheet("sprites/powerup/extra_bomb@2.png");
+    bombItem = new AnimationData(bombItemSheet, 0.4);
+    
+    Sprite[] speedItemSheet = tryLoadSpriteSheet("sprites/powerup/bonus_speed@2.png");
+    speedItem = new AnimationData(speedItemSheet, 0.4);
 
     playerIdleUp = new AnimationData(tryLoadSpriteSheet("sprites/player/idle_up@1.png"));
     playerIdleDown = new AnimationData(tryLoadSpriteSheet("sprites/player/idle_down@1.png"));
@@ -99,6 +111,24 @@ public class ResourceManager {
     
     Sprite[] playerWalkRightSheet = tryLoadSpriteSheet("sprites/player/walking_right@4.png");
     playerWalkRight = new AnimationData(playerWalkRightSheet);
+    
+    Sprite[] bombSheet = tryLoadSpriteSheet("sprites/bomb/bomb@4.png");
+    bomb = new AnimationData(bombSheet, 0.4);
+    
+    Sprite[] upFlameSheet = tryLoadSpriteSheet("sprites/bomb/explosion_up@6.png");
+    upFlame = new AnimationData(upFlameSheet, 0.15, 1);
+    Sprite[] downFlameSheet = tryLoadSpriteSheet("sprites/bomb/explosion_down@6.png");
+    downFlame = new AnimationData(downFlameSheet, 0.15, 1);
+    Sprite[] leftFlameSheet = tryLoadSpriteSheet("sprites/bomb/explosion_left@6.png");
+    leftFlame = new AnimationData(leftFlameSheet, 0.15, 1);
+    Sprite[] rightFlameSheet = tryLoadSpriteSheet("sprites/bomb/explosion_right@6.png");
+    rightFlame = new AnimationData(rightFlameSheet, 0.15, 1);
+    Sprite[] horizontalFlameSheet = tryLoadSpriteSheet("sprites/bomb/explosion_horizontal@6.png");
+    horizontalFlame = new AnimationData(horizontalFlameSheet, 0.15, 1);
+    Sprite[] verticalFlameSheet = tryLoadSpriteSheet("sprites/bomb/explosion_vertical@6.png");
+    verticalFlame = new AnimationData(verticalFlameSheet, 0.15, 1);
+    Sprite[] centerFlameSheet = tryLoadSpriteSheet("sprites/bomb/explosion_center@6.png");
+    centerFlame = new AnimationData(centerFlameSheet, 0.15, 1);
 
     Sprite[] balloomSheet = tryLoadSpriteSheet("sprites/enemy/balloom@3.png");
     balloom = new AnimationData(balloomSheet);

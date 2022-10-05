@@ -44,7 +44,7 @@ public class Balloom extends Enemy implements BasicEnemy {
   }
 
   @Override
-  public void update(long dt) {
+  public void update(double dt) {
     BasicEnemy.super.update(dt);
     this.animation.update(dt);
   }

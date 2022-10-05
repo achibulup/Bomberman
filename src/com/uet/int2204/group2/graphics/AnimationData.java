@@ -5,18 +5,18 @@ public class AnimationData {
 
   private Sprite[] spriteSheet;
   private int loopCount = ENDLESS;
-  private long delay = 200000000; // delay between frames in nanoseconds
+  private double delay = 0.2; // delay between frames in nanoseconds
 
   public AnimationData(Sprite[] spriteSheet) {
     setSpriteSheet(spriteSheet);
   }
 
-  public AnimationData(Sprite[] spriteSheet, long delay) {
+  public AnimationData(Sprite[] spriteSheet, double delay) {
     this(spriteSheet);
     setDelay(delay);
   } 
 
-  public AnimationData(Sprite[] spriteSheet, long delay, int loopCount) {
+  public AnimationData(Sprite[] spriteSheet, double delay, int loopCount) {
     this(spriteSheet, delay);
     setLoopCount(loopCount);
   }
@@ -33,11 +33,11 @@ public class AnimationData {
     this.spriteSheet = spriteSheet;
   }
 
-  public long getDelay() {
+  public double getDelay() {
     return delay;
   }
 
-  public void setDelay(long delay) {
+  public void setDelay(double delay) {
     this.delay = delay;
   }
 

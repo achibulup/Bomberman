@@ -12,7 +12,20 @@ public class RandomMoveController implements EntityController<MovableEntity> {
 
   @Override
   public void control(MovableEntity entity) {
-    entity.setDirection(randDir());
+    if (!entity.isMovable(Direction.UP)
+     && !entity.isMovable(Direction.DOWN)
+     && !entity.isMovable(Direction.LEFT)
+     && !entity.isMovable(Direction.RIGHT)) {
+      entity.setDirection(Direction.NONE);
+      return;
+    }
+    while (true) {
+      Direction tryDir = randDir();
+      if (entity.isMovable(tryDir)) {
+        entity.setDirection(tryDir);
+        break;
+      }
+    }
   }
 
   private static Direction randDir() {

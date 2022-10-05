@@ -3,7 +3,7 @@ package com.uet.int2204.group2.entity;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
 
-public class Wall extends Tile {
+public class Wall extends Tile implements SolidTile {
 
   public Wall(int x, int y) {
     super(x, y);
@@ -15,7 +15,6 @@ public class Wall extends Tile {
   }
 
   @Override
-  public void update(long dt) {
+  public void update(double dt) {
   }
-  
 }

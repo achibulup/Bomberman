@@ -6,7 +6,8 @@ import com.uet.int2204.group2.World;
 import javafx.scene.canvas.GraphicsContext;
 
 public abstract class Entity {
-  protected World world; // the world this entity is in.
+  private World world; // the world this entity is in.
+  private boolean expired = false; 
 
   public World getWorld() {
     return this.world;
@@ -14,6 +15,19 @@ public abstract class Entity {
 
   public void setWorld(World world) {
     this.world = world;
+  }
+
+  // tells whether the entity is expired and should be removed from worlds and lists.
+  public boolean isExpired() {
+    return this.expired;
+  }
+
+  public void markExpired() {
+    this.expired = true;
+  }
+
+  // this will be called after the entity is removed from the world, this method may be overriden.
+  public void onRemoval() {
   }
 
   // get the x position of the main tile the entity is in.
@@ -36,7 +50,7 @@ public abstract class Entity {
    * @param dt : the mount of time has passed since last update, in nanoseconds
    * @param world : the world the entity is in
    */
-  public abstract void update(long dt);
+  public abstract void update(double dt);
 
   public void renderTo(GraphicsContext target) {
     getSprite().drawTo(target, getPixelX(), getPixelY());

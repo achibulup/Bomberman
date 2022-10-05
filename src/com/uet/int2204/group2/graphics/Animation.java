@@ -5,7 +5,7 @@ import static com.uet.int2204.group2.graphics.AnimationData.ENDLESS;
 public class Animation {
   private AnimationData data;
 
-  private long timer = 0; // timer for current frame in nanoseconds
+  private double timer = 0; // timer for current frame in nanoseconds
   private int iter = 0;
   private int remainingLoops;
 
@@ -27,7 +27,8 @@ public class Animation {
   }
 
   public void setLoopCount(int loopCount) {
-    this.remainingLoops = loopCount;
+    this.iter = 0;
+    this.remainingLoops = loopCount - 1;
   }
   
   public Sprite currentSprite() {
@@ -37,7 +38,7 @@ public class Animation {
     return getSpriteSheet()[this.iter];
   }
 
-  public void update(long dt) {
+  public void update(double dt) {
     if (!this.isEnded()) {
       this.timer += dt;
       while (this.timer >= getAnimationDelay()) {
@@ -61,7 +62,7 @@ public class Animation {
     return getData().getSpriteSheet();
   }
 
-  private long getAnimationDelay() {
+  private double getAnimationDelay() {
     return getData().getDelay();
   }
 }
