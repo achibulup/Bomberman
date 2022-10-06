@@ -1,16 +1,12 @@
 package com.uet.int2204.group2.Menu;
 
-import com.uet.int2204.group2.component.GameState;
 import com.uet.int2204.group2.Bomberman;
-import javafx.animation.FadeTransition;
+import com.uet.int2204.group2.component.GameState;
+
 import javafx.animation.TranslateTransition;
 import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-
-import java.io.IOException;
 
 public class GameMenu extends Parent {
 
@@ -57,7 +53,7 @@ public class GameMenu extends Parent {
                 getChildren().remove(menu1);
             });
         });
-        MenuButton btnExit = new MenuButton("Exit");
+        MenuButton btnExit = new MenuButton("EXIT");
         btnExit.setOnMouseClicked(event -> {
             System.exit(0);
         });

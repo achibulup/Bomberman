@@ -23,27 +23,26 @@ import com.uet.int2204.group2.utils.Conversions;
 
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
 
 public class GameState {
   private World world;
   private Canvas canvas;
-  private Group root;
+  private Parent root;
   private AnimationTimer timer;
   private Collection<EventHandler<KeyEvent>> inputHandlers = new ArrayList<>();
 
   public GameState() {
-    int width = Constants.TILE_SIZE * 13;
-    int height = Constants.TILE_SIZE * 13;
-    this.world = new World(11, 11);
-    this.canvas = new Canvas(width, height);
-    this.root = new Group();
-    this.root.getChildren().add(this.canvas);
-    this.root.setAutoSizeChildren(true);
+    int mapWidth = 11;
+    int mapHeight = 11;
+    this.world = new World(mapWidth, mapHeight);
+    this.canvas = new Canvas((mapWidth + 2) * Constants.TILE_SIZE, 
+                             (mapHeight + 2) * Constants.TILE_SIZE);
+    this.root = new Pane(this.canvas);
 
     EntityController<? super Player> playerController = new KeyBoardPlayerController(inputHandlers);
     this.world.setPlayer(new Player(1, 1, playerController));

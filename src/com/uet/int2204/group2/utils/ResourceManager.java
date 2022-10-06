@@ -8,6 +8,8 @@ import com.uet.int2204.group2.graphics.Sprite;
 import javafx.scene.image.Image;
 
 public class ResourceManager {
+  public static final Image background;
+
   public static final Sprite grassNormal;
   public static final Sprite grassShadowed;
 
@@ -73,6 +75,8 @@ public class ResourceManager {
   }
 
   static {
+    background = tryLoadImage("sprites/background.png");
+
     Sprite[] grassSheet = tryLoadSpriteSheet("sprites/map/grass@2.png");
     grassNormal = grassSheet[0];
     grassShadowed = grassSheet[1];
