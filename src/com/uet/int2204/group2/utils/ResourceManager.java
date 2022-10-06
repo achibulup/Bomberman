@@ -13,6 +13,7 @@ public class ResourceManager {
 
   public static final Sprite brick;
   public static final AnimationData brickSparky;
+  public static final AnimationData brickExplosion;
 
   public static final Sprite wall;
 
@@ -23,6 +24,7 @@ public class ResourceManager {
   public static final Sprite rightEdge;
   public static final Sprite bottomEdge;
 
+  public static final AnimationData itemExplosion;
   public static final AnimationData flameItem;
   public static final AnimationData bombItem;
   public static final AnimationData speedItem;
@@ -66,6 +68,10 @@ public class ResourceManager {
     return Sprite.makeSpriteSheet(tryLoadImage(path), Constants.TILE_SIZE, Constants.TILE_SIZE);
   }
 
+  public static Sprite[] tryLoadSpriteSheet(String path, int spriteWidth, int spriteHeight) {
+    return Sprite.makeSpriteSheet(tryLoadImage(path), spriteWidth, spriteHeight);
+  }
+
   static {
     Sprite[] grassSheet = tryLoadSpriteSheet("sprites/map/grass@2.png");
     grassNormal = grassSheet[0];
@@ -74,6 +80,9 @@ public class ResourceManager {
     Sprite[] bricks = tryLoadSpriteSheet("sprites/map/brick_sparky@2.png");
     brick = bricks[0];
     brickSparky = new AnimationData(bricks, 0.6);
+
+    Sprite[] brickExplosionSheet = tryLoadSpriteSheet("sprites/map/brick_explosion@7.png");
+    brickExplosion = new AnimationData(brickExplosionSheet, 0.07, 1);
 
     Sprite wallImg = new Sprite(tryLoadImage("sprites/map/wall@1.png"));
     wall = wallImg;
@@ -85,6 +94,10 @@ public class ResourceManager {
     leftEdge = edgesSheet[0];
     rightEdge = edgesSheet[4];
     bottomEdge = edgesSheet[5];
+
+    Sprite[] itemExplosionSheet = tryLoadSpriteSheet(
+        "sprites/powerup/powerup_explosion@7.png", 52, 56);
+    itemExplosion = new AnimationData(itemExplosionSheet, 0.075, 1);
 
     Sprite[] flameItemSheet = tryLoadSpriteSheet("sprites/powerup/longer_flame@2.png");
     flameItem = new AnimationData(flameItemSheet, 0.4);

@@ -18,7 +18,10 @@ public class BombItem extends Item {
 
   @Override
   public void update(double dt) {
-    this.animation.update(dt);
+    super.update(dt);
+    if (!beingDestroyed()) {
+      this.animation.update(dt);
+    }
   }
   
   @Override
