@@ -62,23 +62,20 @@ public class GameState {
           world.addTile(i, j, Wall.class);
           continue;
         }
-        int r = rand.nextInt(15);
-        if (r < 3) {
-          Brick brick = new Brick(i, j);
-          world.addTile(i, j, brick);
-        } 
+        int r = rand.nextInt(30);
         if (r == 8) {
           world.addTile(i, j, FlameItem.class);
           world.addTile(i, j, new Brick(i, j, true));
-        }
-        if (r == 9) {
+        } else if (r == 9) {
           world.addTile(i, j, BombItem.class);
           world.addTile(i, j, new Brick(i, j, true));
-        }
-        if (r == 10) {
+        } else if (r == 10) {
           world.addTile(i, j, SpeedItem.class);
           world.addTile(i, j, new Brick(i, j, true));
-        }
+        } else if (r < 10) {
+          Brick brick = new Brick(i, j);
+          world.addTile(i, j, brick);
+        } 
       }
     }
 

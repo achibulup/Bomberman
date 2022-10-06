@@ -41,6 +41,9 @@ public class KeyboardEnemyController extends KeyBoardEntityController<Enemy> {
         case D:
           this.direction = Direction.RIGHT;
           break;
+        case Z:
+          this.direction = Direction.NONE;
+          break;
         default:
       }
     }

@@ -37,7 +37,6 @@ public class Brick extends Tile implements SolidTile, DestroyableTile {
 
   @Override
   public void destroy() {
-    // TODO:
     if (!this.destroying) {
       this.destroying = true;
       this.animation = new Animation(ResourceManager.brickExplosion);

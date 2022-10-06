@@ -4,7 +4,6 @@ import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
 
-// TODO:
 public class Bomb extends Tile implements SolidTile, DestroyableTile {
   private Animation animation = new Animation(ResourceManager.bomb);
   private Player owner;
