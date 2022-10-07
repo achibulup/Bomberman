@@ -7,9 +7,9 @@ import com.uet.int2204.group2.entity.Player;
 import java.util.List;
 import java.util.Random;
 
-public class AIMoveController implements EntityController<MovableEntity>{
+public class AIMediumMoveController implements EntityController<MovableEntity> {
 
-    public static final AIMoveController INSTANCE = new AIMoveController();
+    public static final AIMediumMoveController INSTANCE = new AIMediumMoveController();
     private static final Random rand = new Random();
 
     @Override
@@ -17,6 +17,7 @@ public class AIMoveController implements EntityController<MovableEntity>{
         Player player = (Player) entity.getWorld().getPlayer();
         List<Enemy> enemies = (List<Enemy>) entity.getWorld().getEnemies();
         Enemy enemy = enemies.get(0);
+
         entity.setDirection(mediumRanDir(player, enemy));
     }
 
@@ -34,6 +35,7 @@ public class AIMoveController implements EntityController<MovableEntity>{
                 if (v != -1) {
                     dir = v;
                 } else {
+
                     dir = calculateRowDirection(player, enemy);
                 }
             } else {
