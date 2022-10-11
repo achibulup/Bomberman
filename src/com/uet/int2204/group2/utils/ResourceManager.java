@@ -56,6 +56,8 @@ public class ResourceManager {
 
   public static final AnimationData broom;
 
+  public static final AnimationData bear;
+
   // call this function to force initialization of the class, thereby load all the resources
   public static void load() {
   }
@@ -157,5 +159,8 @@ public class ResourceManager {
 
     Sprite[] broomSheet = tryLoadSpriteSheet("sprites/enemy/broom@4.png");
     broom = new AnimationData(broomSheet);
+
+    Sprite[] bearSheet = tryLoadSpriteSheet("sprites/enemy/bear@3.png");
+    bear = new AnimationData(bearSheet);
   }
 }
