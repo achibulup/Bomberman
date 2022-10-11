@@ -5,9 +5,11 @@ import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
 
 public class Bomb extends Tile implements SolidTile, DestroyableTile {
+  public static final double BOMB_EXPLODE_DELAY = 2;
+
   private Animation animation = new Animation(ResourceManager.bomb);
   private Player owner;
-  private double timer = 1.5;
+  private double timer = BOMB_EXPLODE_DELAY;
 
   public Bomb(int x, int y, Player owner) {
     super(x, y);
