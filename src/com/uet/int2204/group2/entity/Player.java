@@ -139,8 +139,10 @@ public class Player extends MovableEntity {
   }
 
   public void collect(Item item) {
-    item.onCollect(this);
-    item.markExpired();
+    if (!item.beingDestroyed()) {
+      item.onCollect(this);
+      item.markExpired();
+    }
   }
 
   /**
