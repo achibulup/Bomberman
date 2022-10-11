@@ -26,6 +26,9 @@ public class Bomberman extends Application {
   private static Set<KeyCode> pressedKeys = new HashSet<>();
   private static Iterable<EventHandler<KeyEvent>> inputHandlers = Collections.emptyList();
 
+  public static int WIDTH = Constants.TILE_SIZE * 13;
+  public static int HEIGHT = Constants.TILE_SIZE * 13;
+
   public static void main(String[] args) {
     ResourceManager.load();
     launch();
@@ -34,7 +37,7 @@ public class Bomberman extends Application {
   @Override
   public void start(Stage stage) throws Exception {
     Pane root = new Pane();
-    root.setPrefSize(Constants.TILE_SIZE * 13, Constants.TILE_SIZE * 13);
+    root.setPrefSize(WIDTH, HEIGHT);
     Image img = ResourceManager.background;
     GameMenu gameMenu = new GameMenu();
     ImageView imageView = new ImageView(img);
@@ -66,6 +69,10 @@ public class Bomberman extends Application {
 
   public static void setRoot(Parent node) {
     scene.setRoot(node);
+  }
+
+  public static void closeApp() {
+    ((Stage) scene.getWindow()).close();
   }
 
   public static void setInputHandlers(Iterable<EventHandler<KeyEvent>> handlers) {
