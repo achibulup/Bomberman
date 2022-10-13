@@ -1,6 +1,7 @@
 package com.uet.int2204.group2;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Stack;
 
@@ -170,24 +171,32 @@ public class World {
   }
 
   protected void removeExpiredEntities() {
+    Collection<Entity> toBeRemoved = new ArrayList<>();
     if (player != null && player.isExpired()) {
-      Entity removed = player;
+      toBeRemoved.add(player);
       player = null;
-      removed.onRemoval();
     }
+
     for (var col : this.map) {
       for (var tiles : col) {
         for (int i = tiles.size(); i --> 0;) {
           Tile tile = tiles.get(i);
           if (tile.isExpired()) {
-            tiles.remove(i);
-            tile.onRemoval();
+            toBeRemoved.add(tile);
           }
         }
+        tiles.removeIf(Entity::isExpired);
       }
     }
-    this.enemies.forEach((enemy) -> enemy.onRemoval());
+
+    for (Enemy enemy : this.enemies) {
+      if (enemy.isExpired()) {
+        toBeRemoved.add(enemy);
+      }
+    }
     this.enemies.removeIf((enemy) -> enemy.isExpired());
+
+    toBeRemoved.forEach(Entity::onRemoval);
   }
 
   protected void playerInteractions(Player player) {
