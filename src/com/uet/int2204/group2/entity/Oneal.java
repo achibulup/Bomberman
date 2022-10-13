@@ -44,12 +44,14 @@ public class Oneal extends Enemy {
 
   @Override
   public void update(double dt) {
-    if (isMovable(getDirection())) {
-      adjustedMove(getSpeed() * dt);
+    if (!isDying()) {
+      if (isMovable(getDirection())) {
+        adjustedMove(getSpeed() * dt);
+      }
+      if (isAligned()) {
+        control();
+      }
+      this.animation.update(dt);
     }
-    if (isAligned()) {
-      control();
-    }
-    this.animation.update(dt);
   }
 }

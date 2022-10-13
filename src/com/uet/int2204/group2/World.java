@@ -1,14 +1,18 @@
 package com.uet.int2204.group2;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Stack;
 
 import com.uet.int2204.group2.entity.Edge;
 import com.uet.int2204.group2.entity.Enemy;
 import com.uet.int2204.group2.entity.Entity;
+import com.uet.int2204.group2.entity.Flame;
 import com.uet.int2204.group2.entity.Grass;
+import com.uet.int2204.group2.entity.Item;
 import com.uet.int2204.group2.entity.Player;
+import com.uet.int2204.group2.entity.SolidTile;
 import com.uet.int2204.group2.entity.Tile;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -113,37 +117,10 @@ public class World {
   }
 
   public void update(double dt) {
-    if (player != null) {
-      player.update(dt);
-    }
-    for (var col : this.map) {
-      for (var tiles : col) {
-        for (var tile : tiles) {
-          tile.update(dt);
-        }
-      }
-    }
-    for (Enemy enemy : enemies) {
-      enemy.update(dt);
-    }
-
-    if (player.isExpired()) {
-      Entity removed = player;
-      player = null;
-      removed.onRemoval();
-    }
-    for (var col : this.map) {
-      for (var tiles : col) {
-        for (int i = tiles.size(); i --> 0;) {
-          Tile tile = tiles.get(i);
-          if (tile.isExpired()) {
-            tiles.remove(i);
-            tile.onRemoval();
-          }
-        }
-      }
-    }
-    this.enemies.removeIf((enemy) -> enemy.isExpired());
+    handleInteractions();
+    updateEntities(dt);
+    handleInteractions();
+    removeExpiredEntities();
   }
 
   public void renderTo(GraphicsContext target) {
@@ -154,11 +131,103 @@ public class World {
         }
       }
     }
-    for (Enemy enemy : enemies) {
+    for (Enemy enemy : this.enemies) {
       enemy.renderTo(target);
     }
-    if (player != null) {
-      player.renderTo(target);
+    if (this.player != null) {
+      this.player.renderTo(target);
+    }
+  }
+
+  protected void updateEntities(double dt) {
+    if (this.player != null && !this.player.isExpired()) {
+      this.player.update(dt);
+    }
+    for (var col : this.map) {
+      for (var tiles : col) {
+        for (var tile : tiles) {
+          if (!tile.isExpired()) {
+            tile.update(dt);
+          }
+        }
+      }
+    }
+    for (Enemy enemy : this.enemies) {
+      if (!enemy.isExpired()) {
+        enemy.update(dt);
+      }
+    }
+  }
+
+  protected void handleInteractions() {
+    if (this.player != null && !this.player.isExpired()) {
+      playerInteractions(this.player);
+    }
+    for (Enemy enemy : this.enemies) {
+      if (!enemy.isExpired()) {
+        enemyInteractions(enemy);
+      }
+    }
+  }
+
+  protected void removeExpiredEntities() {
+    Collection<Entity> toBeRemoved = new ArrayList<>();
+    if (player != null && player.isExpired()) {
+      toBeRemoved.add(player);
+      player = null;
+    }
+
+    for (var col : this.map) {
+      for (var tiles : col) {
+        for (int i = tiles.size(); i --> 0;) {
+          Tile tile = tiles.get(i);
+          if (tile.isExpired()) {
+            toBeRemoved.add(tile);
+          }
+        }
+        tiles.removeIf(Entity::isExpired);
+      }
+    }
+
+    for (Enemy enemy : this.enemies) {
+      if (enemy.isExpired()) {
+        toBeRemoved.add(enemy);
+      }
+    }
+    this.enemies.removeIf((enemy) -> enemy.isExpired());
+
+    toBeRemoved.forEach(Entity::onRemoval);
+  }
+
+  protected void playerInteractions(Player player) {
+    TileStack playerTile = this.map[player.getTileX()][player.getTileY()];
+    for (int i = playerTile.size(); i --> 0;) {
+      Tile tile = playerTile.get(i);
+      if (tile instanceof SolidTile) {
+        break;
+      }
+      if (tile instanceof Flame) {
+        player.getHit();
+      }
+      if (tile instanceof Item) {
+        player.collect((Item) tile);
+      }
+    }
+    for (Enemy enemy : this.enemies) {
+      if (enemy.getTileX() == player.getTileX() 
+       && enemy.getTileY() == player.getTileY()
+       && Entity.collides(enemy, player)) {
+        player.getHit();
+      }
+    }
+  }
+
+  protected void enemyInteractions(Enemy enemy) {
+    int tileX = enemy.getTileX();
+    int tileY = enemy.getTileY();
+    Tile tile = this.getTile(tileX, tileY);
+    if (tile instanceof Flame) {
+      enemy.getHit();
     }
   }
 }

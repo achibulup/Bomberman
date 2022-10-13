@@ -13,8 +13,8 @@ import com.uet.int2204.group2.utils.ResourceManager;
 public class Player extends MovableEntity {
   // the field MovableEntity.direction is the moving direction of the player.
 
-  private static double NUDGE_TOLERANCE = Constants.TILE_SIZE / 2.5;
-  public static double INITIAL_SPEED = 120; // pixels per second.
+  private static double NUDGE_TOLERANCE = Constants.TILE_SIZE / 2.2;
+  public static double INITIAL_SPEED = 150; // pixels per second.
 
   // private Direction faceDirection = Direction.DOWN; // should not be NONE.
 
@@ -74,17 +74,15 @@ public class Player extends MovableEntity {
 
   @Override
   public void update(double dt) {
-    Tile thisTile = getWorld().getTile(getTileX(), getTileY());
-    if (thisTile instanceof Item) {
-      collect((Item) thisTile);
-    }
-    this.controller.control(this);
-    this.currentAnimation.update(dt);
-    double moveDist = getSpeed() * dt;
-    if (isMovable(getDirection())) {
-      adjustedMove(moveDist);
-    } else {
-      cornerCorrection(moveDist);
+    if (!isDying()) {
+      this.controller.control(this);
+      this.currentAnimation.update(dt);
+      double moveDist = getSpeed() * dt;
+      if (isMovable(getDirection())) {
+        adjustedMove(moveDist);
+      } else {
+        cornerCorrection(moveDist);
+      }
     }
   }
 
