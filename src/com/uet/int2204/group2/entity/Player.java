@@ -7,6 +7,7 @@ import com.uet.int2204.group2.controller.EntityController;
 import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.Constants;
+import com.uet.int2204.group2.utils.Direction;
 import com.uet.int2204.group2.utils.ResourceManager;
 
 public class Player extends MovableEntity {
@@ -153,56 +154,16 @@ public class Player extends MovableEntity {
   public void cornerCorrection(double moveDist) {
     double alignX = getTileX() * Constants.TILE_SIZE;
     double alignY = getTileY() * Constants.TILE_SIZE;
-    switch (getDirection()) {
-      case UP:
-        if (!collidesWith(getWorld().getTile(getTileX(), getTileY() - 1).getClass())) {
-          if (getPixelX() < alignX && alignX - getPixelX() <= NUDGE_TOLERANCE) {
-            adjustedMove(Direction.RIGHT, moveDist);
-            break;
-          }
-          if (getPixelX() > alignX && getPixelX() - alignX <= NUDGE_TOLERANCE) {
-            adjustedMove(Direction.LEFT, moveDist);
-            break;
-          }
-        }
-        break;
-      case DOWN:
-        if (!collidesWith(getWorld().getTile(getTileX(), getTileY() + 1).getClass())) {
-          if (getPixelX() < alignX && alignX - getPixelX() <= NUDGE_TOLERANCE) {
-            adjustedMove(Direction.RIGHT, moveDist);
-            break;
-          }
-          if (getPixelX() > alignX && getPixelX() - alignX <= NUDGE_TOLERANCE) {
-            adjustedMove(Direction.LEFT, moveDist);
-            break;
-          }
-        }
-        break;
-      case LEFT:
-        if (!collidesWith(getWorld().getTile(getTileX() - 1, getTileY()).getClass())) {
-          if (getPixelY() < alignY && alignY - getPixelY() <= NUDGE_TOLERANCE) {
-            adjustedMove(Direction.DOWN, moveDist);
-            break;
-          }
-          if (getPixelY() > alignY && getPixelY() - alignY <= NUDGE_TOLERANCE) {
-            adjustedMove(Direction.UP, moveDist);
-            break;
-          }
-        }
-        break;
-      case RIGHT:
-        if (!collidesWith(getWorld().getTile(getTileX() + 1, getTileY()).getClass())) {
-          if (getPixelY() < alignY && alignY - getPixelY() <= NUDGE_TOLERANCE) {
-            adjustedMove(Direction.DOWN, moveDist);
-            break;
-          }
-          if (getPixelY() > alignY && getPixelY() - alignY <= NUDGE_TOLERANCE) {
-            adjustedMove(Direction.UP, moveDist);
-            break;
-          }
-        }
-        break;
-      default:
+    Direction currentDir = getDirection();
+    Tile tileAhead = getWorld().getTile(getTileX() + currentDir.x, getTileY() + currentDir.y);
+
+    if (!collidesWith(tileAhead.getClass())) {
+      double proj = currentDir.turnLeft().dotProduct(getPixelX() - alignX, getPixelY() - alignY);
+      if (0 < proj && proj <= NUDGE_TOLERANCE) {
+        adjustedMove(currentDir.turnRight(), moveDist);
+      } else if (-NUDGE_TOLERANCE <= proj && proj < 0) {
+        adjustedMove(currentDir.turnLeft(), moveDist);
+      }
     }
   }
 

@@ -3,7 +3,7 @@ package com.uet.int2204.group2.controller;
 import java.util.Random;
 
 import com.uet.int2204.group2.entity.MovableEntity;
-import com.uet.int2204.group2.entity.MovableEntity.Direction;
+import com.uet.int2204.group2.utils.Direction;
 
 public class RandomMoveController implements EntityController<MovableEntity> {
   public static final RandomMoveController INSTANCE = new RandomMoveController();
