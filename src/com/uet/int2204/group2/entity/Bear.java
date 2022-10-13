@@ -50,21 +50,23 @@ public class Bear extends Enemy {
 
   @Override
   public void update(double dt) {
-    if (isMovable(getDirection())) {
-      adjustedMove(getSpeed() * dt);
-    } else {
-      this.streak = 0;
-    }
-    if (isAligned()) {
-      if (this.streak > 0) {
-        this.streak--;
+    if (!isDying()) {
+      if (isMovable(getDirection())) {
+        adjustedMove(getSpeed() * dt);
+      } else {
+        this.streak = 0;
       }
-      if (this.streak == 0) {
-        this.streak = rand.nextInt(MAX_STREAK);
-        control();
+      if (isAligned()) {
+        if (this.streak > 0) {
+          this.streak--;
+        }
+        if (this.streak == 0) {
+          this.streak = rand.nextInt(MAX_STREAK);
+          control();
+        }
       }
+      this.animation.update(dt);
     }
-    this.animation.update(dt);
   }
 
 }
