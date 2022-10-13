@@ -11,8 +11,16 @@ public class Flame extends Tile {
 
   private Animation animation;
 
+  public Flame(Type type) {
+    setType(type);
+  }
+
   public Flame(int x, int y, Type type) {
     super(x, y);
+    setType(type);
+  }
+
+  public void setType(Type type) {
     switch (type) {
       case UP:
         this.animation = new Animation(ResourceManager.upFlame);

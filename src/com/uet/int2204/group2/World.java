@@ -34,18 +34,18 @@ public class World {
       }
     }
     for (int i = 0; i < mapWidth + 2; ++i) {
-      addTile(i, 0, new Edge(i, 0, Edge.Type.TOP));
-      addTile(i, mapHeight + 1, new Edge(i, mapHeight + 1, Edge.Type.BOTTOM));
+      addTile(i, 0, new Edge(Edge.Type.TOP));
+      addTile(i, mapHeight + 1, new Edge(Edge.Type.BOTTOM));
     }
-    addTile(0, 0, new Edge(0, 0, Edge.Type.TOP_LEFT));
-    addTile(mapWidth + 1, 0, new Edge(mapWidth + 1, 0, Edge.Type.TOP_RIGHT));
+    addTile(0, 0, new Edge(Edge.Type.TOP_LEFT));
+    addTile(mapWidth + 1, 0, new Edge(Edge.Type.TOP_RIGHT));
     for (int i = 1; i <= mapHeight; ++i) {
-      addTile(0, i, new Edge(0, i, Edge.Type.LEFT));
-      addTile(mapWidth + 1, i, new Edge(mapWidth + 1, i, Edge.Type.RIGHT));
+      addTile(0, i, new Edge(Edge.Type.LEFT));
+      addTile(mapWidth + 1, i, new Edge(Edge.Type.RIGHT));
     }
     for (int i = 1; i <= mapWidth; ++i) {
       for (int j = 1; j <= mapHeight; ++j) {
-        addTile(i, j, Grass.class);
+        addTile(i, j, new Grass());
       }
     }
 
@@ -75,23 +75,9 @@ public class World {
    */
   public void addTile(int tileX, int tileY, Tile tile) {
     tile.setWorld(this);
+    tile.setTileX(tileX);
+    tile.setTileY(tileY);
     this.map[tileX][tileY].push(tile);
-  }
-
-  /**
-   * Construct a tile layer of class @param tileClass on top of the tile stack at the position (tileX, tileY).
-   * This will also set the tile's world to this world.
-   */
-  public Tile addTile(int tileX, int tileY, Class<? extends Tile> tileClass) {
-    try {
-      var constructor = tileClass.getConstructor(int.class, int.class);
-      Tile newTile = constructor.newInstance(tileX, tileY);
-      newTile.setWorld(this);
-      this.map[tileX][tileY].push(newTile);
-      return newTile;
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
   }
 
   /** 

@@ -11,6 +11,10 @@ public class Bomb extends Tile implements SolidTile, DestroyableTile {
   private Player owner;
   private double timer = BOMB_EXPLODE_DELAY;
 
+  public Bomb(Player owner) {
+    this.owner = owner;
+  }
+
   public Bomb(int x, int y, Player owner) {
     super(x, y);
     this.owner = owner;
@@ -36,8 +40,7 @@ public class Bomb extends Tile implements SolidTile, DestroyableTile {
 
   @Override 
   public void onRemoval() {
-    getWorld().addTile(getTileX(), getTileY(), 
-                       new Flame(getTileX(), getTileY(), Flame.Type.CENTER));
+    getWorld().addTile(getTileX(), getTileY(), new Flame(Flame.Type.CENTER));
     int length = getOwner().getFlameLength();
 
     // up direction
@@ -53,9 +56,9 @@ public class Bomb extends Tile implements SolidTile, DestroyableTile {
         break;
       }
       if (i == length) {
-        getWorld().addTile(tileX, tileY, new Flame(tileX, tileY, Flame.Type.UP));
+        getWorld().addTile(tileX, tileY, new Flame(Flame.Type.UP));
       } else {
-        getWorld().addTile(tileX, tileY, new Flame(tileX, tileY, Flame.Type.VERTICAL));
+        getWorld().addTile(tileX, tileY, new Flame(Flame.Type.VERTICAL));
       }
     }
     // down direction
@@ -70,9 +73,9 @@ public class Bomb extends Tile implements SolidTile, DestroyableTile {
         break;
       }
       if (i == length) {
-        getWorld().addTile(tileX, tileY, new Flame(tileX, tileY, Flame.Type.DOWN));
+        getWorld().addTile(tileX, tileY, new Flame(Flame.Type.DOWN));
       } else {
-        getWorld().addTile(tileX, tileY, new Flame(tileX, tileY, Flame.Type.VERTICAL));
+        getWorld().addTile(tileX, tileY, new Flame(Flame.Type.VERTICAL));
       }
     }
     // left direction
@@ -87,9 +90,9 @@ public class Bomb extends Tile implements SolidTile, DestroyableTile {
         break;
       }
       if (i == length) {
-        getWorld().addTile(tileX, tileY, new Flame(tileX, tileY, Flame.Type.LEFT));
+        getWorld().addTile(tileX, tileY, new Flame(Flame.Type.LEFT));
       } else {
-        getWorld().addTile(tileX, tileY, new Flame(tileX, tileY, Flame.Type.HORIZONTAL));
+        getWorld().addTile(tileX, tileY, new Flame(Flame.Type.HORIZONTAL));
       }
     }
     // right direction
@@ -104,9 +107,9 @@ public class Bomb extends Tile implements SolidTile, DestroyableTile {
         break;
       }
       if (i == length) {
-        getWorld().addTile(tileX, tileY, new Flame(tileX, tileY, Flame.Type.RIGHT));
+        getWorld().addTile(tileX, tileY, new Flame(Flame.Type.RIGHT));
       } else {
-        getWorld().addTile(tileX, tileY, new Flame(tileX, tileY, Flame.Type.HORIZONTAL));
+        getWorld().addTile(tileX, tileY, new Flame(Flame.Type.HORIZONTAL));
       }
     }
   }

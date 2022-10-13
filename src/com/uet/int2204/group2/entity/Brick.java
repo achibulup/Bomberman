@@ -8,6 +8,13 @@ public class Brick extends Tile implements SolidTile, DestroyableTile {
   private Animation animation = null;
   private boolean destroying = false;
 
+  public Brick() {
+  }
+
+  public Brick(boolean sparky) {
+    setSparky(sparky);
+  }
+
   public Brick(int x, int y) {
     super(x, y);
   }

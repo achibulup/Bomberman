@@ -7,6 +7,9 @@ public abstract class Tile extends Entity {
   private int tileX;
   private int tileY;
 
+  public Tile() {
+  }
+
   public Tile(int x, int y) {
     this.tileX = x;
     this.tileY = y;
@@ -30,5 +33,13 @@ public abstract class Tile extends Entity {
   @Override
   public int getTileY() {
     return this.tileY;
+  }
+
+  public void setTileX(int tileX) {
+    this.tileX = tileX;
+  }
+
+  public void setTileY(int tileY) {
+    this.tileY = tileY;
   }
 }
