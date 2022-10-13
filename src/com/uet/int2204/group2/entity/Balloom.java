@@ -38,6 +38,15 @@ public class Balloom extends Enemy {
     return SPEED;
   }
 
+  @Override
+  public void getHit() {
+    if (isDying()) {
+      return;
+    }
+    this.setDying();
+    this.animation = new Animation(ResourceManager.balloomDie);
+  }
+
   public void control() {
     getController().control(this);
   }
@@ -52,6 +61,11 @@ public class Balloom extends Enemy {
         control();
       }
       this.animation.update(dt);
+    } else {
+      this.animation.update(dt);
+      if (this.animation.isEnded()) {
+        markExpired();
+      }
     }
   }
 
