@@ -13,6 +13,8 @@ public abstract class MovableEntity extends Entity {
 
   protected Direction direction = Direction.DOWN;
 
+  protected boolean dying = false;
+
   // +--------+--------+
   // |       dir       |
   // |  from -->  to   |
@@ -59,6 +61,14 @@ public abstract class MovableEntity extends Entity {
 
   public void setDirection(Direction direction) {
     this.direction = direction;
+  }
+
+  public boolean isDying() {
+    return this.dying;
+  }
+
+  public void setDying() {
+    this.dying = true;
   }
 
   public boolean collidesWith(Class<? extends Tile> tile) {
