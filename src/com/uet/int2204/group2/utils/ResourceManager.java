@@ -140,7 +140,7 @@ public class ResourceManager {
     playerWalkRight = new AnimationData(playerWalkRightSheet);
 
     Sprite[] playerDeadSheet = tryLoadSpriteSheet("sprites/player/dead@11.png");
-    playerDead = new AnimationData(playerDeadSheet, 0.2, 1);
+    playerDead = new AnimationData(playerDeadSheet, 0.15, 1);
     
     Sprite[] bombSheet = tryLoadSpriteSheet("sprites/bomb/bomb@4.png");
     bomb = new AnimationData(bombSheet, 0.4);
@@ -163,25 +163,25 @@ public class ResourceManager {
     Sprite[] balloomSheet = tryLoadSpriteSheet("sprites/enemy/balloom@3.png");
     balloom = new AnimationData(balloomSheet);
     
-    Sprite[] balloomDieSheet = tryLoadSpriteSheet("sprites/enemy/ballom_die@5.png");
-    balloomDie = new AnimationData(balloomDieSheet, 0.2, 1);
+    Sprite[] balloomDieSheet = tryLoadSpriteSheet("sprites/enemy/balloom_die@5.png");
+    balloomDie = new AnimationData(balloomDieSheet, 0.15, 1);
 
     Sprite[] onealSheet = tryLoadSpriteSheet("sprites/enemy/oneal@4.png");
     oneal = new AnimationData(onealSheet);
     
     Sprite[] onealDieSheet = tryLoadSpriteSheet("sprites/enemy/oneal_die@5.png");
-    onealDie = new AnimationData(onealDieSheet, 0.2, 1);
+    onealDie = new AnimationData(onealDieSheet, 0.15, 1);
 
     Sprite[] broomSheet = tryLoadSpriteSheet("sprites/enemy/broom@4.png");
     broom = new AnimationData(broomSheet);
 
     Sprite[] broomDieSheet = tryLoadSpriteSheet("sprites/enemy/broom_die@7.png");
-    broomDie = new AnimationData(broomDieSheet, 0.2, 1);
+    broomDie = new AnimationData(broomDieSheet, 0.15, 1);
 
     Sprite[] bearSheet = tryLoadSpriteSheet("sprites/enemy/bear@3.png");
     bear = new AnimationData(bearSheet);
 
     Sprite[] bearDieSheet = tryLoadSpriteSheet("sprites/enemy/bear_die@5.png");
-    bearDie = new AnimationData(bearDieSheet, 0.2, 1);
+    bearDie = new AnimationData(bearDieSheet, 0.15, 1);
   }
 }
