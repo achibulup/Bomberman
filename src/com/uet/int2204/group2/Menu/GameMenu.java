@@ -55,7 +55,7 @@ public class GameMenu extends Parent {
         });
         MenuButton btnExit = new MenuButton("EXIT");
         btnExit.setOnMouseClicked(event -> {
-            System.exit(0);
+            Bomberman.closeApp();
         });
         menu0.getChildren().addAll(btnStart, btnOptions, btnExit);
         menu1.getChildren().addAll(btnSound, btnBack);
