@@ -5,7 +5,7 @@ import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
 
-public class Broom extends Enemy implements BasicEnemy {
+public class Broom extends Enemy {
   public static final double SPEED = 80;
 
   private Animation animation = new Animation(ResourceManager.broom);
@@ -43,14 +43,18 @@ public class Broom extends Enemy implements BasicEnemy {
     return SPEED;
   }
 
-  @Override
   public void control() {
     getController().control(this);
   }
 
   @Override
   public void update(double dt) {
-    BasicEnemy.super.update(dt);
+    if (isMovable(getDirection())) {
+      adjustedMove(getSpeed() * dt);
+    }
+    if (isAligned()) {
+      control();
+    }
     this.animation.update(dt);
   }
 
