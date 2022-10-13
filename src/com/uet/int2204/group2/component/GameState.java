@@ -11,6 +11,7 @@ import com.uet.int2204.group2.controller.KeyBoardPlayerController;
 import com.uet.int2204.group2.controller.KeyboardEnemyController;
 import com.uet.int2204.group2.controller.RandomMoveController;
 import com.uet.int2204.group2.entity.Balloom;
+import com.uet.int2204.group2.entity.Bear;
 import com.uet.int2204.group2.entity.BombItem;
 import com.uet.int2204.group2.entity.Brick;
 import com.uet.int2204.group2.entity.Broom;
@@ -42,7 +43,7 @@ public class GameState {
   private World world;
   private Canvas canvas;
   private Parent root;
-  private AnimationTimer timer;
+  private AnimationTimer gameLoop;
   private Collection<EventHandler<KeyEvent>> inputHandlers = new ArrayList<>();
 
   public GameState() {
@@ -52,43 +53,47 @@ public class GameState {
     this.canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
     this.root = new Pane(this.canvas);
 
+    Random rand = new Random();
+
     EntityController<? super Player> playerController = new KeyBoardPlayerController(inputHandlers);
     this.world.setPlayer(new Player(1, 1, playerController));
     EntityController<? super Enemy> balloomController = RandomMoveController.INSTANCE;
-    world.addEnemy(new Balloom(5, 5, balloomController));
+    this.world.addEnemy(new Balloom(3, 3, balloomController));
     EntityController<? super Enemy> broomController = RandomMoveController.INSTANCE;
-    world.addEnemy(new Broom(7, 9, broomController));
+    this.world.addEnemy(new Broom(5, 7, broomController));
+    EntityController<? super Enemy> bearController = RandomMoveController.INSTANCE;
+    for (int i = 0; i < 10; ++i) {
+      this.world.addEnemy(new Bear(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, bearController));
+    }
     EntityController<? super Enemy> onealController = new KeyboardEnemyController(inputHandlers);
-    world.addEnemy(new Oneal(11, 11, onealController));
+    this.world.addEnemy(new Oneal(7, 3, onealController));
 
-    Random rand = new Random();
     for (int i = 1; i <= mapWidth; ++i) {
       for (int j = 1; j <= mapHeight; ++j) {
         if (i + j <= 3) {
           continue;
         }
         if (i % 2 == 0 && j % 2 == 0) {
-          world.addTile(i, j, Wall.class);
+          world.addTile(i, j, new Wall());
           continue;
         }
-        int r = rand.nextInt(30);
+        int r = rand.nextInt(80);
         if (r == 8) {
-          world.addTile(i, j, FlameItem.class);
-          world.addTile(i, j, new Brick(i, j, true));
+          world.addTile(i, j, new FlameItem());
+          world.addTile(i, j, new Brick(true));
         } else if (r == 9) {
-          world.addTile(i, j, BombItem.class);
-          world.addTile(i, j, new Brick(i, j, true));
+          world.addTile(i, j, new BombItem());
+          world.addTile(i, j, new Brick(true));
         } else if (r == 10) {
-          world.addTile(i, j, SpeedItem.class);
-          world.addTile(i, j, new Brick(i, j, true));
-        } else if (r < 10) {
-          Brick brick = new Brick(i, j);
-          world.addTile(i, j, brick);
+          world.addTile(i, j, new SpeedItem());
+          world.addTile(i, j, new Brick(true));
+        } else if (r < 20) {
+          world.addTile(i, j, new Brick());
         } 
       }
     }
 
-    this.timer = new Timer(this);
+    this.gameLoop = new GameLoop(this);
   }
 
   public World getWorld() {
@@ -108,18 +113,18 @@ public class GameState {
   }
 
   public void start() {
-    this.timer.start();
+    this.gameLoop.start();
   }
 
   public void stop() {
-    this.timer.stop();
+    this.gameLoop.stop();
   }
 
-  private static class Timer extends AnimationTimer {
+  private static class GameLoop extends AnimationTimer {
     GameState host;
     long lastTime = -1;
 
-    public Timer(GameState host) {
+    public GameLoop(GameState host) {
       this.host = host;
     }
 
@@ -139,6 +144,9 @@ public class GameState {
   }
   
   private void render() {
+    if (this.world.getPlayer() == null) {
+      Bomberman.closeApp();
+    }
     GraphicsContext target = graphicsContext2D();
     target.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     world.renderTo(graphicsContext2D());
@@ -146,6 +154,9 @@ public class GameState {
 
   // adjust the canvas view to follow the player.
   private void adjustCanvasView() {
+    if (getWorld().getPlayer() == null) {
+      return;
+    }
     Point2D mapCenter = calcMapCenter();
     double canvasCenterX = this.canvas.getWidth() / 2;
     double canvasCenterY = this.canvas.getHeight() / 2;
