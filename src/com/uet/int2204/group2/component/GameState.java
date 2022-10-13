@@ -6,9 +6,10 @@ import java.util.Random;
 
 import com.uet.int2204.group2.Bomberman;
 import com.uet.int2204.group2.World;
+import com.uet.int2204.group2.controller.AIHighMoveController;
+import com.uet.int2204.group2.controller.AIMediumMoveController;
 import com.uet.int2204.group2.controller.EntityController;
 import com.uet.int2204.group2.controller.KeyBoardPlayerController;
-import com.uet.int2204.group2.controller.KeyboardEnemyController;
 import com.uet.int2204.group2.controller.RandomMoveController;
 import com.uet.int2204.group2.entity.Balloom;
 import com.uet.int2204.group2.entity.Bear;
@@ -56,17 +57,24 @@ public class GameState {
     Random rand = new Random();
 
     EntityController<? super Player> playerController = new KeyBoardPlayerController(inputHandlers);
-    this.world.setPlayer(new Player(1, 1, playerController));
     EntityController<? super Enemy> balloomController = RandomMoveController.INSTANCE;
-    this.world.addEnemy(new Balloom(3, 3, balloomController));
     EntityController<? super Enemy> broomController = RandomMoveController.INSTANCE;
-    this.world.addEnemy(new Broom(5, 7, broomController));
-    EntityController<? super Enemy> bearController = RandomMoveController.INSTANCE;
-    for (int i = 0; i < 10; ++i) {
+    EntityController<? super Enemy> bearController = AIHighMoveController.INSTANCE;
+    EntityController<? super Enemy> onealController = AIMediumMoveController.INSTANCE;
+    this.world.setPlayer(new Player(1, 1, playerController));
+
+    for (int i = 0; i < 3; ++i) {
+      this.world.addEnemy(new Balloom(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, balloomController));
+      this.world.addEnemy(new Oneal(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, onealController));
+    }
+
+    for (int i = 0; i < 8; ++i) {
       this.world.addEnemy(new Bear(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, bearController));
     }
-    EntityController<? super Enemy> onealController = new KeyboardEnemyController(inputHandlers);
-    this.world.addEnemy(new Oneal(7, 3, onealController));
+    
+    for (int i = 0; i < 5; ++i) {
+      this.world.addEnemy(new Broom(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, broomController));
+    }
 
     for (int i = 1; i <= mapWidth; ++i) {
       for (int j = 1; j <= mapHeight; ++j) {

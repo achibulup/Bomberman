@@ -1,8 +1,8 @@
 package com.uet.int2204.group2.controller;
 
 import com.uet.int2204.group2.entity.Enemy;
-import com.uet.int2204.group2.entity.MovableEntity;
 import com.uet.int2204.group2.entity.Player;
+import com.uet.int2204.group2.utils.Direction;
 
 import java.util.Random;
 
@@ -17,7 +17,7 @@ public class AIHighMoveController implements EntityController<Enemy>{
         enemy.setDirection(getDirectionHigh(aiHighrandomDir(player, enemy)));
 
         int dir = aiHighrandomDir(player, enemy);
-        if (getDirectionHigh(dir) == MovableEntity.Direction.LEFT) {
+        if (getDirectionHigh(dir) == Direction.LEFT) {
                 if (!enemy.isMovable(getDirectionHigh(dir))) {
                     dir =  0;
                     enemy.setDirection(getDirectionHigh(dir));
@@ -32,7 +32,7 @@ public class AIHighMoveController implements EntityController<Enemy>{
                 } else {
 
                 }
-            } else if (getDirectionHigh(dir) == MovableEntity.Direction.RIGHT) {
+            } else if (getDirectionHigh(dir) == Direction.RIGHT) {
                 if (!enemy.isMovable(getDirectionHigh(dir))) {
                     dir = 0;
                     enemy.setDirection(getDirectionHigh(dir));
@@ -45,7 +45,7 @@ public class AIHighMoveController implements EntityController<Enemy>{
                         }
                     }
                 }
-            } else if (getDirectionHigh(dir) == MovableEntity.Direction.UP) {
+            } else if (getDirectionHigh(dir) == Direction.UP) {
                 if (!enemy.isMovable(getDirectionHigh(dir))) {
                     dir = 2;
                     enemy.setDirection(getDirectionHigh(dir));
@@ -58,7 +58,7 @@ public class AIHighMoveController implements EntityController<Enemy>{
                         }
                     }
                 }
-            } else if (getDirectionHigh(dir) == MovableEntity.Direction.DOWN) {
+            } else if (getDirectionHigh(dir) == Direction.DOWN) {
                 if (!enemy.isMovable(getDirectionHigh(dir))) {
                     dir = 2;
                     enemy.setDirection(getDirectionHigh(dir));
@@ -79,11 +79,9 @@ public class AIHighMoveController implements EntityController<Enemy>{
     private static int aiHighrandomDir(Player player, Enemy enemy) {
         int dir = -1;
         if (player == null) {
-            System.out.println("Player null");
             dir = rand.nextInt(4);
 
         } else {
-            System.out.println("player is not null");
             int vertical = rand.nextInt(2);
             if (vertical == 1) {
                 int v = calculateColDirection(player, enemy);
@@ -106,23 +104,18 @@ public class AIHighMoveController implements EntityController<Enemy>{
         return dir;
     }
 
-    public static MovableEntity.Direction getDirectionHigh(int dir) {
+    public static Direction getDirectionHigh(int dir) {
         switch (dir) {
             case -1:
-                System.out.println("NONE");
-                return MovableEntity.Direction.NONE;
+                return Direction.NONE;
             case 0:
-                System.out.println("UP");
-                return MovableEntity.Direction.UP;
+                return Direction.UP;
             case 1:
-                System.out.println("DOWN");
-                return MovableEntity.Direction.DOWN;
+                return Direction.DOWN;
             case 2:
-                System.out.println("LEFT");
-                return MovableEntity.Direction.LEFT;
+                return Direction.LEFT;
             case 3:
-                System.out.println("RIGHT");
-                return MovableEntity.Direction.RIGHT;
+                return Direction.RIGHT;
         }
         throw new RuntimeException("Random.nextInt(4) return value out of range");
     }
