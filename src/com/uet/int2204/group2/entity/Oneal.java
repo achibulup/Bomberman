@@ -10,7 +10,7 @@ public class Oneal extends Enemy {
 
   private Animation animation = new Animation(ResourceManager.oneal);
   private EntityController<? super Oneal> controller = EntityController.doNothingController;
-
+  
   public Oneal(int tileX, int tileY) {
     super(tileX, tileY);
   }
@@ -27,7 +27,7 @@ public class Oneal extends Enemy {
   public void setController(EntityController<? super Oneal> controller) {
     this.controller = controller;
   }
-
+  
   @Override
   public Sprite getSprite() {
     return this.animation.currentSprite();
@@ -52,5 +52,4 @@ public class Oneal extends Enemy {
     }
     this.animation.update(dt);
   }
-
 }
