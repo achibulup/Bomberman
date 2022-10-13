@@ -75,6 +75,12 @@ public abstract class MovableEntity extends Entity {
     return SolidTile.class.isAssignableFrom(tile);
   }
 
+  // called when the entity get hit (eg. by flame)
+  public void getHit() {
+    setDying();
+    markExpired();
+  }
+
   public boolean isMovable(Direction direction) {
     if (direction == Direction.NONE) {
       return false;
@@ -110,11 +116,6 @@ public abstract class MovableEntity extends Entity {
       }
     }
     return true;
-  }
-
-  // called when the entity get hit (eg. by flame)
-  public void getHit() {
-    markExpired();
   }
 
   // checks if this entity is perfectly aligned with a tile.

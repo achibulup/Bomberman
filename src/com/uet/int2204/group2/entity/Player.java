@@ -74,13 +74,15 @@ public class Player extends MovableEntity {
 
   @Override
   public void update(double dt) {
-    this.controller.control(this);
-    this.currentAnimation.update(dt);
-    double moveDist = getSpeed() * dt;
-    if (isMovable(getDirection())) {
-      adjustedMove(moveDist);
-    } else {
-      cornerCorrection(moveDist);
+    if (!isDying()) {
+      this.controller.control(this);
+      this.currentAnimation.update(dt);
+      double moveDist = getSpeed() * dt;
+      if (isMovable(getDirection())) {
+        adjustedMove(moveDist);
+      } else {
+        cornerCorrection(moveDist);
+      }
     }
   }
 
