@@ -29,8 +29,8 @@ public class Broom extends Enemy {
   }
 
   @Override
-  public boolean collidesWith(Class<? extends Tile> tile) {
-    return tile != Brick.class && super.collidesWith(tile);
+  public boolean blockedBy(Class<? extends Tile> tile) {
+    return tile != Brick.class && super.blockedBy(tile);
   }
 
   @Override
