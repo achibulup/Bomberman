@@ -71,7 +71,7 @@ public abstract class MovableEntity extends Entity {
     this.dying = true;
   }
 
-  public boolean collidesWith(Class<? extends Tile> tile) {
+  public boolean blockedBy(Class<? extends Tile> tile) {
     return SolidTile.class.isAssignableFrom(tile);
   }
 
@@ -97,21 +97,21 @@ public abstract class MovableEntity extends Entity {
     }
 
     Tile tileAhead = world.getTile(getTileX() + direction.x, getTileY() + direction.y);
-    if (collidesWith(tileAhead.getClass())) {
+    if (blockedBy(tileAhead.getClass())) {
       return false;
     }
     double perpProj = direction.turnLeft().dotProduct(dx, dy);
     if (perpProj > 0) {
       Tile tileAheadLeft = world.getTile(getTileX() + direction.x + direction.turnLeft().x, 
                                          getTileY() + direction.y + direction.turnLeft().y);
-      if (collidesWith(tileAheadLeft.getClass())) {
+      if (blockedBy(tileAheadLeft.getClass())) {
         return false;
       }
     } 
     if (perpProj < 0) {
       Tile tileAheadRight = world.getTile(getTileX() + direction.x + direction.turnRight().x, 
                                           getTileY() + direction.y + direction.turnRight().y);
-      if (collidesWith(tileAheadRight.getClass())) {
+      if (blockedBy(tileAheadRight.getClass())) {
         return false;
       }
     }
