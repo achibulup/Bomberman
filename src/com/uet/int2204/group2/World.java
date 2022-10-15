@@ -73,6 +73,17 @@ public class World {
   }
 
   /**
+   * Put a tile layer on top of the tile stack at the position (tile.tilex, tile.tileY).
+   * This will also set the tile's world to this world.
+   */
+  public void addTile(Tile tile) {
+    int tileX = tile.getTileX();
+    int tileY = tile.getTileY();
+    tile.setWorld(this);
+    this.map[tileX][tileY].push(tile);
+  }
+
+  /**
    * Put a tile layer on top of the tile stack at the position (tileX, tileY).
    * This will also set the tile's world to this world.
    */
