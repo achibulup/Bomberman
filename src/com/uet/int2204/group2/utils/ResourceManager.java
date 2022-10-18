@@ -1,14 +1,18 @@
 package com.uet.int2204.group2.utils;
 
+import java.io.FileInputStream;
 import java.nio.file.FileSystemNotFoundException;
 
 import com.uet.int2204.group2.graphics.AnimationData;
 import com.uet.int2204.group2.graphics.Sprite;
+import com.uet.int2204.group2.map.MapData;
 
 import javafx.scene.image.Image;
 
 public class ResourceManager {
   public static final Image background;
+
+  public static final MapData[] levels;
 
   public static final Sprite grassNormal;
   public static final Sprite grassShadowed;
@@ -76,10 +80,20 @@ public class ResourceManager {
 
   public static Sprite[] tryLoadSpriteSheet(String path, int spriteWidth, int spriteHeight) {
     return Sprite.makeSpriteSheet(tryLoadImage(path), spriteWidth, spriteHeight);
+  }  
+  
+  public static MapData tryLoadMapData(String path) {
+    try {
+      return new MapData(new FileInputStream("target/classes/" + path));
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
 
   static {
     background = tryLoadImage("sprites/background.png");
+
+    levels = new MapData[]{tryLoadMapData("levels/level1.txt")};
 
     Sprite[] grassSheet = tryLoadSpriteSheet("sprites/map/grass@2.png");
     grassNormal = grassSheet[0];
