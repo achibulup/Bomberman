@@ -58,6 +58,10 @@ public class World {
     enemies = new ArrayList<>();
   }
 
+  public char[][] getMatrix() {
+    return this.matrix;
+  }
+
   public int getMapWidth() {
     return this.mapWidth;
   }
@@ -84,13 +88,6 @@ public class World {
     tile.setTileX(tileX);
     tile.setTileY(tileY);
     this.map[tileX][tileY].push(tile);
-    if (tile instanceof SolidTile) {
-      if (tile instanceof Bomb) {
-        this.matrix[tileX][tileY] = 'B';
-      } else {
-        this.matrix[tileX][tileY] = '#';
-      }
-    }
   }
 
   /** 
@@ -98,14 +95,6 @@ public class World {
    */
   public void popTile(int tileX, int tileY) {
     this.map[tileX][tileY].pop();
-    Tile tile = this.map[tileX][tileY].peek();
-    if (tile instanceof SolidTile) {
-      if (tile instanceof Bomb) {
-        this.matrix[tileX][tileY] = 'B';
-      } else {
-        this.matrix[tileX][tileY] = '#';
-      }
-    }
   }
 
   public Player getPlayer() {
@@ -168,6 +157,23 @@ public class World {
   }
 
   public void renderTo(GraphicsContext target) {
+    for (int i = 0; i < matrix[0].length; ++i) {
+      for (int j = 0; j < matrix.length; ++j) {
+        Tile tile = this.map[j][i].peek();
+        if (tile instanceof SolidTile) {
+          if (tile instanceof Bomb) {
+            this.matrix[j][i] = 'B';
+          } else {
+            this.matrix[j][i] = '#';
+          }
+        } else {
+          this.matrix[j][i] = ' ';
+        }
+      }
+    }
+    
+
+
     for (var col : this.map) {
       for (var tiles : col) {
         for (var tile : tiles) {
