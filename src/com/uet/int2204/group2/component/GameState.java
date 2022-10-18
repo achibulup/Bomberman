@@ -155,9 +155,11 @@ public class GameState {
     if (this.world.getPlayer() == null) {
       Bomberman.closeApp();
     }
-    GraphicsContext target = graphicsContext2D();
-    target.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    world.renderTo(graphicsContext2D());
+    else {
+      GraphicsContext target = graphicsContext2D();
+      target.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+      world.renderTo(graphicsContext2D()); 
+    }
   }
 
   // adjust the canvas view to follow the player.
