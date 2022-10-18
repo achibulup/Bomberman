@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import com.uet.int2204.group2.entity.Bomb;
 import com.uet.int2204.group2.entity.Edge;
 import com.uet.int2204.group2.entity.Enemy;
 import com.uet.int2204.group2.entity.Entity;
 import com.uet.int2204.group2.entity.Grass;
 import com.uet.int2204.group2.entity.Player;
+import com.uet.int2204.group2.entity.SolidTile;
 import com.uet.int2204.group2.entity.Tile;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -23,14 +25,18 @@ public class World {
   private TileStack[][] map;
   private List<Enemy> enemies;
 
+  private char[][] matrix;
+
   public World(int mapWidth, int mapHeight) {
     this.mapWidth = mapWidth;
     this.mapHeight = mapHeight;
 
     this.map = new TileStack[mapWidth + 2][mapHeight + 2];
+    this.matrix = new char[mapWidth + 2][mapHeight + 2];
     for (int i = 0; i < mapWidth + 2; ++i) {
       for (int j = 0; j < mapHeight + 2; ++j) {
-        map[i][j] = new TileStack();
+        this.map[i][j] = new TileStack();
+        this.matrix[i][j] = ' ';
       }
     }
     for (int i = 0; i < mapWidth + 2; ++i) {
@@ -78,6 +84,13 @@ public class World {
     tile.setTileX(tileX);
     tile.setTileY(tileY);
     this.map[tileX][tileY].push(tile);
+    if (tile instanceof SolidTile) {
+      if (tile instanceof Bomb) {
+        this.matrix[tileX][tileY] = 'B';
+      } else {
+        this.matrix[tileX][tileY] = '#';
+      }
+    }
   }
 
   /** 
@@ -85,6 +98,14 @@ public class World {
    */
   public void popTile(int tileX, int tileY) {
     this.map[tileX][tileY].pop();
+    Tile tile = this.map[tileX][tileY].peek();
+    if (tile instanceof SolidTile) {
+      if (tile instanceof Bomb) {
+        this.matrix[tileX][tileY] = 'B';
+      } else {
+        this.matrix[tileX][tileY] = '#';
+      }
+    }
   }
 
   public Player getPlayer() {
