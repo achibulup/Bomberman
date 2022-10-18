@@ -141,6 +141,7 @@ public class GameState {
   }
 
   private void loadMap(MapData mapData) {
+    this.inputHandlers.clear();
     this.world = new World(mapData.getWidth(), mapData.getHeight());
     for (int i = 1; i <= world.getMapWidth(); ++i) {
       for (int j = 1; j <= world.getMapHeight(); ++j) {
