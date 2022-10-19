@@ -19,8 +19,11 @@ import com.uet.int2204.group2.entity.Enemy;
 import com.uet.int2204.group2.entity.FlameItem;
 import com.uet.int2204.group2.entity.Oneal;
 import com.uet.int2204.group2.entity.Player;
+import com.uet.int2204.group2.entity.Portal;
 import com.uet.int2204.group2.entity.SpeedItem;
 import com.uet.int2204.group2.entity.Wall;
+import com.uet.int2204.group2.map.ActivatePortalTrigger;
+import com.uet.int2204.group2.map.BlinkBrickTrigger;
 import com.uet.int2204.group2.utils.Constants;
 import com.uet.int2204.group2.utils.Conversions;
 import com.uet.int2204.group2.utils.Maths;
@@ -79,19 +82,19 @@ public class GameState {
         }
         int r = rand.nextInt(80);
         if (r == 8) {
-          world.addTile(i, j, new FlameItem());
-          world.addTile(i, j, new Brick(true));
+          world.addTile(i, j, new Brick(new FlameItem()));
         } else if (r == 9) {
-          world.addTile(i, j, new BombItem());
-          world.addTile(i, j, new Brick(true));
+          world.addTile(i, j, new Brick(new BombItem()));
         } else if (r == 10) {
-          world.addTile(i, j, new SpeedItem());
-          world.addTile(i, j, new Brick(true));
+          world.addTile(i, j, new Brick(new SpeedItem()));
         } else if (r < 20) {
           world.addTile(i, j, new Brick());
         } 
       }
     }
+    world.addTile(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, new Portal());
+    world.addTrigger(new BlinkBrickTrigger());
+    world.addTrigger(new ActivatePortalTrigger());
 
     this.gameLoop = new GameLoop(this);
   }

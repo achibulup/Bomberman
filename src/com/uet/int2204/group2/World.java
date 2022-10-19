@@ -12,8 +12,11 @@ import com.uet.int2204.group2.entity.Flame;
 import com.uet.int2204.group2.entity.Grass;
 import com.uet.int2204.group2.entity.Item;
 import com.uet.int2204.group2.entity.Player;
+import com.uet.int2204.group2.entity.Portal;
 import com.uet.int2204.group2.entity.SolidTile;
 import com.uet.int2204.group2.entity.Tile;
+import com.uet.int2204.group2.map.SingleUseWorldTrigger;
+import com.uet.int2204.group2.map.WorldTrigger;
 
 import javafx.scene.canvas.GraphicsContext;
 
@@ -26,6 +29,9 @@ public class World {
   private Player player;
   private TileStack[][] map;
   private List<Enemy> enemies;
+  private List<WorldTrigger> triggers = new ArrayList<>();
+
+  private boolean portalActive = false;
 
   public World(int mapWidth, int mapHeight) {
     this.mapWidth = mapWidth;
@@ -92,6 +98,9 @@ public class World {
     tile.setWorld(this);
     tile.setTileX(tileX);
     tile.setTileY(tileY);
+    if (tile instanceof Portal && isPortalActive()) {
+      ((Portal) tile).setBlinking(true);
+    }
     this.map[tileX][tileY].push(tile);
   }
 
@@ -115,7 +124,7 @@ public class World {
     this.player = player;
   }
 
-  public Iterable<Enemy> getEnemies() {
+  public Collection<Enemy> getEnemies() {
     return this.enemies;
   }
 
@@ -127,10 +136,36 @@ public class World {
     this.enemies.add(enemy);
   }
 
+  public void addTrigger(WorldTrigger trigger) {
+    this.triggers.add(trigger);
+  }
+
+  public Collection<WorldTrigger> getTriggers() {
+    return this.triggers;
+  }
+
+  public boolean isPortalActive() {
+    return this.portalActive;
+  }
+
+  public void setPortalActive() {
+    this.portalActive = true;
+    for (var col : this.map) {
+      for (var tiles : col) {
+        for (Tile tile : tiles) {
+          if (tile instanceof Portal) {
+            ((Portal) tile).setBlinking(true);
+          }
+        }
+      }
+    }
+  }
+
   public void update(double dt) {
     handleInteractions();
     updateEntities(dt);
     handleInteractions();
+    runTriggers();
     removeExpiredEntities();
   }
 
@@ -179,6 +214,19 @@ public class World {
         enemyInteractions(enemy);
       }
     }
+  }
+
+  private void runTriggers() {
+    Collection<WorldTrigger> removedSingleTriggers = new ArrayList<>();
+    for (WorldTrigger trigger : this.triggers) {
+      if (trigger.checkCondition(this)) {
+        if (trigger instanceof SingleUseWorldTrigger) {
+          removedSingleTriggers.add(trigger);
+        }
+        trigger.activate(this);
+      }
+    }
+    this.triggers.removeAll(removedSingleTriggers);
   }
 
   protected void removeExpiredEntities() {
