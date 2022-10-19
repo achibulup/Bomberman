@@ -93,7 +93,11 @@ public class ResourceManager {
   static {
     background = tryLoadImage("sprites/background.png");
 
-    levels = new MapData[]{tryLoadMapData("levels/level1.txt")};
+    levels = new MapData[]{
+      tryLoadMapData("levels/level1.txt"),
+      tryLoadMapData("levels/level2.txt"),
+      tryLoadMapData("levels/level3.txt")
+    };
 
     Sprite[] grassSheet = tryLoadSpriteSheet("sprites/map/grass@2.png");
     grassNormal = grassSheet[0];

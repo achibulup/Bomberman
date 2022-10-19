@@ -29,10 +29,12 @@ import com.uet.int2204.group2.utils.ResourceManager;
 
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Affine;
@@ -46,7 +48,10 @@ public class GameState {
   private Canvas canvas;
   private Parent root;
   private AnimationTimer gameLoop;
+  private LevelController levelController;
   private Collection<EventHandler<KeyEvent>> inputHandlers = new ArrayList<>();
+
+  private int currentLevel = 1;
 
   public GameState() {
     this.canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -94,9 +99,11 @@ public class GameState {
     //     } 
     //   }
     // }
-    loadMap(ResourceManager.levels[0]);
-
+    loadMap(currentLevel = 1);
+    this.levelController = new LevelController(this);
+    this.inputHandlers.add(this.levelController);
     this.gameLoop = new GameLoop(this);
+
   }
 
   public World getWorld() {
@@ -140,8 +147,53 @@ public class GameState {
     }
   }
 
+  private enum LevelChange {
+    NEXT, PREV, NONE
+  };
+  private static class LevelController implements EventHandler<KeyEvent> {
+    private GameState host;
+    private LevelChange levelChange = LevelChange.NONE;
+
+    public LevelController(GameState host) {
+      this.host = host;
+    }
+
+    @Override 
+    public void handle(KeyEvent event) {
+      if (event.getEventType() == KeyEvent.KEY_PRESSED) {
+        if (event.getCode() == KeyCode.OPEN_BRACKET) {
+          levelChange = LevelChange.PREV;
+        }
+        if (event.getCode() == KeyCode.CLOSE_BRACKET) {
+          levelChange = LevelChange.NEXT;
+        }
+      }
+    }
+
+    public void changeLevel() {
+      if (this.levelChange == LevelChange.PREV) {
+        if (host.currentLevel > 1) {
+          host.loadMap(--host.currentLevel);
+        }
+      }
+      if (this.levelChange == LevelChange.NEXT) {
+        if (host.currentLevel == ResourceManager.levels.length) {
+          Bomberman.closeApp();
+        } else {
+          host.loadMap(++host.currentLevel);
+        }
+      }
+
+      this.levelChange = LevelChange.NONE;
+    }
+  }
+
+  private void loadMap(int level) {
+    loadMap(ResourceManager.levels[level - 1]);
+  }
+
   private void loadMap(MapData mapData) {
-    this.inputHandlers.clear();
+    this.inputHandlers.removeIf((handler) -> handler instanceof EntityController);
     this.world = new World(mapData.getWidth(), mapData.getHeight());
     for (int i = 1; i <= world.getMapWidth(); ++i) {
       for (int j = 1; j <= world.getMapHeight(); ++j) {
@@ -188,7 +240,12 @@ public class GameState {
   
   private void update(double dt) {
     world.update(dt);
+    changeLevel();
     adjustCanvasView();
+  }
+  
+  private void changeLevel() {
+    this.levelController.changeLevel();
   }
   
   private void render() {
