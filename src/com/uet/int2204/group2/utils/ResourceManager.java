@@ -127,7 +127,7 @@ public class ResourceManager {
 
     Sprite[] portalSheet = tryLoadSpriteSheet("sprites/map/portal@2.png");
     portal = portalSheet[0];
-    portalBlinking = new AnimationData(portalSheet);
+    portalBlinking = new AnimationData(portalSheet, 0.5);
 
     playerIdleUp = new AnimationData(tryLoadSpriteSheet("sprites/player/idle_up@1.png"));
     playerIdleDown = new AnimationData(tryLoadSpriteSheet("sprites/player/idle_down@1.png"));
