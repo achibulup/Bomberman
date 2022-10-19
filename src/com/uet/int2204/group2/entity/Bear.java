@@ -44,6 +44,15 @@ public class Bear extends Enemy {
     return SPEED;
   }
 
+  @Override
+  public void getHit() {
+    if (isDying()) {
+      return;
+    }
+    this.setDying();
+    this.animation = new Animation(ResourceManager.bearDie);
+  }
+
   public void control() {
     getController().control(this);
   }
@@ -66,6 +75,11 @@ public class Bear extends Enemy {
         }
       }
       this.animation.update(dt);
+    } else {
+      this.animation.update(dt);
+      if (this.animation.isEnded()) {
+        markExpired();
+      }
     }
   }
 
