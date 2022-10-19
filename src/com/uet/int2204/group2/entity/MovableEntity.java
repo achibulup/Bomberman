@@ -3,13 +3,9 @@ package com.uet.int2204.group2.entity;
 import static com.uet.int2204.group2.utils.Constants.TILE_SIZE;
 
 import com.uet.int2204.group2.World;
-import com.uet.int2204.group2.utils.Constants;
+import com.uet.int2204.group2.utils.Direction;
 
 public abstract class MovableEntity extends Entity {
-  public static enum Direction {
-    NONE, UP, DOWN, LEFT, RIGHT
-  };
-
   protected int tileX;
   protected int tileY;
   protected double pixelX;
@@ -70,75 +66,45 @@ public abstract class MovableEntity extends Entity {
   }
 
   public boolean isMovable(Direction direction) {
-    World world = getWorld();
-    switch (direction) {
-      case UP:
-        if (!isYAligned()) {
-          return true;
-        }
-        if (collidesWith(world.getTile(getTileX(), getTileY() - 1).getClass())) {
-          return false;
-        }
-        if (getPixelX() < getTileX() * Constants.TILE_SIZE
-         && collidesWith(world.getTile(getTileX() - 1, getTileY() - 1).getClass())) {
-          return false;
-        }
-        if (getPixelX() > getTileX() * Constants.TILE_SIZE
-         && collidesWith(world.getTile(getTileX() + 1, getTileY() - 1).getClass())) {
-          return false;
-        }
-        return true;
-      case DOWN:
-        if (!isYAligned()) {
-          return true;
-        }
-        if (collidesWith(world.getTile(getTileX(), getTileY() + 1).getClass())) {
-          return false;
-        }
-        if (getPixelX() < getTileX() * Constants.TILE_SIZE
-         && collidesWith(world.getTile(getTileX() - 1, getTileY() + 1).getClass())) {
-          return false;
-        }
-        if (getPixelX() > getTileX() * Constants.TILE_SIZE
-         && collidesWith(world.getTile(getTileX() + 1, getTileY() + 1).getClass())) {
-          return false;
-        }
-        return true;
-      case LEFT:
-        if (!isXAligned()) {
-          return true;
-        }
-        if (collidesWith(world.getTile(getTileX() - 1, getTileY()).getClass())) {
-          return false;
-        }
-        if (getPixelY() < getTileY() * Constants.TILE_SIZE
-        && collidesWith(world.getTile(getTileX() - 1, getTileY() - 1).getClass())) {
-          return false;
-        }
-        if (getPixelY() > getTileY() * Constants.TILE_SIZE
-        && collidesWith(world.getTile(getTileX() - 1, getTileY() + 1).getClass())) {
-          return false;
-        }
-        return true;
-      case RIGHT:
-        if (!isXAligned()) {
-          return true;
-        }
-        if (collidesWith(world.getTile(getTileX() + 1, getTileY()).getClass())) {
-          return false;
-        }
-        if (getPixelY() < getTileY() * Constants.TILE_SIZE
-        && collidesWith(world.getTile(getTileX() + 1, getTileY() - 1).getClass())) {
-          return false;
-        }
-        if (getPixelY() > getTileY() * Constants.TILE_SIZE
-        && collidesWith(world.getTile(getTileX() + 1, getTileY() + 1).getClass())) {
-          return false;
-        }
-        return true;
-      default:
+    if (direction == Direction.NONE) {
+      return false;
     }
-    return false;
+
+    World world = getWorld();
+    // displacement from the main tile
+    double dx = getPixelX() - getTileX() * TILE_SIZE;
+    double dy = getPixelY() - getTileY() * TILE_SIZE;
+
+    // if the entity is not aligned along the direction's axis, return true
+    if (direction.dotProduct(dx, dy) != 0) {
+      return true;
+    }
+
+    Tile tileAhead = world.getTile(getTileX() + direction.x, getTileY() + direction.y);
+    if (collidesWith(tileAhead.getClass())) {
+      return false;
+    }
+    double perpProj = direction.turnLeft().dotProduct(dx, dy);
+    if (perpProj > 0) {
+      Tile tileAheadLeft = world.getTile(getTileX() + direction.x + direction.turnLeft().x, 
+                                         getTileY() + direction.y + direction.turnLeft().y);
+      if (collidesWith(tileAheadLeft.getClass())) {
+        return false;
+      }
+    } 
+    if (perpProj < 0) {
+      Tile tileAheadRight = world.getTile(getTileX() + direction.x + direction.turnRight().x, 
+                                          getTileY() + direction.y + direction.turnRight().y);
+      if (collidesWith(tileAheadRight.getClass())) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  // called when the entity get hit (eg. by flame)
+  public void getHit() {
+    markExpired();
   }
 
   // checks if this entity is perfectly aligned with a tile.
@@ -211,22 +177,10 @@ public abstract class MovableEntity extends Entity {
   }
 
   protected static double calcDx(Direction direction, double distance) {
-    if (direction == Direction.LEFT) {
-      return -distance;
-    }
-    if (direction == Direction.RIGHT) {
-      return distance;
-    }
-    return 0;
+    return distance * direction.x;
   }
 
   protected static double calcDy(Direction direction, double distance) {
-    if (direction == Direction.UP) {
-      return -distance;
-    }
-    if (direction == Direction.DOWN) {
-      return distance;
-    }
-    return 0;
+    return distance * direction.y;
   }
 }

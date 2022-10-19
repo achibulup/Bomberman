@@ -6,6 +6,9 @@ import com.uet.int2204.group2.utils.ResourceManager;
 public class FlameItem extends Item {
   private Animation animation = new Animation(ResourceManager.flameItem);
 
+  public FlameItem() {
+  }
+
   public FlameItem(int tileX, int tileY) {
     super(tileX, tileY);
   }

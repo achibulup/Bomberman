@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.uet.int2204.group2.entity.Player;
-import com.uet.int2204.group2.entity.MovableEntity.Direction;
+import com.uet.int2204.group2.utils.Direction;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;

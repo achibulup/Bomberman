@@ -7,6 +7,9 @@ import com.uet.int2204.group2.utils.ResourceManager;
 public class SpeedItem extends Item {
   private Animation animation = new Animation(ResourceManager.speedItem);
 
+  public SpeedItem() {
+  }
+
   public SpeedItem(int tileX, int tileY) {
     super(tileX, tileY);
   }

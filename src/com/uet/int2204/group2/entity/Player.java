@@ -1,12 +1,15 @@
 package com.uet.int2204.group2.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.uet.int2204.group2.controller.EntityController;
 import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.Constants;
+import com.uet.int2204.group2.utils.Direction;
 import com.uet.int2204.group2.utils.ResourceManager;
 
-// TODO:
 public class Player extends MovableEntity {
   // the field MovableEntity.direction is the moving direction of the player.
 
@@ -19,9 +22,8 @@ public class Player extends MovableEntity {
   private EntityController<? super Player> controller = EntityController.doNothingController;
   private double speed = INITIAL_SPEED;
   private int flameLength = 1;
-  private int maxBombCount = 2;
-
-  private int remainingBombs = maxBombCount;
+  private int maxBombCount = 1;
+  private List<Bomb> bombList = new ArrayList<>();
 
   public Player(int tileX, int tileY) {
     super(tileX, tileY);
@@ -63,7 +65,6 @@ public class Player extends MovableEntity {
 
   public void setMaxBombCount(int maxBombCount) {
     this.maxBombCount = maxBombCount;
-    this.remainingBombs = maxBombCount;
   }
 
   @Override
@@ -73,17 +74,18 @@ public class Player extends MovableEntity {
 
   @Override
   public void update(double dt) {
-    this.controller.control(this);
-    if (getWorld().getTile(getTileX(), getTileY()) instanceof Item) {
-      collect((Item) getWorld().getTile(getTileX(), getTileY()));
+    Tile thisTile = getWorld().getTile(getTileX(), getTileY());
+    if (thisTile instanceof Item) {
+      collect((Item) thisTile);
     }
+    this.controller.control(this);
+    this.currentAnimation.update(dt);
     double moveDist = getSpeed() * dt;
     if (isMovable(getDirection())) {
       adjustedMove(moveDist);
     } else {
       cornerCorrection(moveDist);
     }
-    this.currentAnimation.update(dt);
   }
 
   @Override
@@ -127,19 +129,21 @@ public class Player extends MovableEntity {
   }
 
   public void placeBomb() {
-    // TODO:
-    if (this.remainingBombs == 0 
+    updateBombList();
+    if (this.bombList.size() == this.maxBombCount
      || getWorld().getTile(getTileX(), getTileY()) instanceof SolidTile) {
       return;
     }
-    this.remainingBombs--;
-    Bomb bomb = new Bomb(getTileX(), getTileY(), this);
-    getWorld().addTile(getTileX(), getTileY(), bomb);
+    Bomb newBomb = new Bomb(getTileX(), getTileY(), this);
+    this.bombList.add(newBomb);
+    getWorld().addTile(getTileX(), getTileY(), newBomb);
   }
 
   public void collect(Item item) {
-    item.onCollect(this);
-    item.markExpired();
+    if (!item.beingDestroyed()) {
+      item.onCollect(this);
+      item.markExpired();
+    }
   }
 
   /**
@@ -150,56 +154,20 @@ public class Player extends MovableEntity {
   public void cornerCorrection(double moveDist) {
     double alignX = getTileX() * Constants.TILE_SIZE;
     double alignY = getTileY() * Constants.TILE_SIZE;
-    switch (getDirection()) {
-      case UP:
-        if (!collidesWith(getWorld().getTile(getTileX(), getTileY() - 1).getClass())) {
-          if (getPixelX() < alignX && alignX - getPixelX() <= NUDGE_TOLERANCE) {
-            adjustedMove(Direction.RIGHT, moveDist);
-            break;
-          }
-          if (getPixelX() > alignX && getPixelX() - alignX <= NUDGE_TOLERANCE) {
-            adjustedMove(Direction.LEFT, moveDist);
-            break;
-          }
-        }
-        break;
-      case DOWN:
-        if (!collidesWith(getWorld().getTile(getTileX(), getTileY() + 1).getClass())) {
-          if (getPixelX() < alignX && alignX - getPixelX() <= NUDGE_TOLERANCE) {
-            adjustedMove(Direction.RIGHT, moveDist);
-            break;
-          }
-          if (getPixelX() > alignX && getPixelX() - alignX <= NUDGE_TOLERANCE) {
-            adjustedMove(Direction.LEFT, moveDist);
-            break;
-          }
-        }
-        break;
-      case LEFT:
-        if (!collidesWith(getWorld().getTile(getTileX() - 1, getTileY()).getClass())) {
-          if (getPixelY() < alignY && alignY - getPixelY() <= NUDGE_TOLERANCE) {
-            adjustedMove(Direction.DOWN, moveDist);
-            break;
-          }
-          if (getPixelY() > alignY && getPixelY() - alignY <= NUDGE_TOLERANCE) {
-            adjustedMove(Direction.UP, moveDist);
-            break;
-          }
-        }
-        break;
-      case RIGHT:
-        if (!collidesWith(getWorld().getTile(getTileX() + 1, getTileY()).getClass())) {
-          if (getPixelY() < alignY && alignY - getPixelY() <= NUDGE_TOLERANCE) {
-            adjustedMove(Direction.DOWN, moveDist);
-            break;
-          }
-          if (getPixelY() > alignY && getPixelY() - alignY <= NUDGE_TOLERANCE) {
-            adjustedMove(Direction.UP, moveDist);
-            break;
-          }
-        }
-        break;
-      default:
+    Direction currentDir = getDirection();
+    Tile tileAhead = getWorld().getTile(getTileX() + currentDir.x, getTileY() + currentDir.y);
+
+    if (!collidesWith(tileAhead.getClass())) {
+      double proj = currentDir.turnLeft().dotProduct(getPixelX() - alignX, getPixelY() - alignY);
+      if (0 < proj && proj <= NUDGE_TOLERANCE) {
+        adjustedMove(currentDir.turnRight(), moveDist);
+      } else if (-NUDGE_TOLERANCE <= proj && proj < 0) {
+        adjustedMove(currentDir.turnLeft(), moveDist);
+      }
     }
+  }
+
+  public void updateBombList() {
+    this.bombList.removeIf((bomb) -> bomb.isExpired());
   }
 }

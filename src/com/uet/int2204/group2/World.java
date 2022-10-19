@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import com.uet.int2204.group2.entity.Bomb;
 import com.uet.int2204.group2.entity.Edge;
 import com.uet.int2204.group2.entity.Enemy;
 import com.uet.int2204.group2.entity.Entity;
 import com.uet.int2204.group2.entity.Grass;
 import com.uet.int2204.group2.entity.Player;
+import com.uet.int2204.group2.entity.SolidTile;
 import com.uet.int2204.group2.entity.Tile;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -23,33 +25,41 @@ public class World {
   private TileStack[][] map;
   private List<Enemy> enemies;
 
+  private char[][] matrix;
+
   public World(int mapWidth, int mapHeight) {
     this.mapWidth = mapWidth;
     this.mapHeight = mapHeight;
 
     this.map = new TileStack[mapWidth + 2][mapHeight + 2];
+    this.matrix = new char[mapWidth + 2][mapHeight + 2];
     for (int i = 0; i < mapWidth + 2; ++i) {
       for (int j = 0; j < mapHeight + 2; ++j) {
-        map[i][j] = new TileStack();
+        this.map[i][j] = new TileStack();
+        this.matrix[i][j] = ' ';
       }
     }
     for (int i = 0; i < mapWidth + 2; ++i) {
-      addTile(i, 0, new Edge(i, 0, Edge.Type.TOP));
-      addTile(i, mapHeight + 1, new Edge(i, mapHeight + 1, Edge.Type.BOTTOM));
+      addTile(i, 0, new Edge(Edge.Type.TOP));
+      addTile(i, mapHeight + 1, new Edge(Edge.Type.BOTTOM));
     }
-    addTile(0, 0, new Edge(0, 0, Edge.Type.TOP_LEFT));
-    addTile(mapWidth + 1, 0, new Edge(mapWidth + 1, 0, Edge.Type.TOP_RIGHT));
+    addTile(0, 0, new Edge(Edge.Type.TOP_LEFT));
+    addTile(mapWidth + 1, 0, new Edge(Edge.Type.TOP_RIGHT));
     for (int i = 1; i <= mapHeight; ++i) {
-      addTile(0, i, new Edge(0, i, Edge.Type.LEFT));
-      addTile(mapWidth + 1, i, new Edge(mapWidth + 1, i, Edge.Type.RIGHT));
+      addTile(0, i, new Edge(Edge.Type.LEFT));
+      addTile(mapWidth + 1, i, new Edge(Edge.Type.RIGHT));
     }
     for (int i = 1; i <= mapWidth; ++i) {
       for (int j = 1; j <= mapHeight; ++j) {
-        addTile(i, j, Grass.class);
+        addTile(i, j, new Grass());
       }
     }
 
     enemies = new ArrayList<>();
+  }
+
+  public char[][] getMatrix() {
+    return this.matrix;
   }
 
   public int getMapWidth() {
@@ -75,23 +85,9 @@ public class World {
    */
   public void addTile(int tileX, int tileY, Tile tile) {
     tile.setWorld(this);
+    tile.setTileX(tileX);
+    tile.setTileY(tileY);
     this.map[tileX][tileY].push(tile);
-  }
-
-  /**
-   * Construct a tile layer of class @param tileClass on top of the tile stack at the position (tileX, tileY).
-   * This will also set the tile's world to this world.
-   */
-  public Tile addTile(int tileX, int tileY, Class<? extends Tile> tileClass) {
-    try {
-      var constructor = tileClass.getConstructor(int.class, int.class);
-      Tile newTile = constructor.newInstance(tileX, tileY);
-      newTile.setWorld(this);
-      this.map[tileX][tileY].push(newTile);
-      return newTile;
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
   }
 
   /** 
@@ -161,6 +157,23 @@ public class World {
   }
 
   public void renderTo(GraphicsContext target) {
+    for (int i = 0; i < matrix[0].length; ++i) {
+      for (int j = 0; j < matrix.length; ++j) {
+        Tile tile = this.map[j][i].peek();
+        if (tile instanceof SolidTile) {
+          if (tile instanceof Bomb) {
+            this.matrix[j][i] = 'B';
+          } else {
+            this.matrix[j][i] = '#';
+          }
+        } else {
+          this.matrix[j][i] = ' ';
+        }
+      }
+    }
+    
+
+
     for (var col : this.map) {
       for (var tiles : col) {
         for (var tile : tiles) {

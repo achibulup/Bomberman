@@ -5,27 +5,32 @@ import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
 
-public class Balloom extends Enemy {
-  public static final double SPEED = 70;
+public class Broom extends Enemy {
+  public static final double SPEED = 80;
 
-  private Animation animation = new Animation(ResourceManager.balloom);
-  private EntityController<? super Balloom> controller = EntityController.doNothingController;
+  private Animation animation = new Animation(ResourceManager.broom);
+  private EntityController<? super Broom> controller = EntityController.doNothingController;
 
-  public Balloom(int tileX, int tileY) {
+  public Broom(int tileX, int tileY) {
     super(tileX, tileY);
   }
 
-  public Balloom(int tileX, int tileY, EntityController<? super Balloom> controller) {
+  public Broom(int tileX, int tileY, EntityController<? super Broom> controller) {
     super(tileX, tileY);
     setController(controller);
   }
 
-  public EntityController<? super Balloom> getController() {
+  public EntityController<? super Broom> getController() {
     return this.controller;
   }
 
-  public void setController(EntityController<? super Balloom> controller) {
+  public void setController(EntityController<? super Broom> controller) {
     this.controller = controller;
+  }
+
+  @Override
+  public boolean collidesWith(Class<? extends Tile> tile) {
+    return tile != Brick.class && super.collidesWith(tile);
   }
 
   @Override

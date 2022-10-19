@@ -1,29 +1,33 @@
 package com.uet.int2204.group2;
 
-import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.uet.int2204.group2.Menu.GameMenu;
 import com.uet.int2204.group2.utils.Constants;
 import com.uet.int2204.group2.utils.ResourceManager;
 
-public class Bomberman extends Application {
-  public static final int WIDTH = Constants.TILE_SIZE * 13;
-  public static final int HEIGHT = Constants.TILE_SIZE * 13;
+import javafx.application.Application;
+import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
+public class Bomberman extends Application {
   private static Scene scene;
   private static Set<KeyCode> pressedKeys = new HashSet<>();
   private static Iterable<EventHandler<KeyEvent>> inputHandlers = Collections.emptyList();
+
+  public static int WIDTH = Constants.TILE_SIZE * 13;
+  public static int HEIGHT = Constants.TILE_SIZE * 13;
 
   public static void main(String[] args) {
     ResourceManager.load();
@@ -31,8 +35,15 @@ public class Bomberman extends Application {
   }
 
   @Override
-  public void start(Stage stage) throws IOException {
-    scene = new Scene(loadFXML("menu"), WIDTH, HEIGHT);
+  public void start(Stage stage) throws Exception {
+    Pane root = new Pane();
+    root.setPrefSize(WIDTH, HEIGHT);
+    Image img = ResourceManager.background;
+    GameMenu gameMenu = new GameMenu();
+    ImageView imageView = new ImageView(img);
+    root.getChildren().addAll(imageView, gameMenu);
+
+    scene = new Scene(root);
     scene.setOnKeyPressed((keyEvent) -> {
       if (!pressedKeys.contains(keyEvent.getCode())) {
         pressedKeys.add(keyEvent.getCode());
@@ -47,6 +58,7 @@ public class Bomberman extends Application {
         handler.handle(keyEvent);
       }
     });
+
     stage.setScene(scene);
     stage.show();
   }
@@ -57,6 +69,10 @@ public class Bomberman extends Application {
 
   public static void setRoot(Parent node) {
     scene.setRoot(node);
+  }
+
+  public static void closeApp() {
+    ((Stage) scene.getWindow()).close();
   }
 
   public static void setInputHandlers(Iterable<EventHandler<KeyEvent>> handlers) {

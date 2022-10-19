@@ -4,6 +4,9 @@ import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
 
 public class Grass extends Tile {
+  public Grass() {
+  }
+
   public Grass(int tileX, int tileY) {
     super(tileX, tileY);
   }

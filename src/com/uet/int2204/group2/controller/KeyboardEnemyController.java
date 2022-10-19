@@ -3,7 +3,7 @@ package com.uet.int2204.group2.controller;
 import java.util.Collection;
 
 import com.uet.int2204.group2.entity.Enemy;
-import com.uet.int2204.group2.entity.MovableEntity.Direction;
+import com.uet.int2204.group2.utils.Direction;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
@@ -40,6 +40,9 @@ public class KeyboardEnemyController extends KeyBoardEntityController<Enemy> {
           break;
         case D:
           this.direction = Direction.RIGHT;
+          break;
+        case Z:
+          this.direction = Direction.NONE;
           break;
         default:
       }

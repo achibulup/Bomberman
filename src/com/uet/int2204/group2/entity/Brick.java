@@ -8,6 +8,13 @@ public class Brick extends Tile implements SolidTile, DestroyableTile {
   private Animation animation = null;
   private boolean destroying = false;
 
+  public Brick() {
+  }
+
+  public Brick(boolean sparky) {
+    setSparky(sparky);
+  }
+
   public Brick(int x, int y) {
     super(x, y);
   }
@@ -37,7 +44,6 @@ public class Brick extends Tile implements SolidTile, DestroyableTile {
 
   @Override
   public void destroy() {
-    // TODO:
     if (!this.destroying) {
       this.destroying = true;
       this.animation = new Animation(ResourceManager.brickExplosion);

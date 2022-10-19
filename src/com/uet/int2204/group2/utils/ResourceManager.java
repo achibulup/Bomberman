@@ -1,13 +1,19 @@
 package com.uet.int2204.group2.utils;
 
+import java.io.FileInputStream;
 import java.nio.file.FileSystemNotFoundException;
 
 import com.uet.int2204.group2.graphics.AnimationData;
 import com.uet.int2204.group2.graphics.Sprite;
+import com.uet.int2204.group2.map.MapData;
 
 import javafx.scene.image.Image;
 
 public class ResourceManager {
+  public static final Image background;
+
+  public static final MapData[] levels;
+
   public static final Sprite grassNormal;
   public static final Sprite grassShadowed;
 
@@ -51,7 +57,11 @@ public class ResourceManager {
   public static final AnimationData balloom;
 
   public static final AnimationData oneal;
-  
+
+  public static final AnimationData broom;
+
+  public static final AnimationData bear;
+
   // call this function to force initialization of the class, thereby load all the resources
   public static void load() {
   }
@@ -70,9 +80,21 @@ public class ResourceManager {
 
   public static Sprite[] tryLoadSpriteSheet(String path, int spriteWidth, int spriteHeight) {
     return Sprite.makeSpriteSheet(tryLoadImage(path), spriteWidth, spriteHeight);
+  }  
+  
+  public static MapData tryLoadMapData(String path) {
+    try {
+      return new MapData(new FileInputStream("target/classes/" + path));
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
 
   static {
+    background = tryLoadImage("sprites/background.png");
+
+    levels = new MapData[]{tryLoadMapData("levels/level1.txt")};
+
     Sprite[] grassSheet = tryLoadSpriteSheet("sprites/map/grass@2.png");
     grassNormal = grassSheet[0];
     grassShadowed = grassSheet[1];
@@ -148,5 +170,11 @@ public class ResourceManager {
 
     Sprite[] onealSheet = tryLoadSpriteSheet("sprites/enemy/oneal@4.png");
     oneal = new AnimationData(onealSheet);
+
+    Sprite[] broomSheet = tryLoadSpriteSheet("sprites/enemy/broom@4.png");
+    broom = new AnimationData(broomSheet);
+
+    Sprite[] bearSheet = tryLoadSpriteSheet("sprites/enemy/bear@3.png");
+    bear = new AnimationData(bearSheet);
   }
 }

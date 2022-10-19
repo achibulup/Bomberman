@@ -7,6 +7,10 @@ import javafx.scene.canvas.GraphicsContext;
 
 public abstract class Item extends Tile implements DestroyableTile {
   protected Animation explosionAnimation = null;
+
+  public Item(){
+  }
+
   public Item(int tileX, int tileY) {
     super(tileX, tileY);
   }
@@ -33,7 +37,6 @@ public abstract class Item extends Tile implements DestroyableTile {
   public void destroy() {
     this.explosionAnimation = new Animation(ResourceManager.itemExplosion);
   }
-
 
   public abstract void onCollect(Player player);
 

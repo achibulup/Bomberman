@@ -9,8 +9,16 @@ public class Edge extends Tile implements SolidTile {
   }
   private Type type;
 
+  public Edge(Type type) {
+    this.type = type;
+  }
+
   public Edge(int x, int y, Type type) {
     super(x, y);
+    this.type = type;
+  }
+
+  public void setType(Type type) {
     this.type = type;
   }
 

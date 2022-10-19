@@ -7,6 +7,9 @@ import com.uet.int2204.group2.utils.ResourceManager;
 public class BombItem extends Item {
   private Animation animation = new Animation(ResourceManager.bombItem);
 
+  public BombItem() {
+  }
+
   public BombItem(int tileX, int tileY) {
     super(tileX, tileY);
   }
