@@ -31,6 +31,9 @@ public class ResourceManager {
   public static final AnimationData bombItem;
   public static final AnimationData speedItem;
 
+  public static final Sprite portal;
+  public static final AnimationData portalBlinking;
+
   public static final AnimationData playerIdleUp;
   public static final AnimationData playerIdleDown;
   public static final AnimationData playerIdleLeft;
@@ -121,6 +124,10 @@ public class ResourceManager {
     
     Sprite[] speedItemSheet = tryLoadSpriteSheet("sprites/powerup/bonus_speed@2.png");
     speedItem = new AnimationData(speedItemSheet, 0.4);
+
+    Sprite[] portalSheet = tryLoadSpriteSheet("sprites/map/portal@2.png");
+    portal = portalSheet[0];
+    portalBlinking = new AnimationData(portalSheet);
 
     playerIdleUp = new AnimationData(tryLoadSpriteSheet("sprites/player/idle_up@1.png"));
     playerIdleDown = new AnimationData(tryLoadSpriteSheet("sprites/player/idle_down@1.png"));
