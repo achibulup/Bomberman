@@ -60,6 +60,9 @@ public class Bear extends Enemy {
   @Override
   public void update(double dt) {
     if (!isDying()) {
+      if (isHalfwayBlocked(getDirection())) {
+        setDirection(getDirection().opposite());
+      }
       if (isMovable(getDirection())) {
         adjustedMove(getSpeed() * dt);
       } else {

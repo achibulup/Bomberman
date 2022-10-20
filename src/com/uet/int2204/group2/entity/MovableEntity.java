@@ -118,6 +118,43 @@ public abstract class MovableEntity extends Entity {
     return true;
   }
 
+  public boolean isHalfwayBlocked(Direction direction) {
+    if (direction == Direction.NONE) {
+      return false;
+    }
+
+    World world = getWorld();
+    // displacement from the main tile
+    double dx = getPixelX() - getTileX() * TILE_SIZE;
+    double dy = getPixelY() - getTileY() * TILE_SIZE;
+
+    // if the entity is entering the tile or is aligned along the direction's axis, return false
+    if (direction.dotProduct(dx, dy) <= 0) {
+      return false;
+    }
+
+    Tile tileAhead = world.getTile(getTileX() + direction.x, getTileY() + direction.y);
+    if (blockedBy(tileAhead.getClass())) {
+      return true;
+    }
+    double perpProj = direction.turnLeft().dotProduct(dx, dy);
+    if (perpProj > 0) {
+      Tile tileAheadLeft = world.getTile(getTileX() + direction.x + direction.turnLeft().x, 
+                                         getTileY() + direction.y + direction.turnLeft().y);
+      if (blockedBy(tileAheadLeft.getClass())) {
+        return true;
+      }
+    } 
+    if (perpProj < 0) {
+      Tile tileAheadRight = world.getTile(getTileX() + direction.x + direction.turnRight().x, 
+                                          getTileY() + direction.y + direction.turnRight().y);
+      if (blockedBy(tileAheadRight.getClass())) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   // checks if this entity is perfectly aligned with a tile.
   public boolean isAligned() {
     return isXAligned() && isYAligned();
