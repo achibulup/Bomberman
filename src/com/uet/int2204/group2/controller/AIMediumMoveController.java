@@ -3,6 +3,7 @@ package com.uet.int2204.group2.controller;
 import com.uet.int2204.group2.entity.Enemy;
 import com.uet.int2204.group2.entity.MovableEntity;
 import com.uet.int2204.group2.entity.Player;
+import com.uet.int2204.group2.utils.Direction;
 
 import java.util.List;
 import java.util.Random;
@@ -21,7 +22,7 @@ public class AIMediumMoveController implements EntityController<MovableEntity> {
         entity.setDirection(mediumRanDir(player, enemy));
     }
 
-    private static MovableEntity.Direction mediumRanDir(Player player, Enemy enemy) {
+    private static Direction mediumRanDir(Player player, Enemy enemy) {
         int dir = -1;
         if (player == null) {
             System.out.println("Player null");
@@ -51,19 +52,19 @@ public class AIMediumMoveController implements EntityController<MovableEntity> {
         switch (dir) {
             case -1:
                 System.out.println("NONE");
-                return MovableEntity.Direction.NONE;
+                return Direction.NONE;
             case 0:
                 System.out.println("UP");
-                return MovableEntity.Direction.UP;
+                return Direction.UP;
             case 1:
                 System.out.println("DOWN");
-                return MovableEntity.Direction.DOWN;
+                return Direction.DOWN;
             case 2:
                 System.out.println("LEFT");
-                return MovableEntity.Direction.LEFT;
+                return Direction.LEFT;
             case 3:
                 System.out.println("RIGHT");
-                return MovableEntity.Direction.RIGHT;
+                return Direction.RIGHT;
         }
         throw new RuntimeException("Random.nextInt(4) return value out of range");
     }

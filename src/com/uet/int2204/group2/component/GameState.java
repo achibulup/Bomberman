@@ -2,20 +2,16 @@ package com.uet.int2204.group2.component;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Random;
 
 import com.uet.int2204.group2.Bomberman;
 import com.uet.int2204.group2.World;
-import com.uet.int2204.group2.controller.EntityController;
-import com.uet.int2204.group2.controller.KeyBoardPlayerController;
-import com.uet.int2204.group2.controller.KeyboardEnemyController;
-import com.uet.int2204.group2.controller.RandomMoveController;
+import com.uet.int2204.group2.controller.*;
+import com.uet.int2204.group2.controller.Algorithm.AIIntelligent;
 import com.uet.int2204.group2.entity.Balloom;
 import com.uet.int2204.group2.entity.Bear;
 import com.uet.int2204.group2.entity.BombItem;
 import com.uet.int2204.group2.entity.Brick;
 import com.uet.int2204.group2.entity.Broom;
-import com.uet.int2204.group2.entity.Enemy;
 import com.uet.int2204.group2.entity.FlameItem;
 import com.uet.int2204.group2.entity.Oneal;
 import com.uet.int2204.group2.entity.Player;
@@ -47,6 +43,7 @@ public class GameState {
   private Parent root;
   private AnimationTimer gameLoop;
   private Collection<EventHandler<KeyEvent>> inputHandlers = new ArrayList<>();
+
 
   public GameState() {
     this.canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -147,6 +144,7 @@ public class GameState {
       for (int j = 1; j <= world.getMapHeight(); ++j) {
         switch (mapData.getMap()[i][j]) {
           case '#':
+
             this.world.addTile(i, j, new Wall());
             break;
           case '*':
@@ -169,7 +167,7 @@ public class GameState {
                 i, j, new KeyBoardPlayerController(this.inputHandlers)));
             break;
           case '1':
-            this.world.addEnemy(new Balloom(i, j, RandomMoveController.INSTANCE));
+            this.world.addEnemy(new Balloom(i, j, AIIntelligent.INSTANCE));
             break;
           case '2':
             this.world.addEnemy(new Oneal(i, j, RandomMoveController.INSTANCE));
