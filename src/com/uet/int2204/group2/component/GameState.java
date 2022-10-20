@@ -209,16 +209,16 @@ public class GameState {
             this.world.addTile(i, j, new Brick());
             break;
           case 'f':
-            this.world.addTile(i, j, new FlameItem());
-            this.world.addTile(i, j, new Brick());
+            this.world.addTile(i, j, new Brick(new FlameItem()));
             break;
           case 'b':
-            this.world.addTile(i, j, new BombItem());
-            this.world.addTile(i, j, new Brick());
+            this.world.addTile(i, j, new Brick(new BombItem()));
             break;
           case 's':
-            this.world.addTile(i, j, new SpeedItem());
-            this.world.addTile(i, j, new Brick());
+            this.world.addTile(i, j, new Brick(new SpeedItem()));
+            break;
+          case 'x':
+            this.world.addTile(i, j, new Brick(new Portal()));
             break;
           case 'p':
             this.world.setPlayer(new Player(
@@ -228,13 +228,13 @@ public class GameState {
             this.world.addEnemy(new Balloom(i, j, RandomMoveController.INSTANCE));
             break;
           case '2':
-            this.world.addEnemy(new Oneal(i, j, RandomMoveController.INSTANCE));
+            this.world.addEnemy(new Oneal(i, j, AIMediumMoveController.INSTANCE));
             break;
           case '3':
             this.world.addEnemy(new Broom(i, j, RandomMoveController.INSTANCE));
             break;
           case '4':
-            this.world.addEnemy(new Bear(i, j, RandomMoveController.INSTANCE));
+            this.world.addEnemy(new Bear(i, j, AIHighMoveController.INSTANCE));
             break;
         }
       }

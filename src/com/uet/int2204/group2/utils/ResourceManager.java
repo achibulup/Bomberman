@@ -105,7 +105,8 @@ public class ResourceManager {
     levels = new MapData[]{
       tryLoadMapData("levels/level1.txt"),
       tryLoadMapData("levels/level2.txt"),
-      tryLoadMapData("levels/level3.txt")
+      tryLoadMapData("levels/level3.txt"),
+      tryLoadMapData("levels/level4.txt")
     };
 
     Sprite[] grassSheet = tryLoadSpriteSheet("sprites/map/grass@2.png");
