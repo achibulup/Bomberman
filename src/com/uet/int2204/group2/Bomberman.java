@@ -44,7 +44,7 @@ public class Bomberman extends Application {
     root.getChildren().addAll(imageView, gameMenu);
 
     scene = new Scene(root);
-    scene.setOnKeyPressed((keyEvent) -> {
+    scene.addEventHandler(KeyEvent.KEY_PRESSED, (keyEvent) -> {
       if (!pressedKeys.contains(keyEvent.getCode())) {
         pressedKeys.add(keyEvent.getCode());
         for (var handler : inputHandlers) {
@@ -52,7 +52,7 @@ public class Bomberman extends Application {
         }
       }
     });
-    scene.setOnKeyReleased((keyEvent) -> {
+    scene.addEventHandler(KeyEvent.KEY_RELEASED, (keyEvent) -> {
       pressedKeys.remove(keyEvent.getCode());
       for (var handler : inputHandlers) {
         handler.handle(keyEvent);

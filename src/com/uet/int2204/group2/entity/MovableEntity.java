@@ -11,7 +11,7 @@ public abstract class MovableEntity extends Entity {
   protected double pixelX;
   protected double pixelY;
 
-  protected Direction direction = Direction.DOWN;
+  protected Direction direction = Direction.NONE;
 
   protected boolean dying = false;
 

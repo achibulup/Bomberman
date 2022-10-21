@@ -28,6 +28,8 @@ public class Player extends MovableEntity {
 
   public Player(int tileX, int tileY) {
     super(tileX, tileY);
+    setDirection(Direction.DOWN);
+    setDirection(Direction.NONE);
   }
 
   public Player(int tileX, int tileY, EntityController<? super Player> controller) {
@@ -74,6 +76,7 @@ public class Player extends MovableEntity {
 
   public void setEnteringPortal() {
     this.enteringPortal = true;
+    this.direction = Direction.NONE;
     this.animation = new Animation(ResourceManager.playerEnterPortal);
   }
 
