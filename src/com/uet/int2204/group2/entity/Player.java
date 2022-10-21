@@ -76,6 +76,7 @@ public class Player extends MovableEntity {
 
   public void setEnteringPortal() {
     this.enteringPortal = true;
+    this.direction = Direction.NONE;
     this.animation = new Animation(ResourceManager.playerEnterPortal);
   }
 

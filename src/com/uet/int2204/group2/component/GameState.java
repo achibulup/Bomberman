@@ -52,8 +52,8 @@ public class GameState {
   private Canvas canvas;
   private Parent root;
   private AnimationTimer gameLoop;
-  private LevelController levelController;
   private Collection<EventHandler<KeyEvent>> inputHandlers = new ArrayList<>();
+  private Collection<GameStateTrigger> triggers = new ArrayList<>();
 
   private int currentLevel = 1;
 
@@ -104,10 +104,11 @@ public class GameState {
     //   }
     // }
     loadMap(currentLevel = 1);
-    this.levelController = new LevelController(this);
-    this.inputHandlers.add(this.levelController);
+    KeyboardLevelController levelController = new KeyboardLevelController();
+    this.inputHandlers.add(levelController);
+    this.triggers.add(levelController);
+    this.triggers.add(new NextLevelTrigger());
     this.gameLoop = new GameLoop(this);
-
   }
 
   public World getWorld() {
@@ -151,52 +152,26 @@ public class GameState {
     }
   }
 
-  private enum LevelChange {
-    NEXT, PREV, NONE
-  };
-  private static class LevelController implements EventHandler<KeyEvent> {
-    private GameState host;
-    private LevelChange levelChange = LevelChange.NONE;
 
-    public LevelController(GameState host) {
-      this.host = host;
-    }
-
-    @Override 
-    public void handle(KeyEvent event) {
-      if (event.getEventType() == KeyEvent.KEY_PRESSED) {
-        if (event.getCode() == KeyCode.OPEN_BRACKET) {
-          levelChange = LevelChange.PREV;
-        }
-        if (event.getCode() == KeyCode.CLOSE_BRACKET) {
-          levelChange = LevelChange.NEXT;
-        }
-      }
-    }
-
-    public void changeLevel() {
-      if (this.levelChange == LevelChange.PREV) {
-        if (host.currentLevel > 1) {
-          host.loadMap(--host.currentLevel);
-        }
-      }
-      if (this.levelChange == LevelChange.NEXT) {
-        if (host.currentLevel == ResourceManager.levels.length) {
-          Bomberman.closeApp();
-        } else {
-          host.loadMap(++host.currentLevel);
-        }
-      }
-
-      this.levelChange = LevelChange.NONE;
+  public void prevLevel() {
+    if (this.currentLevel > 1) {
+      this.loadMap(--this.currentLevel);
     }
   }
 
-  private void loadMap(int level) {
+  public void nextLevel() {
+    if (this.currentLevel == ResourceManager.levels.length) {
+      Bomberman.closeApp();
+    } else {
+      this.loadMap(++this.currentLevel);
+    }
+  }
+
+  public void loadMap(int level) {
     loadMap(ResourceManager.levels[level - 1]);
   }
 
-  private void loadMap(MapData mapData) {
+  public void loadMap(MapData mapData) {
     this.inputHandlers.removeIf((handler) -> handler instanceof EntityController);
     this.world = new World(mapData.getWidth(), mapData.getHeight());
     for (int i = 1; i <= world.getMapWidth(); ++i) {
@@ -208,17 +183,17 @@ public class GameState {
           case '*':
             this.world.addTile(i, j, new Brick());
             break;
+          case 'x':
+            this.world.addTile(i, j, new Brick(new Portal()));
+            break;
           case 'f':
-            this.world.addTile(i, j, new FlameItem());
-            this.world.addTile(i, j, new Brick());
+            this.world.addTile(i, j, new Brick(new FlameItem()));
             break;
           case 'b':
-            this.world.addTile(i, j, new BombItem());
-            this.world.addTile(i, j, new Brick());
+            this.world.addTile(i, j, new Brick(new BombItem()));
             break;
           case 's':
-            this.world.addTile(i, j, new SpeedItem());
-            this.world.addTile(i, j, new Brick());
+            this.world.addTile(i, j, new Brick(new SpeedItem()));
             break;
           case 'p':
             this.world.setPlayer(new Player(
@@ -246,12 +221,16 @@ public class GameState {
   
   private void update(double dt) {
     world.update(dt);
-    changeLevel();
+    runTriggers();
     adjustCanvasView();
   }
-  
-  private void changeLevel() {
-    this.levelController.changeLevel();
+
+  private void runTriggers() {
+    for (GameStateTrigger trigger : this.triggers.toArray(new GameStateTrigger[0])) {
+      if (trigger.checkCondition(this)) {
+        trigger.activate(this);
+      }
+    }
   }
   
   private void render() {

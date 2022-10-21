@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Stack;
 
+import com.uet.int2204.group2.entity.Brick;
 import com.uet.int2204.group2.entity.Edge;
 import com.uet.int2204.group2.entity.Enemy;
 import com.uet.int2204.group2.entity.Entity;
@@ -98,9 +99,6 @@ public class World {
     tile.setWorld(this);
     tile.setTileX(tileX);
     tile.setTileY(tileY);
-    if (tile instanceof Portal && isPortalActive()) {
-      ((Portal) tile).setBlinking(true);
-    }
     this.map[tileX][tileY].push(tile);
   }
 
@@ -155,6 +153,11 @@ public class World {
         for (Tile tile : tiles) {
           if (tile instanceof Portal) {
             ((Portal) tile).setBlinking(true);
+          } else if (tile instanceof Brick) {
+            Entity hidden = ((Brick) tile).getHiddenEntity();
+            if (hidden instanceof Portal) {
+              ((Portal) hidden).setBlinking(true);
+            }
           }
         }
       }
