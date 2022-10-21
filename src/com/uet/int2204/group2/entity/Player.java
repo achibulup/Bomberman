@@ -24,6 +24,7 @@ public class Player extends MovableEntity {
   private int flameLength = 1;
   private int maxBombCount = 1;
   private List<Bomb> bombList = new ArrayList<>();
+  private boolean enteringPortal = false;
 
   public Player(int tileX, int tileY) {
     super(tileX, tileY);
@@ -67,6 +68,15 @@ public class Player extends MovableEntity {
     this.maxBombCount = maxBombCount;
   }
 
+  public boolean isEnteringPortal() {
+    return this.enteringPortal;
+  }
+
+  public void setEnteringPortal() {
+    this.enteringPortal = true;
+    this.animation = new Animation(ResourceManager.playerEnterPortal);
+  }
+
   @Override
   public Sprite getSprite() {
     return animation.currentSprite();
@@ -83,7 +93,12 @@ public class Player extends MovableEntity {
 
   @Override
   public void update(double dt) {
-    if (!isDying()) {
+    if (isEnteringPortal()) {
+      this.animation.update(dt);
+      if (this.animation.isEnded()) {
+        this.markExpired();
+      }
+    } else if (!isDying()) {
       this.controller.control(this);
       this.animation.update(dt);
       double moveDist = getSpeed() * dt;
