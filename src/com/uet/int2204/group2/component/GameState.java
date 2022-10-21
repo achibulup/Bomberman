@@ -24,6 +24,7 @@ import com.uet.int2204.group2.entity.SpeedItem;
 import com.uet.int2204.group2.entity.Wall;
 import com.uet.int2204.group2.map.ActivatePortalTrigger;
 import com.uet.int2204.group2.map.BlinkBrickTrigger;
+import com.uet.int2204.group2.map.PlayerEnterPortalTrigger;
 import com.uet.int2204.group2.utils.Constants;
 import com.uet.int2204.group2.utils.Conversions;
 import com.uet.int2204.group2.utils.Maths;
@@ -60,16 +61,16 @@ public class GameState {
 
     EntityController<? super Player> playerController = new KeyBoardPlayerController(inputHandlers);
     this.world.setPlayer(new Player(1, 1, playerController));
-    EntityController<? super Enemy> balloomController = RandomMoveController.INSTANCE;
-    this.world.addEnemy(new Balloom(3, 3, balloomController));
-    EntityController<? super Enemy> broomController = RandomMoveController.INSTANCE;
-    this.world.addEnemy(new Broom(5, 7, broomController));
-    EntityController<? super Enemy> bearController = RandomMoveController.INSTANCE;
-    for (int i = 0; i < 10; ++i) {
-      this.world.addEnemy(new Bear(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, bearController));
-    }
-    EntityController<? super Enemy> onealController = new KeyboardEnemyController(inputHandlers);
-    this.world.addEnemy(new Oneal(7, 3, onealController));
+    // EntityController<? super Enemy> balloomController = RandomMoveController.INSTANCE;
+    // this.world.addEnemy(new Balloom(3, 3, balloomController));
+    // EntityController<? super Enemy> broomController = RandomMoveController.INSTANCE;
+    // this.world.addEnemy(new Broom(5, 7, broomController));
+    // EntityController<? super Enemy> bearController = RandomMoveController.INSTANCE;
+    // for (int i = 0; i < 10; ++i) {
+    //   this.world.addEnemy(new Bear(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, bearController));
+    // }
+    // EntityController<? super Enemy> onealController = new KeyboardEnemyController(inputHandlers);
+    // this.world.addEnemy(new Oneal(7, 3, onealController));
 
     for (int i = 1; i <= mapWidth; ++i) {
       for (int j = 1; j <= mapHeight; ++j) {
@@ -95,6 +96,7 @@ public class GameState {
     world.addTile(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, new Portal());
     world.addTrigger(new BlinkBrickTrigger());
     world.addTrigger(new ActivatePortalTrigger());
+    world.addTrigger(new PlayerEnterPortalTrigger());
 
     this.gameLoop = new GameLoop(this);
   }

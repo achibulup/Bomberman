@@ -218,12 +218,12 @@ public class World {
 
   private void runTriggers() {
     Collection<WorldTrigger> removedSingleTriggers = new ArrayList<>();
-    for (WorldTrigger trigger : this.triggers) {
+    for (WorldTrigger trigger : this.triggers.toArray(new WorldTrigger[0])) {
       if (trigger.checkCondition(this)) {
-        if (trigger instanceof SingleUseWorldTrigger) {
+        trigger.activate(this);
+        if (trigger.isDone()) {
           removedSingleTriggers.add(trigger);
         }
-        trigger.activate(this);
       }
     }
     this.triggers.removeAll(removedSingleTriggers);
