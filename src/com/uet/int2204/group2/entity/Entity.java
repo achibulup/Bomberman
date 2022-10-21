@@ -63,6 +63,6 @@ public abstract class Entity {
   public abstract void update(double dt);
 
   public void renderTo(GraphicsContext target) {
-    getSprite().drawTo(target, getPixelX(), getPixelY());
+    getSprite().drawTo(target, getPixelX(), getPixelY(), TILE_SIZE, TILE_SIZE);
   }
 }
