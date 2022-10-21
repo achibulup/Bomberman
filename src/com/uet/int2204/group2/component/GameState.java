@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Random;
 
 import com.uet.int2204.group2.Bomberman;
+import com.uet.int2204.group2.Sound.Sound;
 import com.uet.int2204.group2.World;
 import com.uet.int2204.group2.controller.AIHighMoveController;
 import com.uet.int2204.group2.controller.AIMediumMoveController;
@@ -26,6 +27,7 @@ import com.uet.int2204.group2.utils.Constants;
 import com.uet.int2204.group2.utils.Conversions;
 import com.uet.int2204.group2.utils.Maths;
 
+import com.uet.int2204.group2.utils.ResourceManager;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -38,6 +40,7 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 
 public class GameState {
+  Sound sound = new Sound();
   public static int CANVAS_WIDTH = Bomberman.WIDTH;
   public static int CANVAS_HEIGHT = Bomberman.HEIGHT;
   
@@ -63,15 +66,15 @@ public class GameState {
     EntityController<? super Enemy> onealController = AIMediumMoveController.INSTANCE;
     this.world.setPlayer(new Player(1, 1, playerController));
 
-    for (int i = 0; i < 3; ++i) {
-      this.world.addEnemy(new Balloom(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, balloomController));
-      this.world.addEnemy(new Oneal(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, onealController));
-    }
+//    for (int i = 0; i < 3; ++i) {
+//      this.world.addEnemy(new Balloom(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, balloomController));
+//      this.world.addEnemy(new Oneal(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, onealController));
+//    }
+//
+//    for (int i = 0; i < 8; ++i) {
+//      this.world.addEnemy(new Bear(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, bearController));
+//    }
 
-    for (int i = 0; i < 8; ++i) {
-      this.world.addEnemy(new Bear(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, bearController));
-    }
-    
     for (int i = 0; i < 5; ++i) {
       this.world.addEnemy(new Broom(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, broomController));
     }
@@ -121,6 +124,8 @@ public class GameState {
   }
 
   public void start() {
+    Bomberman.start.stopMusic();
+    Bomberman.start.playMusic(ResourceManager.sound[1]);
     this.gameLoop.start();
   }
 

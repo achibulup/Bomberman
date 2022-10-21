@@ -1,7 +1,10 @@
 package com.uet.int2204.group2.utils;
 
 import java.nio.file.FileSystemNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.uet.int2204.group2.Sound.Sound;
 import com.uet.int2204.group2.graphics.AnimationData;
 import com.uet.int2204.group2.graphics.Sprite;
 
@@ -9,6 +12,12 @@ import javafx.scene.image.Image;
 
 public class ResourceManager {
   public static final Image background;
+  public static final Image logo;
+  public static final Image miniIcon;
+  public static final Image cursor;
+  public static final Image menuButton;
+  public static final Image imgOption;
+  public static final String[] sound = new String[10];
 
   public static final Sprite grassNormal;
   public static final Sprite grassShadowed;
@@ -85,7 +94,19 @@ public class ResourceManager {
   }
 
   static {
-    background = tryLoadImage("sprites/background.png");
+    background = tryLoadImage("sprites/background.jpg");
+    logo = tryLoadImage("sprites/Logo1.png");
+    miniIcon = tryLoadImage("sprites/powerup/extra_bomb@2.png");
+    menuButton = tryLoadImage("sprites/play8.png");
+    cursor = tryLoadImage("sprites/cursor.png");
+    imgOption = tryLoadImage("sprites/option.png");
+
+    sound[0] = "res/audio/homestart.mp3"; // bắt đầu game
+    sound[1] = "res/audio/gameaudio.wav"; // âm nền chơi game
+    sound[2] = "res/audio/putbomb.wav"; // đặt boom
+    sound[3] = "res/audio/boom.wav"; // bom nổ
+    sound[4] = "res/audio/getitem.wav"; // ăn item
+    sound[5] = "res/audio/dead2.wav"; // mất mạng
 
     Sprite[] grassSheet = tryLoadSpriteSheet("sprites/map/grass@2.png");
     grassNormal = grassSheet[0];

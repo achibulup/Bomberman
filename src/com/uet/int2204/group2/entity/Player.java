@@ -3,6 +3,8 @@ package com.uet.int2204.group2.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.uet.int2204.group2.Bomberman;
+import com.uet.int2204.group2.Sound.Sound;
 import com.uet.int2204.group2.controller.EntityController;
 import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
@@ -149,6 +151,8 @@ public class Player extends MovableEntity {
     Bomb newBomb = new Bomb(getTileX(), getTileY(), this);
     this.bombList.add(newBomb);
     getWorld().addTile(getTileX(), getTileY(), newBomb);
+    Sound sound1 = new Sound();
+    sound1.playMusic(ResourceManager.sound[2]);
   }
 
   public void collect(Item item) {
@@ -156,6 +160,8 @@ public class Player extends MovableEntity {
       item.onCollect(this);
       item.markExpired();
     }
+    Sound sound = new Sound();
+    sound.playMusic(ResourceManager.sound[4]);
   }
 
   /**
