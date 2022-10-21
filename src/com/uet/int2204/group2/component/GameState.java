@@ -170,13 +170,13 @@ public class GameState {
             this.world.addEnemy(new Balloom(i, j, AIIntelligent.INSTANCE));
             break;
           case '2':
-            this.world.addEnemy(new Oneal(i, j, RandomMoveController.INSTANCE));
+            this.world.addEnemy(new Oneal(i, j, AILowMoveController.INSTANCE));
             break;
           case '3':
-            this.world.addEnemy(new Broom(i, j, RandomMoveController.INSTANCE));
+            this.world.addEnemy(new Broom(i, j, AILowMoveController.INSTANCE));
             break;
           case '4':
-            this.world.addEnemy(new Bear(i, j, RandomMoveController.INSTANCE));
+            this.world.addEnemy(new Bear(i, j, AILowMoveController.INSTANCE));
             break;
         }
       }

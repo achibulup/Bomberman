@@ -21,7 +21,7 @@ public class BFS {
     }
 
     // BFS, Time O(n^2), Space O(n^2)
-    public static List<Point> shortestPath(char[][] matrix, Point start, Point end) {
+    public static List<Point> findSortPath(char[][] matrix, Point start, Point end) {
         int sx = start.row, sy = start.col;
         int dx = end.row, dy = end.col;
 

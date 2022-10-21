@@ -1,6 +1,5 @@
 package com.uet.int2204.group2.controller.Algorithm;
 
-import com.uet.int2204.group2.World;
 import com.uet.int2204.group2.controller.EntityController;
 import com.uet.int2204.group2.entity.Enemy;
 import com.uet.int2204.group2.entity.Player;
@@ -9,7 +8,7 @@ import com.uet.int2204.group2.utils.Direction;
 import java.util.List;
 import java.util.Random;
 
-import static com.uet.int2204.group2.controller.Algorithm.BFS.shortestPath;
+import static com.uet.int2204.group2.controller.Algorithm.BFS.findSortPath;
 
 public class AIIntelligent implements EntityController<Enemy> {
     public static AIIntelligent INSTANCE = new AIIntelligent();
@@ -23,19 +22,14 @@ public class AIIntelligent implements EntityController<Enemy> {
     public static Direction getDirectionHigh(int dir) {
         switch (dir) {
             case -1:
-                System.out.println("NONE");
                 return Direction.NONE;
             case 0:
-                System.out.println("UP");
                 return Direction.UP;
             case 1:
-                System.out.println("DOWN");
                 return Direction.DOWN;
             case 2:
-                System.out.println("LEFT");
                 return Direction.LEFT;
             case 3:
-                System.out.println("RIGHT");
                 return Direction.RIGHT;
         }
         throw new RuntimeException("Random.nextInt(4) return value out of range");
@@ -47,8 +41,8 @@ public class AIIntelligent implements EntityController<Enemy> {
         if (player == null) {
             return rand.nextInt(4);
         }
-        List<Point> path = shortestPath(matrix, new Point(player.getTileY(), player.getTileX()),
-                                                new Point(enemy.getTileY(), enemy.getTileX()));
+        List<Point> path = findSortPath(matrix, new Point(player.getTileX(), player.getTileY()),
+                                                new Point(enemy.getTileX(), enemy.getTileY()));
         if (path == null) {
             return rand.nextInt(4);
         } else if (path.size() == 1) {
@@ -59,8 +53,8 @@ public class AIIntelligent implements EntityController<Enemy> {
     }
 
     protected int calculateDirection(Point start, Point end) {
-        if (end.col > start.col) return 0;
-        if (end.col < start.col) return 1;
+        if (end.col < start.col) return 0;
+        if (end.col > start.col) return 1;
         if (end.row < start.row) return 2;
         if (end.row > start.row) return 3;
 

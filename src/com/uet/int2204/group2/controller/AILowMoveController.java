@@ -6,9 +6,9 @@ import com.uet.int2204.group2.entity.MovableEntity;
 import com.uet.int2204.group2.utils.Direction;
 
 
-public class RandomMoveController implements EntityController<MovableEntity> {
+public class AILowMoveController implements EntityController<MovableEntity> {
 
-  public static final RandomMoveController INSTANCE = new RandomMoveController();
+  public static final AILowMoveController INSTANCE = new AILowMoveController();
 
   private static final Random rand = new Random();
 
