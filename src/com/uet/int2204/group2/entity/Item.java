@@ -1,6 +1,7 @@
 package com.uet.int2204.group2.entity;
 
 import com.uet.int2204.group2.graphics.Animation;
+import com.uet.int2204.group2.utils.Constants;
 import com.uet.int2204.group2.utils.ResourceManager;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -29,7 +30,8 @@ public abstract class Item extends Tile implements DestroyableTile {
   public void renderTo(GraphicsContext target) {
     getSprite().drawTo(target, getPixelX(), getPixelY());
     if (beingDestroyed()) {
-      this.explosionAnimation.currentSprite().drawTo(target, getPixelX(), getPixelY());
+      this.explosionAnimation.currentSprite().drawTo(
+          target, getPixelX(), getPixelY(), Constants.TILE_SIZE, Constants.TILE_SIZE);
     }
   }
 

@@ -50,6 +50,8 @@ public class ResourceManager {
 
   public static final AnimationData playerDead;
 
+  public static final AnimationData playerEnterPortal;
+
   public static final AnimationData bomb;
   public static final AnimationData upFlame;
   public static final AnimationData downFlame;
@@ -167,6 +169,10 @@ public class ResourceManager {
 
     Sprite[] playerDeadSheet = tryLoadSpriteSheet("sprites/player/dead@11.png");
     playerDead = new AnimationData(playerDeadSheet, 0.15, 1);
+
+    Sprite[] playerEnterPortalSheet = 
+        tryLoadSpriteSheet("sprites/player/enter_portal@16.png", 52, 56);
+    playerEnterPortal = new AnimationData(playerEnterPortalSheet, 0.14, 1);
     
     Sprite[] bombSheet = tryLoadSpriteSheet("sprites/bomb/bomb@4.png");
     bomb = new AnimationData(bombSheet, 0.4);

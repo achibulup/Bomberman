@@ -83,9 +83,22 @@ public class Sprite {
    * @param destY : the y position of the destination rectangle
    */
   public void drawTo(GraphicsContext target, double destX, double destY) {
+    drawTo(target, destX, destY, getWidth(), getHeight());
+  }
+
+  /** 
+   * draw this sprite to a canvas
+   * @param target : the graphic context to draw to
+   * @param destX : the x position of the destination rectangle
+   * @param destY : the y position of the destination rectangle
+   * @param destWidth : the width of the destination rectangle
+   * @param destHeight : the height of the destination rectangle
+   */
+  public void drawTo(GraphicsContext target, double destX, double destY, 
+                     double destWidth, double destHeight) {
     target.drawImage(getSourceImage(), 
         getX(), getY(), getWidth(), getHeight(),
-        destX, destY, getWidth(), getHeight());
+        destX, destY, destWidth, destHeight);
   }
 
   // create a sprite sheet from an image
