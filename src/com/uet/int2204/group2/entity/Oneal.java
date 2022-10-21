@@ -38,19 +38,35 @@ public class Oneal extends Enemy {
     return SPEED;
   }
 
+  @Override
+  public void getHit() {
+    if (isDying()) {
+      return;
+    }
+    this.setDying();
+    this.animation = new Animation(ResourceManager.onealDie);
+  }
+
   public void control() {
     getController().control(this);
   }
 
   @Override
   public void update(double dt) {
-    if (isMovable(getDirection())) {
-      adjustedMove(getSpeed() * dt);
+    if (!isDying()) {
+      if (isMovable(getDirection())) {
+        adjustedMove(getSpeed() * dt);
+      }
+      if (isAligned()) {
+        control();
+      }
+      this.animation.update(dt);
+    } else {
+      this.animation.update(dt);
+      if (this.animation.isEnded()) {
+        markExpired();
+      }
     }
-    if (isAligned()) {
-      control();
-    }
-    this.animation.update(dt);
   }
 
 }

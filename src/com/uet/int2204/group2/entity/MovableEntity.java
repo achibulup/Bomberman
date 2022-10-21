@@ -13,6 +13,8 @@ public abstract class MovableEntity extends Entity {
 
   protected Direction direction = Direction.DOWN;
 
+  protected boolean dying = false;
+
   // +--------+--------+
   // |       dir       |
   // |  from -->  to   |
@@ -61,8 +63,22 @@ public abstract class MovableEntity extends Entity {
     this.direction = direction;
   }
 
+  public boolean isDying() {
+    return this.dying;
+  }
+
+  public void setDying() {
+    this.dying = true;
+  }
+
   public boolean collidesWith(Class<? extends Tile> tile) {
     return SolidTile.class.isAssignableFrom(tile);
+  }
+
+  // called when the entity get hit (eg. by flame)
+  public void getHit() {
+    setDying();
+    markExpired();
   }
 
   public boolean isMovable(Direction direction) {
@@ -100,11 +116,6 @@ public abstract class MovableEntity extends Entity {
       }
     }
     return true;
-  }
-
-  // called when the entity get hit (eg. by flame)
-  public void getHit() {
-    markExpired();
   }
 
   // checks if this entity is perfectly aligned with a tile.

@@ -13,12 +13,12 @@ import com.uet.int2204.group2.utils.ResourceManager;
 public class Player extends MovableEntity {
   // the field MovableEntity.direction is the moving direction of the player.
 
-  private static double NUDGE_TOLERANCE = Constants.TILE_SIZE / 2.5;
-  public static double INITIAL_SPEED = 120; // pixels per second.
+  private static double NUDGE_TOLERANCE = Constants.TILE_SIZE / 2.2;
+  public static double INITIAL_SPEED = 150; // pixels per second.
 
   // private Direction faceDirection = Direction.DOWN; // should not be NONE.
 
-  private Animation currentAnimation = new Animation(ResourceManager.playerWalkDown);
+  private Animation animation = new Animation(ResourceManager.playerWalkDown);
   private EntityController<? super Player> controller = EntityController.doNothingController;
   private double speed = INITIAL_SPEED;
   private int flameLength = 1;
@@ -69,22 +69,34 @@ public class Player extends MovableEntity {
 
   @Override
   public Sprite getSprite() {
-    return currentAnimation.currentSprite();
+    return animation.currentSprite();
   };
 
   @Override
-  public void update(double dt) {
-    Tile thisTile = getWorld().getTile(getTileX(), getTileY());
-    if (thisTile instanceof Item) {
-      collect((Item) thisTile);
+  public void getHit() {
+    if (isDying()) {
+      return;
     }
-    this.controller.control(this);
-    this.currentAnimation.update(dt);
-    double moveDist = getSpeed() * dt;
-    if (isMovable(getDirection())) {
-      adjustedMove(moveDist);
+    this.setDying();
+    this.animation = new Animation(ResourceManager.playerDead);
+  }
+
+  @Override
+  public void update(double dt) {
+    if (!isDying()) {
+      this.controller.control(this);
+      this.animation.update(dt);
+      double moveDist = getSpeed() * dt;
+      if (isMovable(getDirection())) {
+        adjustedMove(moveDist);
+      } else {
+        cornerCorrection(moveDist);
+      }
     } else {
-      cornerCorrection(moveDist);
+      this.animation.update(dt);
+      if (this.animation.isEnded()) {
+        this.markExpired();
+      }
     }
   }
 
@@ -94,32 +106,32 @@ public class Player extends MovableEntity {
       if (direction == Direction.NONE) {
         switch (this.direction) {
           case UP:
-            this.currentAnimation = new Animation(ResourceManager.playerIdleUp);
+            this.animation = new Animation(ResourceManager.playerIdleUp);
             break;
           case DOWN:
-            this.currentAnimation = new Animation(ResourceManager.playerIdleDown);
+            this.animation = new Animation(ResourceManager.playerIdleDown);
             break;
           case LEFT: 
-            this.currentAnimation = new Animation(ResourceManager.playerIdleLeft);
+            this.animation = new Animation(ResourceManager.playerIdleLeft);
             break;
           case RIGHT:
-            this.currentAnimation = new Animation(ResourceManager.playerIdleRight);
+            this.animation = new Animation(ResourceManager.playerIdleRight);
             break;
           default:
         }
       } else {
         switch (direction) {
           case UP:
-            this.currentAnimation = new Animation(ResourceManager.playerWalkUp);
+            this.animation = new Animation(ResourceManager.playerWalkUp);
             break;
           case DOWN:
-            this.currentAnimation = new Animation(ResourceManager.playerWalkDown);
+            this.animation = new Animation(ResourceManager.playerWalkDown);
             break;
           case LEFT: 
-            this.currentAnimation = new Animation(ResourceManager.playerWalkLeft);
+            this.animation = new Animation(ResourceManager.playerWalkLeft);
             break;
           case RIGHT:
-            this.currentAnimation = new Animation(ResourceManager.playerWalkRight);
+            this.animation = new Animation(ResourceManager.playerWalkRight);
             break;
           default:
         }
