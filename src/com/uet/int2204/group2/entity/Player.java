@@ -18,7 +18,7 @@ public class Player extends MovableEntity {
 
   // private Direction faceDirection = Direction.DOWN; // should not be NONE.
 
-  private Animation animation = new Animation(ResourceManager.playerWalkDown);
+  private Animation animation = new Animation(ResourceManager.playerIdleDown);
   private EntityController<? super Player> controller = EntityController.doNothingController;
   private double speed = INITIAL_SPEED;
   private int flameLength = 1;
@@ -31,7 +31,7 @@ public class Player extends MovableEntity {
   }
 
   public Player(int tileX, int tileY, EntityController<? super Player> controller) {
-    super(tileX, tileY);
+    this(tileX, tileY);
     setController(controller);
   }
 
