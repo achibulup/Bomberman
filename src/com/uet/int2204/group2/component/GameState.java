@@ -130,6 +130,19 @@ public class GameState {
     this.gameLoop.stop();
   }
 
+  public void reload() {
+    this.inputHandlers.clear();
+    loadMap(currentLevel = 1);
+    this.levelController = new LevelController(this);
+    this.inputHandlers.add(this.levelController);
+  }
+
+  // this function should be called when the instance is not used anymore.
+  public void close() {
+    this.gameLoop.stop();
+    this.inputHandlers.clear();
+  }
+
   private static class GameLoop extends AnimationTimer {
     GameState host;
     long lastTime = -1;
