@@ -43,6 +43,7 @@ public class Bomberman extends Application {
     public void start(Stage stage) throws Exception {
         root = new Pane();
         root.setPrefSize(WIDTH, HEIGHT);
+        scene = new Scene(root);
         Image img = ResourceManager.background;
         Image imageLogo = ResourceManager.logo;
         GameMenu gameMenu = new GameMenu();
@@ -54,7 +55,6 @@ public class Bomberman extends Application {
         start.playMusic(ResourceManager.sound[0]);
         start.loopMusic();
         root.getChildren().addAll(imageView, imageView1, gameMenu);
-        scene = new Scene(root);
         scene.setOnKeyPressed((keyEvent) -> {
             if (!pressedKeys.contains(keyEvent.getCode())) {
                 pressedKeys.add(keyEvent.getCode());
@@ -69,7 +69,6 @@ public class Bomberman extends Application {
                 handler.handle(keyEvent);
             }
         });
-        //Sound.mediaPlayer.setCycleCount(Sound.mediaPlayer.INDEFINITE);
         scene.setCursor(new ImageCursor(ResourceManager.cursor));
         stage.setTitle("BOMBERMAN");
         stage.getIcons().add(ResourceManager.miniIcon);

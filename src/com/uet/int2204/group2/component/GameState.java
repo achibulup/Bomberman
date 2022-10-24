@@ -124,8 +124,6 @@ public class GameState {
   }
 
   public void start() {
-    Bomberman.start.stopMusic();
-    Bomberman.start.playMusic(ResourceManager.sound[1]);
     this.gameLoop.start();
   }
 

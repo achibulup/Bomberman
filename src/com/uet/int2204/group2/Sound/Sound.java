@@ -21,9 +21,6 @@ public class Sound {
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
     }
     public void changeVolume(double volume) {
-        if (volume < 0 || volume > 1) {
-            throw new IllegalArgumentException();
-        }
         mediaPlayer.setVolume(volume);
     }
 }
