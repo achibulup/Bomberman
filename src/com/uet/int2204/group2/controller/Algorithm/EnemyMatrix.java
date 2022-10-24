@@ -1,24 +1,26 @@
 package com.uet.int2204.group2.controller.Algorithm;
 
-public class EnemyMatrix implements Matrix {
-  private char[][] matrix;
+import com.uet.int2204.group2.entity.MovableEntity;
 
-  public EnemyMatrix(char[][] matrix) {
-    this.matrix = matrix;
+public class EnemyMatrix implements Matrix {
+  private MovableEntity enemy;
+
+  public EnemyMatrix(MovableEntity enemy) {
+    this.enemy = enemy;
   }
 
   @Override
   public int getWidth() {
-    return this.matrix.length;
+    return this.enemy.getWorld().getMapWidth() + 2;
   }
 
   @Override
   public int getHeight() {
-    return this.matrix[0].length;
+    return this.enemy.getWorld().getMapHeight() + 2;
   }
 
   @Override
   public boolean isBlocked(int x, int y) {
-    return this.matrix[x][y] != ' ';
+    return this.enemy.collidesWith(this.enemy.getWorld().getTile(x, y).getClass());
   }
 }
