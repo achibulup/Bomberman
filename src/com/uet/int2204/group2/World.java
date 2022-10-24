@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Stack;
 
+import com.uet.int2204.group2.entity.Bomb;
 import com.uet.int2204.group2.entity.Brick;
 import com.uet.int2204.group2.entity.Edge;
 import com.uet.int2204.group2.entity.Enemy;
@@ -16,7 +17,6 @@ import com.uet.int2204.group2.entity.Player;
 import com.uet.int2204.group2.entity.Portal;
 import com.uet.int2204.group2.entity.SolidTile;
 import com.uet.int2204.group2.entity.Tile;
-import com.uet.int2204.group2.map.SingleUseWorldTrigger;
 import com.uet.int2204.group2.map.WorldTrigger;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -34,14 +34,18 @@ public class World {
 
   private boolean portalActive = false;
 
+  private char[][] matrix;
+
   public World(int mapWidth, int mapHeight) {
     this.mapWidth = mapWidth;
     this.mapHeight = mapHeight;
 
     this.map = new TileStack[mapWidth + 2][mapHeight + 2];
+    this.matrix = new char[mapWidth + 2][mapHeight + 2];
     for (int i = 0; i < mapWidth + 2; ++i) {
       for (int j = 0; j < mapHeight + 2; ++j) {
-        map[i][j] = new TileStack();
+        this.map[i][j] = new TileStack();
+        this.matrix[i][j] = ' ';
       }
     }
     for (int i = 0; i < mapWidth + 2; ++i) {
@@ -61,6 +65,10 @@ public class World {
     }
 
     enemies = new ArrayList<>();
+  }
+
+  public char[][] getMatrix() {
+    return this.matrix;
   }
 
   public int getMapWidth() {
@@ -173,6 +181,22 @@ public class World {
   }
 
   public void renderTo(GraphicsContext target) {
+    for (int i = 0; i < matrix[0].length; ++i) {
+      for (int j = 0; j < matrix.length; ++j) {
+        Tile tile = this.map[j][i].peek();
+        if (tile instanceof SolidTile) {
+          if (tile instanceof Bomb) {
+            this.matrix[j][i] = 'B';
+          } else {
+            this.matrix[j][i] = '#';
+          }
+        } else {
+          this.matrix[j][i] = ' ';
+        }
+      }
+    }
+      
+  
     for (var col : this.map) {
       for (var tiles : col) {
         for (var tile : tiles) {

@@ -11,6 +11,7 @@ public class MapData {
   private int height;
   private char[][] map;
 
+
   public MapData() {
     setSize(0, 0);
   }
@@ -72,9 +73,10 @@ public class MapData {
       for (int j = 1; j <= width; ++j) {
         this.map[j][i] = line.charAt(j);
       }
-    } 
+    }
     buffReader.readLine(); // skip the bottom edge
     inputReader.close();
     buffReader.close();
   }
+
 }

@@ -2,22 +2,20 @@ package com.uet.int2204.group2.component;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Random;
 
 import com.uet.int2204.group2.Bomberman;
-import com.uet.int2204.group2.Sound.Sound;
 import com.uet.int2204.group2.World;
-import com.uet.int2204.group2.controller.AIHighMoveController;
-import com.uet.int2204.group2.controller.AIMediumMoveController;
+import com.uet.int2204.group2.Sound.Sound;
+import com.uet.int2204.group2.controller.AIBearMoveController;
+import com.uet.int2204.group2.controller.AILowMoveController;
 import com.uet.int2204.group2.controller.EntityController;
 import com.uet.int2204.group2.controller.KeyBoardPlayerController;
-import com.uet.int2204.group2.controller.RandomMoveController;
+import com.uet.int2204.group2.controller.Algorithm.AIIntelligent;
 import com.uet.int2204.group2.entity.Balloom;
 import com.uet.int2204.group2.entity.Bear;
 import com.uet.int2204.group2.entity.BombItem;
 import com.uet.int2204.group2.entity.Brick;
 import com.uet.int2204.group2.entity.Broom;
-import com.uet.int2204.group2.entity.Enemy;
 import com.uet.int2204.group2.entity.FlameItem;
 import com.uet.int2204.group2.entity.Oneal;
 import com.uet.int2204.group2.entity.Player;
@@ -26,22 +24,19 @@ import com.uet.int2204.group2.entity.SpeedItem;
 import com.uet.int2204.group2.entity.Wall;
 import com.uet.int2204.group2.map.ActivatePortalTrigger;
 import com.uet.int2204.group2.map.BlinkBrickTrigger;
-import com.uet.int2204.group2.map.PlayerEnterPortalTrigger;
 import com.uet.int2204.group2.map.MapData;
+import com.uet.int2204.group2.map.PlayerEnterPortalTrigger;
 import com.uet.int2204.group2.utils.Constants;
 import com.uet.int2204.group2.utils.Conversions;
 import com.uet.int2204.group2.utils.Maths;
 import com.uet.int2204.group2.utils.ResourceManager;
 
-import com.uet.int2204.group2.utils.ResourceManager;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Affine;
@@ -184,6 +179,7 @@ public class GameState {
       for (int j = 1; j <= world.getMapHeight(); ++j) {
         switch (mapData.getMap()[i][j]) {
           case '#':
+
             this.world.addTile(i, j, new Wall());
             break;
           case '*':
@@ -206,16 +202,16 @@ public class GameState {
                 i, j, new KeyBoardPlayerController(this.inputHandlers)));
             break;
           case '1':
-            this.world.addEnemy(new Balloom(i, j, RandomMoveController.INSTANCE));
+            this.world.addEnemy(new Balloom(i, j, AILowMoveController.INSTANCE));
             break;
           case '2':
-            this.world.addEnemy(new Oneal(i, j, AIMediumMoveController.INSTANCE));
+            this.world.addEnemy(new Oneal(i, j, AIIntelligent.INSTANCE));
             break;
           case '3':
-            this.world.addEnemy(new Broom(i, j, RandomMoveController.INSTANCE));
+            this.world.addEnemy(new Broom(i, j, AILowMoveController.INSTANCE));
             break;
           case '4':
-            this.world.addEnemy(new Bear(i, j, AIHighMoveController.INSTANCE));
+            this.world.addEnemy(new Bear(i, j, AIBearMoveController.INSTANCE));
             break;
         }
       }
@@ -245,7 +241,10 @@ public class GameState {
     }
     else {
       GraphicsContext target = graphicsContext2D();
+      Affine transform = graphicsContext2D().getTransform();
+      graphicsContext2D().setTransform(new Affine());
       target.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+      graphicsContext2D().setTransform(transform);
       world.renderTo(graphicsContext2D()); 
     }
   }

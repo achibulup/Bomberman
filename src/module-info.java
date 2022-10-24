@@ -12,4 +12,5 @@ module com.uet.int2204.group2 {
     exports com.uet.int2204.group2.graphics;
     exports com.uet.int2204.group2.map;
     exports com.uet.int2204.group2.utils;
+    exports com.uet.int2204.group2.controller.Algorithm;
 }
