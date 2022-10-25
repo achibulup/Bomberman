@@ -17,12 +17,12 @@ public class GameMenu extends Parent {
 
     public GameMenu() {
         VBox menuStart = new VBox(30);
-        VBox opsion = new VBox(30);
+        VBox instruction = new VBox(30);
         VBox pause = new VBox(30);
         menuStart.setTranslateX(170);
         menuStart.setTranslateY(220);
-        opsion.setTranslateX(0);
-        opsion.setTranslateY(200);
+        instruction.setTranslateX(0);
+        instruction.setTranslateY(200);
         pause.setTranslateX(170);
         pause.setTranslateY(220);
         final int offset = 400;
@@ -39,6 +39,7 @@ public class GameMenu extends Parent {
          */
         MenuButton btnResume = new MenuButton("RESUME");
         MenuButton btnNewGame = new MenuButton("NEWGAME");
+        MenuButton btnQuit = new MenuButton("Quit");
         //MenuButton btnBackStart = new MenuButton("BACK");
 
         /**
@@ -57,15 +58,16 @@ public class GameMenu extends Parent {
         });
 
         btnNewGame.setOnMouseClicked(event -> {
+            getChildren().remove(game.getRoot());
             game.reload();
             switchToGame();
         });
 
         btnOptions.setOnMouseClicked(event -> {
-            getChildren().add(opsion);
+            getChildren().add(instruction);
             TranslateTransition tt = new TranslateTransition(Duration.seconds(0.5), menuStart);
             tt.setToX(menuStart.getTranslateX() - 400);
-            TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), opsion);
+            TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), instruction);
             tt1.setToX(menuStart.getTranslateX());
             tt.play();
             tt1.play();
@@ -78,21 +80,21 @@ public class GameMenu extends Parent {
             getChildren().add(menuStart);
             TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menuStart);
             tt.setToX(menuStart.getTranslateX() + offset);
-            TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), opsion);
-            tt1.setToX(opsion.getTranslateX());
+            TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), instruction);
+            tt1.setToX(instruction.getTranslateX());
             tt.play();
             tt1.play();
             tt.setOnFinished(evt -> {
-                getChildren().remove(opsion);
+                getChildren().remove(instruction);
             });
         });
 
         Bomberman.scene.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ESCAPE) {
                 game.stop();
-                getChildren().add(pause);
                 getChildren().remove(menuStart);
-                TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), opsion);
+                getChildren().add(pause);
+                TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), instruction);
                 tt1.setToX(menuStart.getTranslateX());
                 Bomberman.setRoot(Bomberman.root);
             }
@@ -101,14 +103,17 @@ public class GameMenu extends Parent {
         btnExit.setOnMouseClicked(event -> {
             Bomberman.closeApp();
         });
+        btnQuit.setOnMouseClicked(event -> {
+            Bomberman.closeApp();
+        });
         btnResume.setOnMouseClicked(mouseEvent -> {
             getChildren().remove(pause);
             switchToGame();
         });
 
         menuStart.getChildren().addAll(btnStart, btnOptions, btnExit);
-        opsion.getChildren().addAll(btnInstruction, btnBack);
-        pause.getChildren().addAll(btnResume, btnNewGame);
+        instruction.getChildren().addAll(btnInstruction, btnBack);
+        pause.getChildren().addAll(btnResume, btnNewGame,btnQuit);
         getChildren().addAll(menuStart);
     }
 
@@ -123,9 +128,4 @@ public class GameMenu extends Parent {
         Bomberman.setInputHandlers(game.getInputHandlers());
         game.stop();
     }
-//    public void newGame() {
-//        Bomberman.setRoot(game.getRoot());
-//        Bomberman.setInputHandlers(game.getInputHandlers());
-//        game.reload();
-//    }
 }
