@@ -121,7 +121,7 @@ public class ResourceManager {
 
     Sprite wallImg = new Sprite(tryLoadImage("sprites/map/wall@1.png"));
     wall = wallImg;
-    
+
     Sprite[] edgesSheet = tryLoadSpriteSheet("sprites/map/edges@10.png");
     topEdge = edgesSheet[2];
     topLeftEdge = edgesSheet[1];
@@ -131,7 +131,7 @@ public class ResourceManager {
     bottomEdge = edgesSheet[5];
 
     Sprite[] itemExplosionSheet = tryLoadSpriteSheet(
-        "sprites/powerup/powerup_explosion@7.png", 52, 56);
+            "sprites/powerup/powerup_explosion@7.png", 52, 56);
     itemExplosion = new AnimationData(itemExplosionSheet, 0.075, 1);
 
     Sprite[] flameItemSheet = tryLoadSpriteSheet("sprites/powerup/longer_flame@2.png");
@@ -139,7 +139,7 @@ public class ResourceManager {
 
     Sprite[] bombItemSheet = tryLoadSpriteSheet("sprites/powerup/extra_bomb@2.png");
     bombItem = new AnimationData(bombItemSheet, 0.4);
-    
+
     Sprite[] speedItemSheet = tryLoadSpriteSheet("sprites/powerup/bonus_speed@2.png");
     speedItem = new AnimationData(speedItemSheet, 0.4);
 
@@ -147,25 +147,25 @@ public class ResourceManager {
     playerIdleDown = new AnimationData(tryLoadSpriteSheet("sprites/player/idle_down@1.png"));
     playerIdleLeft = new AnimationData(tryLoadSpriteSheet("sprites/player/idle_left@1.png"));
     playerIdleRight = new AnimationData(tryLoadSpriteSheet("sprites/player/idle_right@1.png"));
-    
+
     Sprite[] playerWalkUpSheet = tryLoadSpriteSheet("sprites/player/walking_up@4.png");
     playerWalkUp = new AnimationData(playerWalkUpSheet);
 
     Sprite[] playerWalkDownSheet = tryLoadSpriteSheet("sprites/player/walking_down@4.png");
     playerWalkDown = new AnimationData(playerWalkDownSheet);
-    
+
     Sprite[] playerWalkLeftSheet = tryLoadSpriteSheet("sprites/player/walking_left@4.png");
     playerWalkLeft = new AnimationData(playerWalkLeftSheet);
-    
+
     Sprite[] playerWalkRightSheet = tryLoadSpriteSheet("sprites/player/walking_right@4.png");
     playerWalkRight = new AnimationData(playerWalkRightSheet);
 
     Sprite[] playerDeadSheet = tryLoadSpriteSheet("sprites/player/dead@11.png");
     playerDead = new AnimationData(playerDeadSheet, 0.15, 1);
-    
+
     Sprite[] bombSheet = tryLoadSpriteSheet("sprites/bomb/bomb@4.png");
     bomb = new AnimationData(bombSheet, 0.4);
-    
+
     Sprite[] upFlameSheet = tryLoadSpriteSheet("sprites/bomb/explosion_up@6.png");
     upFlame = new AnimationData(upFlameSheet, 0.15, 1);
     Sprite[] downFlameSheet = tryLoadSpriteSheet("sprites/bomb/explosion_down@6.png");
@@ -183,13 +183,13 @@ public class ResourceManager {
 
     Sprite[] balloomSheet = tryLoadSpriteSheet("sprites/enemy/balloom@3.png");
     balloom = new AnimationData(balloomSheet);
-    
+
     Sprite[] balloomDieSheet = tryLoadSpriteSheet("sprites/enemy/balloom_die@5.png");
     balloomDie = new AnimationData(balloomDieSheet, 0.15, 1);
 
     Sprite[] onealSheet = tryLoadSpriteSheet("sprites/enemy/oneal@4.png");
     oneal = new AnimationData(onealSheet);
-    
+
     Sprite[] onealDieSheet = tryLoadSpriteSheet("sprites/enemy/oneal_die@5.png");
     onealDie = new AnimationData(onealDieSheet, 0.15, 1);
 

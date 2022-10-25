@@ -16,7 +16,7 @@ public class Player extends MovableEntity {
   // the field MovableEntity.direction is the moving direction of the player.
 
   private static double NUDGE_TOLERANCE = Constants.TILE_SIZE / 2.2;
-  public static double INITIAL_SPEED = 150; // pixels per second.
+  public static double INITIAL_SPEED = 250; // pixels per second.
 
   // private Direction faceDirection = Direction.DOWN; // should not be NONE.
 
@@ -81,6 +81,8 @@ public class Player extends MovableEntity {
     }
     this.setDying();
     this.animation = new Animation(ResourceManager.playerDead);
+    Sound sound = new Sound();
+    sound.playMusic(ResourceManager.sound[5]);
   }
 
   @Override

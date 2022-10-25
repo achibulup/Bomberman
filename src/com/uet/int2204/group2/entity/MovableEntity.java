@@ -71,8 +71,6 @@ public abstract class MovableEntity extends Entity {
 
   public void setDying() {
     this.dying = true;
-    Sound sound = new Sound();
-    sound.playMusic(ResourceManager.sound[5]);
   }
 
   public boolean collidesWith(Class<? extends Tile> tile) {

@@ -14,7 +14,6 @@ import javafx.util.Duration;
 
 public class GameMenu extends Parent {
     GameState game = new GameState();
-    GameState newGame = new GameState();
 
     public GameMenu() {
         VBox menuStart = new VBox(30);

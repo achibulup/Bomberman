@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Stack;
 
+import com.uet.int2204.group2.entity.Bomb;
 import com.uet.int2204.group2.entity.Edge;
 import com.uet.int2204.group2.entity.Enemy;
 import com.uet.int2204.group2.entity.Entity;
@@ -34,7 +35,7 @@ public class World {
     this.map = new TileStack[mapWidth + 2][mapHeight + 2];
     for (int i = 0; i < mapWidth + 2; ++i) {
       for (int j = 0; j < mapHeight + 2; ++j) {
-        map[i][j] = new TileStack();
+        this.map[i][j] = new TileStack();
       }
     }
     for (int i = 0; i < mapWidth + 2; ++i) {

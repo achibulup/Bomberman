@@ -26,8 +26,7 @@ public class MenuButton extends StackPane {
 
     public MenuButton(String name) {
         text = new Text(name);
-        //font = Font.loadFont(new File("/res/font/Minecrafter.ttf").toURI().toString(), 20);
-        font = Font.font(30);
+        font = Font.loadFont("file:target/classes/font/Minecrafter_Alt.ttf", 25);
         text.setFont(font);
         menuButton = ResourceManager.menuButton;
         ImageView imageView = new ImageView(menuButton);

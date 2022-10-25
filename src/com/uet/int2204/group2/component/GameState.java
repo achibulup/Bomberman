@@ -9,9 +9,10 @@ import com.uet.int2204.group2.Sound.Sound;
 import com.uet.int2204.group2.World;
 import com.uet.int2204.group2.controller.AIHighMoveController;
 import com.uet.int2204.group2.controller.AIMediumMoveController;
+import com.uet.int2204.group2.controller.Algorithm.AIIntelligent;
 import com.uet.int2204.group2.controller.EntityController;
 import com.uet.int2204.group2.controller.KeyBoardPlayerController;
-import com.uet.int2204.group2.controller.RandomMoveController;
+import com.uet.int2204.group2.controller.AILowMoveController;
 import com.uet.int2204.group2.entity.Balloom;
 import com.uet.int2204.group2.entity.Bear;
 import com.uet.int2204.group2.entity.BombItem;
@@ -43,7 +44,7 @@ public class GameState {
   Sound sound = new Sound();
   public static int CANVAS_WIDTH = Bomberman.WIDTH;
   public static int CANVAS_HEIGHT = Bomberman.HEIGHT;
-  
+
   private World world;
   private Canvas canvas;
   private Parent root;
@@ -52,7 +53,7 @@ public class GameState {
 
   public GameState() {
     int mapWidth = 21; // map width in tiles
-    int mapHeight = 15; // map height in tiles
+    int mapHeight = 16; // map height in tiles
     this.world = new World(mapWidth, mapHeight);
     this.canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
     this.root = new Pane(this.canvas);
@@ -60,24 +61,24 @@ public class GameState {
     Random rand = new Random();
 
     EntityController<? super Player> playerController = new KeyBoardPlayerController(inputHandlers);
-    EntityController<? super Enemy> balloomController = RandomMoveController.INSTANCE;
-    EntityController<? super Enemy> broomController = RandomMoveController.INSTANCE;
+    EntityController<? super Enemy> balloomController = AILowMoveController.INSTANCE;
+    EntityController<? super Enemy> broomController = AIIntelligent.INSTANCE;
     EntityController<? super Enemy> bearController = AIHighMoveController.INSTANCE;
     EntityController<? super Enemy> onealController = AIMediumMoveController.INSTANCE;
     this.world.setPlayer(new Player(1, 1, playerController));
 
-//    for (int i = 0; i < 3; ++i) {
+   for (int i = 0; i < 3; ++i) {
 //      this.world.addEnemy(new Balloom(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, balloomController));
-//      this.world.addEnemy(new Oneal(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, onealController));
-//    }
+     this.world.addEnemy(new Oneal(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, onealController));
+    }
 //
 //    for (int i = 0; i < 8; ++i) {
 //      this.world.addEnemy(new Bear(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, bearController));
 //    }
 
-    for (int i = 0; i < 5; ++i) {
-      this.world.addEnemy(new Broom(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, broomController));
-    }
+//    for (int i = 0; i < 5; ++i) {
+//      this.world.addEnemy(new Broom(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, broomController));
+//    }
 
     for (int i = 1; i <= mapWidth; ++i) {
       for (int j = 1; j <= mapHeight; ++j) {
@@ -100,7 +101,7 @@ public class GameState {
           world.addTile(i, j, new Brick(true));
         } else if (r < 20) {
           world.addTile(i, j, new Brick());
-        } 
+        }
       }
     }
 
@@ -146,14 +147,14 @@ public class GameState {
       host.update(dt);
       host.render();
     }
-    
+
   }
-  
+
   private void update(double dt) {
     world.update(dt);
     adjustCanvasView();
   }
-  
+
   private void render() {
     if (this.world.getPlayer() == null) {
       Bomberman.closeApp();
@@ -172,7 +173,7 @@ public class GameState {
     double canvasCenterX = this.canvas.getWidth() / 2;
     double canvasCenterY = this.canvas.getHeight() / 2;
     graphicsContext2D().setTransform(new Affine(
-        Transform.translate(canvasCenterX - mapCenter.getX(), canvasCenterY - mapCenter.getY())));
+            Transform.translate(canvasCenterX - mapCenter.getX(), canvasCenterY - mapCenter.getY())));
   }
 
   // calculate the position on the map that should be placed in the center of the canvas.
@@ -181,17 +182,17 @@ public class GameState {
     double centerX = mapWidth / 2;
     if (mapWidth > canvas.getWidth()) {
       double playerCenterX = getWorld().getPlayer().getPixelX() + Constants.TILE_SIZE / 2;
-      centerX = Maths.clamp(playerCenterX, 
-          canvas.getWidth() / 2, mapWidth - canvas.getWidth() / 2);
+      centerX = Maths.clamp(playerCenterX,
+              canvas.getWidth() / 2, mapWidth - canvas.getWidth() / 2);
     }
     double mapHeight = (getWorld().getMapHeight() + 2) * Constants.TILE_SIZE; // like mapWidth
     double centerY = mapHeight / 2;
     if (mapHeight > canvas.getHeight()) {
       double playerCenterY = getWorld().getPlayer().getPixelY() + Constants.TILE_SIZE / 2;
-      centerY = Maths.clamp(playerCenterY, 
-          canvas.getHeight() / 2, mapHeight - canvas.getHeight() / 2);
+      centerY = Maths.clamp(playerCenterY,
+              canvas.getHeight() / 2, mapHeight - canvas.getHeight() / 2);
     }
     return new Point2D(centerX, centerY);
   }
-  
+
 }
