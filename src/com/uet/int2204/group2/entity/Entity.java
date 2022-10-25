@@ -1,6 +1,9 @@
 package com.uet.int2204.group2.entity;
 
 import com.uet.int2204.group2.graphics.Sprite;
+
+import static com.uet.int2204.group2.utils.Constants.TILE_SIZE;
+
 import com.uet.int2204.group2.World;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -45,6 +48,13 @@ public abstract class Entity {
   // get the current sprite of the entity.
   public abstract Sprite getSprite();
 
+  public static boolean collides(Entity a, Entity b) {
+    return a.getPixelX() + TILE_SIZE > b.getPixelX() 
+        && b.getPixelX() + TILE_SIZE > a.getPixelX()
+        && a.getPixelY() + TILE_SIZE > b.getPixelY() 
+        && b.getPixelY() + TILE_SIZE > a.getPixelY();
+  }
+
   /**
    * update the state of the entity.
    * @param dt : the mount of time has passed since last update, in nanoseconds
@@ -53,6 +63,6 @@ public abstract class Entity {
   public abstract void update(double dt);
 
   public void renderTo(GraphicsContext target) {
-    getSprite().drawTo(target, getPixelX(), getPixelY());
+    getSprite().drawTo(target, getPixelX(), getPixelY(), TILE_SIZE, TILE_SIZE);
   }
 }

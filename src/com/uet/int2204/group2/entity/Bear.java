@@ -7,7 +7,7 @@ import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
 
-public class Bear extends Enemy {
+public class Bear extends Enemy implements SimpleSpriteEnemy {
   public static final double SPEED = 170;
   public static final int MAX_STREAK = 4;
 
@@ -44,27 +44,53 @@ public class Bear extends Enemy {
     return SPEED;
   }
 
+  @Override
+  public void getHit() {
+    if (isDying()) {
+      return;
+    }
+    this.setDying();
+    setDyingAnimation();
+  }
+
+  @Override
+  public Animation getAnimation() {
+    return this.animation;
+  }
+
+  @Override
+  public void setDyingAnimation() {
+    this.animation = new Animation(ResourceManager.bearDie);
+  }
+
   public void control() {
     getController().control(this);
   }
 
   @Override
   public void update(double dt) {
-    if (isMovable(getDirection())) {
-      adjustedMove(getSpeed() * dt);
+    if (!isDying()) {
+      if (isMovable(getDirection())) {
+        adjustedMove(getSpeed() * dt);
+      } else {
+        this.streak = 0;
+      }
+      if (isAligned()) {
+        if (this.streak > 0) {
+          this.streak--;
+        }
+        if (this.streak == 0) {
+          this.streak = rand.nextInt(MAX_STREAK);
+          control();
+        }
+      }
+      this.animation.update(dt);
     } else {
-      this.streak = 0;
-    }
-    if (isAligned()) {
-      if (this.streak > 0) {
-        this.streak--;
-      }
-      if (this.streak == 0) {
-        this.streak = rand.nextInt(MAX_STREAK);
-        control();
+      this.animation.update(dt);
+      if (this.animation.isEnded()) {
+        markExpired();
       }
     }
-    this.animation.update(dt);
   }
 
 }

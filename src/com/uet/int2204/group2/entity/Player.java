@@ -13,24 +13,25 @@ import com.uet.int2204.group2.utils.ResourceManager;
 public class Player extends MovableEntity {
   // the field MovableEntity.direction is the moving direction of the player.
 
-  private static double NUDGE_TOLERANCE = Constants.TILE_SIZE / 2.5;
-  public static double INITIAL_SPEED = 120; // pixels per second.
+  private static double NUDGE_TOLERANCE = Constants.TILE_SIZE / 2.2;
+  public static double INITIAL_SPEED = 150; // pixels per second.
 
   // private Direction faceDirection = Direction.DOWN; // should not be NONE.
 
-  private Animation currentAnimation = new Animation(ResourceManager.playerWalkDown);
+  private Animation animation = new Animation(ResourceManager.playerIdleDown);
   private EntityController<? super Player> controller = EntityController.doNothingController;
   private double speed = INITIAL_SPEED;
   private int flameLength = 1;
   private int maxBombCount = 1;
   private List<Bomb> bombList = new ArrayList<>();
+  private boolean enteringPortal = false;
 
   public Player(int tileX, int tileY) {
     super(tileX, tileY);
   }
 
   public Player(int tileX, int tileY, EntityController<? super Player> controller) {
-    super(tileX, tileY);
+    this(tileX, tileY);
     setController(controller);
   }
 
@@ -67,24 +68,50 @@ public class Player extends MovableEntity {
     this.maxBombCount = maxBombCount;
   }
 
+  public boolean isEnteringPortal() {
+    return this.enteringPortal;
+  }
+
+  public void setEnteringPortal() {
+    this.enteringPortal = true;
+    this.animation = new Animation(ResourceManager.playerEnterPortal);
+  }
+
   @Override
   public Sprite getSprite() {
-    return currentAnimation.currentSprite();
+    return animation.currentSprite();
   };
 
   @Override
-  public void update(double dt) {
-    Tile thisTile = getWorld().getTile(getTileX(), getTileY());
-    if (thisTile instanceof Item) {
-      collect((Item) thisTile);
+  public void getHit() {
+    if (isDying()) {
+      return;
     }
-    this.controller.control(this);
-    this.currentAnimation.update(dt);
-    double moveDist = getSpeed() * dt;
-    if (isMovable(getDirection())) {
-      adjustedMove(moveDist);
+    this.setDying();
+    this.animation = new Animation(ResourceManager.playerDead);
+  }
+
+  @Override
+  public void update(double dt) {
+    if (isEnteringPortal()) {
+      this.animation.update(dt);
+      if (this.animation.isEnded()) {
+        this.markExpired();
+      }
+    } else if (!isDying()) {
+      this.controller.control(this);
+      this.animation.update(dt);
+      double moveDist = getSpeed() * dt;
+      if (isMovable(getDirection())) {
+        adjustedMove(moveDist);
+      } else {
+        cornerCorrection(moveDist);
+      }
     } else {
-      cornerCorrection(moveDist);
+      this.animation.update(dt);
+      if (this.animation.isEnded()) {
+        this.markExpired();
+      }
     }
   }
 
@@ -94,32 +121,32 @@ public class Player extends MovableEntity {
       if (direction == Direction.NONE) {
         switch (this.direction) {
           case UP:
-            this.currentAnimation = new Animation(ResourceManager.playerIdleUp);
+            this.animation = new Animation(ResourceManager.playerIdleUp);
             break;
           case DOWN:
-            this.currentAnimation = new Animation(ResourceManager.playerIdleDown);
+            this.animation = new Animation(ResourceManager.playerIdleDown);
             break;
           case LEFT: 
-            this.currentAnimation = new Animation(ResourceManager.playerIdleLeft);
+            this.animation = new Animation(ResourceManager.playerIdleLeft);
             break;
           case RIGHT:
-            this.currentAnimation = new Animation(ResourceManager.playerIdleRight);
+            this.animation = new Animation(ResourceManager.playerIdleRight);
             break;
           default:
         }
       } else {
         switch (direction) {
           case UP:
-            this.currentAnimation = new Animation(ResourceManager.playerWalkUp);
+            this.animation = new Animation(ResourceManager.playerWalkUp);
             break;
           case DOWN:
-            this.currentAnimation = new Animation(ResourceManager.playerWalkDown);
+            this.animation = new Animation(ResourceManager.playerWalkDown);
             break;
           case LEFT: 
-            this.currentAnimation = new Animation(ResourceManager.playerWalkLeft);
+            this.animation = new Animation(ResourceManager.playerWalkLeft);
             break;
           case RIGHT:
-            this.currentAnimation = new Animation(ResourceManager.playerWalkRight);
+            this.animation = new Animation(ResourceManager.playerWalkRight);
             break;
           default:
         }
@@ -157,7 +184,7 @@ public class Player extends MovableEntity {
     Direction currentDir = getDirection();
     Tile tileAhead = getWorld().getTile(getTileX() + currentDir.x, getTileY() + currentDir.y);
 
-    if (!collidesWith(tileAhead.getClass())) {
+    if (!blockedBy(tileAhead.getClass())) {
       double proj = currentDir.turnLeft().dotProduct(getPixelX() - alignX, getPixelY() - alignY);
       if (0 < proj && proj <= NUDGE_TOLERANCE) {
         adjustedMove(currentDir.turnRight(), moveDist);
