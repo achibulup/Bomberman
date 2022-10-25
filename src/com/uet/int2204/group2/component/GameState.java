@@ -54,7 +54,7 @@ public class GameState {
   public static int CANVAS_HEIGHT = Bomberman.HEIGHT - Constants.TILE_SIZE;
 
   public static final int PLAYER_LIVES = 4;
-  
+
   private World world;
   private Canvas canvas;
   private Parent root;
@@ -161,7 +161,7 @@ public class GameState {
     //       world.addTile(i, j, new Brick(true));
     //     } else if (r < 20) {
     //       world.addTile(i, j, new Brick());
-    //     } 
+    //     }
     //   }
     // }
   }
@@ -246,7 +246,7 @@ public class GameState {
             break;
           case 'p':
             this.world.setPlayer(new Player(
-                i, j, new KeyBoardPlayerController(this.inputHandlers)));
+                    i, j, new KeyBoardPlayerController(this.inputHandlers)));
             this.world.getPlayer().setLives(3);
             break;
           case '1':
@@ -271,7 +271,7 @@ public class GameState {
     respawnPlayer.setLivesProperty(new PlayerLivesProperty(this.world.getPlayer()));
     this.world.addExtension(respawnPlayer);
   }
-  
+
   void update(double dt) {
     world.update(dt);
     runTriggers();

@@ -58,7 +58,7 @@ public class GameMenu extends Parent {
         });
 
         btnNewGame.setOnMouseClicked(event -> {
-            getChildren().remove(game.getRoot());
+            getChildren().remove(Bomberman.root);
             game.reload();
             switchToGame();
         });
@@ -118,14 +118,12 @@ public class GameMenu extends Parent {
     }
 
     public void switchToGame() {
+        game.start();
         Bomberman.setRoot(game.getRoot());
         Bomberman.setInputHandlers(game.getInputHandlers());
-        game.start();
     }
 
     public void ressume() {
-        Bomberman.setRoot(game.getRoot());
-        Bomberman.setInputHandlers(game.getInputHandlers());
         game.stop();
     }
 }
