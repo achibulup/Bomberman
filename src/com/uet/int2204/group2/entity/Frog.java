@@ -1,6 +1,7 @@
 package com.uet.int2204.group2.entity;
 
 import com.uet.int2204.group2.controller.EntityController;
+import com.uet.int2204.group2.controller.RandomMoveController;
 import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
@@ -43,6 +44,12 @@ public class Frog extends Enemy implements SimpleEnemy {
     SimpleEnemy.super.getHit();
   }
 
+  @Override
+  public void onRemoval() {
+    getWorld().addEnemy(createEnemy());
+    getWorld().addEnemy(createEnemy());
+  }
+
   @Override 
   public Animation getAnimation() {
     return this.animation;
@@ -61,5 +68,9 @@ public class Frog extends Enemy implements SimpleEnemy {
   @Override
   public void update(double dt) {
     SimpleEnemy.super.update(dt);
+  }
+
+  private Enemy createEnemy() {
+    return new Balloom(getTileX(), getTileY(), RandomMoveController.INSTANCE);
   }
 }
