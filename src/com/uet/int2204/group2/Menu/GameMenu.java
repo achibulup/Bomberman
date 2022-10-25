@@ -50,11 +50,13 @@ public class GameMenu extends Parent {
             Bomberman.start.stopMusic();
             Bomberman.start.playMusic(ResourceManager.sound[1]);
             Bomberman.start.changeVolume(0.5);
+            Bomberman.start.loopMusic();
             switchToGame();
         });
 
         btnNewGame.setOnMouseClicked(event -> {
-
+            game.reload();
+            switchToGame();
         });
 
         btnOptions.setOnMouseClicked(event -> {
@@ -118,4 +120,9 @@ public class GameMenu extends Parent {
         Bomberman.setInputHandlers(game.getInputHandlers());
         game.stop();
     }
+//    public void newGame() {
+//        Bomberman.setRoot(game.getRoot());
+//        Bomberman.setInputHandlers(game.getInputHandlers());
+//        game.reload();
+//    }
 }
