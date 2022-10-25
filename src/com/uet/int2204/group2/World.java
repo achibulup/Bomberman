@@ -285,34 +285,54 @@ public class World {
   }
 
   protected void playerInteractions(Player player) {
+    Collection<Runnable> interactions = new ArrayList<>();
+
     TileStack playerTile = this.map[player.getTileX()][player.getTileY()];
     for (int i = playerTile.size(); i --> 0;) {
       Tile tile = playerTile.get(i);
+      Runnable playerToTile = player.getInteractionToTile(tile);
+      Runnable tileToPlayer = tile.getInteractionToEntity(player);
+      if (playerToTile != null) {
+        interactions.add(playerToTile);
+      }
+      if (tileToPlayer != null) {
+        interactions.add(tileToPlayer);
+      }
       if (tile instanceof SolidTile) {
         break;
       }
-      if (tile instanceof Flame) {
-        player.getHit();
-      }
-      if (tile instanceof Item) {
-        player.collect((Item) tile);
-      }
     }
+
     for (Enemy enemy : this.enemies) {
       if (enemy.getTileX() == player.getTileX() 
        && enemy.getTileY() == player.getTileY()
        && Entity.collides(enemy, player)) {
-        player.getHit();
+        Runnable playerToEnemy = player.getInteractionToEntity(enemy);
+        Runnable enemyToPlayer = enemy.getInteractionToEntity(player);
+        if (playerToEnemy != null) {
+          interactions.add(playerToEnemy);
+        }
+        if (enemyToPlayer != null) {
+          interactions.add(enemyToPlayer);
+        }
       }
     }
+
+    interactions.forEach(Runnable::run);
   }
 
   protected void enemyInteractions(Enemy enemy) {
     int tileX = enemy.getTileX();
     int tileY = enemy.getTileY();
     Tile tile = this.getTile(tileX, tileY);
-    if (tile instanceof Flame) {
-      enemy.getHit();
+
+    Runnable enemyToTile = enemy.getInteractionToTile(tile);
+    Runnable tileToEnemy = tile.getInteractionToEntity(enemy);
+    if (enemyToTile != null) {
+      enemyToTile.run();
+    }
+    if (tileToEnemy != null) {
+      tileToEnemy.run();
     }
   }
 }

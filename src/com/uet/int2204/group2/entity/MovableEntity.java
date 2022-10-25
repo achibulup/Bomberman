@@ -81,6 +81,14 @@ public abstract class MovableEntity extends Entity {
     markExpired();
   }
 
+  public Runnable getInteractionToEntity(MovableEntity entity) {
+    return null;
+  }
+
+  public Runnable getInteractionToTile(Tile tile) {
+    return null;
+  }
+
   public boolean isMovable(Direction direction) {
     if (direction == Direction.NONE) {
       return false;

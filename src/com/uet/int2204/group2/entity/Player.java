@@ -109,6 +109,14 @@ public class Player extends MovableEntity {
   }
 
   @Override
+  public Runnable getInteractionToTile(Tile tile) {
+    if (tile instanceof Item) {
+      return () -> this.collect((Item) tile);
+    }
+    return null;
+  }
+
+  @Override
   public void update(double dt) {
     if (isEnteringPortal()) {
       this.animation.update(dt);
