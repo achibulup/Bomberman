@@ -58,7 +58,12 @@ public class GameMenu extends Parent {
         });
 
         btnNewGame.setOnMouseClicked(event -> {
+            Bomberman.start.stopMusic();
+            Bomberman.start.playMusic(ResourceManager.sound[1]);
+            Bomberman.start.changeVolume(0.5);
+            Bomberman.start.loopMusic();
             getChildren().remove(Bomberman.root);
+            getChildren().remove(pause);
             game.reload();
             switchToGame();
         });
