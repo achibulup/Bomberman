@@ -18,6 +18,8 @@ public class Player extends MovableEntity {
   private static double NUDGE_TOLERANCE = Constants.TILE_SIZE / 2.2;
   public static double INITIAL_SPEED = 250; // pixels per second.
 
+  public static final int INITIAL_HEALTH = 5;
+
   // private Direction faceDirection = Direction.DOWN; // should not be NONE.
 
   private Animation animation = new Animation(ResourceManager.playerIdleDown);
@@ -27,7 +29,7 @@ public class Player extends MovableEntity {
   private int maxBombCount = 1;
   private List<Bomb> bombList = new ArrayList<>();
   private boolean enteringPortal = false;
-  private int lives = 1;
+  private int lives = INITIAL_HEALTH;
 
   public Player(int tileX, int tileY) {
     super(tileX, tileY);
@@ -101,7 +103,18 @@ public class Player extends MovableEntity {
     if (isDying()) {
       return;
     }
-    setDying(true);
+    else {
+      die();
+    }
+  }
+
+  public void decreaseLives() {
+    this.lives--;
+  }
+
+  public void die() {
+    decreaseLives();
+    this.setDying(true);
     this.animation = new Animation(ResourceManager.playerDead);
     Sound sound = new Sound();
     sound.playMusic(ResourceManager.sound[5]);
