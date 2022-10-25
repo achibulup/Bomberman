@@ -37,7 +37,9 @@ public abstract class Item extends Tile implements DestroyableTile {
 
   @Override
   public void destroy() {
-    this.explosionAnimation = new Animation(ResourceManager.itemExplosion);
+    if (!beingDestroyed()) {
+      this.explosionAnimation = new Animation(ResourceManager.itemExplosion);
+    }
   }
 
   public abstract void onCollect(Player player);
