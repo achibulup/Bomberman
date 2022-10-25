@@ -32,6 +32,7 @@ public class ResourceManager {
   public static final AnimationData speedItem;
   public static final AnimationData lifeItem;
   public static final AnimationData wallPassItem;
+  public static final AnimationData detonatorItem;
 
   public static final Sprite portal;
   public static final AnimationData portalBlinking;
@@ -70,6 +71,13 @@ public class ResourceManager {
 
   public static final AnimationData bear;
   public static final AnimationData bearDie;
+
+  public static final AnimationData frog;
+  public static final AnimationData frogDie;
+
+  public static final AnimationData fire;
+  public static final AnimationData fireDie;
+
 
   // call this function to force initialization of the class, thereby load all the resources
   public static void load() {
@@ -134,6 +142,9 @@ public class ResourceManager {
 
     Sprite[] wallPassItemSheet = tryLoadSpriteSheet("sprites/powerup/go_through_brick@2.png");
     wallPassItem = new AnimationData(wallPassItemSheet, 0.4);
+
+    Sprite[] detonatorItemSheet = tryLoadSpriteSheet("sprites/powerup/detonator@2.png");
+    detonatorItem = new AnimationData(detonatorItemSheet, 0.4);
 
     Sprite[] portalSheet = tryLoadSpriteSheet("sprites/map/portal@2.png");
     portal = portalSheet[0];
@@ -204,5 +215,17 @@ public class ResourceManager {
 
     Sprite[] bearDieSheet = tryLoadSpriteSheet("sprites/enemy/bear_die@5.png");
     bearDie = new AnimationData(bearDieSheet, 0.15, 1);
+
+    Sprite[] frogSheet = tryLoadSpriteSheet("sprites/enemy/frog@3.png");
+    frog = new AnimationData(frogSheet);
+    
+    Sprite[] frogDieSheet = tryLoadSpriteSheet("sprites/enemy/frog_die@7.png");
+    frogDie = new AnimationData(frogDieSheet, 0.15, 1);
+
+    Sprite[] fireSheet = tryLoadSpriteSheet("sprites/enemy/fire@4.png");
+    fire = new AnimationData(fireSheet);
+    
+    Sprite[] fireDieSheet = tryLoadSpriteSheet("sprites/enemy/fire_die@7.png");
+    fireDie = new AnimationData(fireDieSheet, 0.15, 1);
   }
 }
