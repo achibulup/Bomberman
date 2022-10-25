@@ -5,6 +5,7 @@ import java.util.Random;
 import com.uet.int2204.group2.controller.EntityController;
 import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
+import com.uet.int2204.group2.utils.Direction;
 import com.uet.int2204.group2.utils.ResourceManager;
 
 public class Bear extends Enemy implements SimpleEnemy {
@@ -40,12 +41,23 @@ public class Bear extends Enemy implements SimpleEnemy {
   }
 
   @Override
+  public boolean isMovable(Direction direction) {
+    boolean result = super.isMovable(direction);
+    if (!result) {
+      this.streak = 0;
+    }
+    return result;
+  }
+
+  @Override
   public void moveTo(double pixelX, double pixelY) {
+    if (!isMovable(direction)) {
+      this.streak = 0;
+      return;
+    }
     super.moveTo(pixelX, pixelY);
     if (isAligned()) {
-      if (this.streak == 0) {
-        this.streak = rand.nextInt(4) + 1;
-      } else {
+      if (this.streak > 0) {
         --this.streak;
       }
     }
@@ -74,6 +86,7 @@ public class Bear extends Enemy implements SimpleEnemy {
   @Override
   public void control() {
     getController().control(this);
+    this.streak = rand.nextInt(4) + 1;
   }
 
   @Override
