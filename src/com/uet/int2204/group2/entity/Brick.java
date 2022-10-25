@@ -7,21 +7,22 @@ import com.uet.int2204.group2.utils.ResourceManager;
 public class Brick extends Tile implements SolidTile, DestroyableTile {
   private Animation animation = null;
   private boolean destroying = false;
+  private Entity hidden = null;
 
   public Brick() {
   }
 
-  public Brick(boolean sparky) {
-    setSparky(sparky);
+  public Brick(Entity hidden) {
+    setHiddenEntity(hidden);
   }
 
   public Brick(int x, int y) {
     super(x, y);
   }
 
-  public Brick(int x, int y, boolean sparky) {
+  public Brick(int x, int y, Entity hidden) {
     super(x, y);
-    setSparky(sparky);
+    setHiddenEntity(hidden);
   }
 
   @Override
@@ -48,6 +49,23 @@ public class Brick extends Tile implements SolidTile, DestroyableTile {
       this.destroying = true;
       this.animation = new Animation(ResourceManager.brickExplosion);
     }
+  }
+
+  @Override
+  public void onRemoval() {
+    if (this.hidden instanceof Tile) {
+      getWorld().addTile(getTileX(), getTileY(), (Tile) getHiddenEntity());
+    } else if (this.hidden instanceof Enemy) {
+      getWorld().addEnemy((Enemy) getHiddenEntity());
+    }
+  }
+
+  public Entity getHiddenEntity() {
+    return this.hidden;
+  }
+
+  public void setHiddenEntity(Entity hidden) {
+    this.hidden = hidden;
   }
   
   public boolean isSparky() {

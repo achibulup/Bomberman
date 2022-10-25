@@ -29,6 +29,8 @@ public class Player extends MovableEntity {
 
   public Player(int tileX, int tileY) {
     super(tileX, tileY);
+    setDirection(Direction.DOWN);
+    setDirection(Direction.NONE);
   }
 
   public Player(int tileX, int tileY, EntityController<? super Player> controller) {
@@ -177,7 +179,7 @@ public class Player extends MovableEntity {
     Direction currentDir = getDirection();
     Tile tileAhead = getWorld().getTile(getTileX() + currentDir.x, getTileY() + currentDir.y);
 
-    if (!collidesWith(tileAhead.getClass())) {
+    if (!blockedBy(tileAhead.getClass())) {
       double proj = currentDir.turnLeft().dotProduct(getPixelX() - alignX, getPixelY() - alignY);
       if (0 < proj && proj <= NUDGE_TOLERANCE) {
         adjustedMove(currentDir.turnRight(), moveDist);
