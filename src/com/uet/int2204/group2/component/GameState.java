@@ -16,7 +16,9 @@ import com.uet.int2204.group2.entity.BombItem;
 import com.uet.int2204.group2.entity.Brick;
 import com.uet.int2204.group2.entity.Broom;
 import com.uet.int2204.group2.entity.Enemy;
+import com.uet.int2204.group2.entity.Fire;
 import com.uet.int2204.group2.entity.FlameItem;
+import com.uet.int2204.group2.entity.Frog;
 import com.uet.int2204.group2.entity.Oneal;
 import com.uet.int2204.group2.entity.Player;
 import com.uet.int2204.group2.entity.SpeedItem;
@@ -244,6 +246,12 @@ public class GameState {
             break;
           case '4':
             this.world.addEnemy(new Bear(i, j, RandomMoveController.INSTANCE));
+            break;
+          case '5':
+            this.world.addEnemy(new Frog(i, j, RandomMoveController.INSTANCE));
+            break;
+          case '6':
+            this.world.addEnemy(new Fire(i, j, RandomMoveController.INSTANCE));
             break;
         }
       }
