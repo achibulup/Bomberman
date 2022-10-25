@@ -55,6 +55,7 @@ public class GameState {
 
   public static Text point = new Text();
   public static Text timer = new Text();
+  public static int timePlay = 180 * 60;
   public static Text lives = new Text();
   public static Text namePlayer = new Text();
   private Collection<EventHandler<KeyEvent>> inputHandlers = new ArrayList<>();
@@ -64,6 +65,8 @@ public class GameState {
     int mapHeight = 15; // map height in tiles
     this.world = new World(mapWidth, mapHeight);
     this.canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+    this.canvas.setTranslateX(0);
+    this.canvas.setTranslateY(48 + 8 );
     this.root = new Pane(this.canvas);
 
     setPoint((Pane) getRoot(), point, timer, lives, namePlayer);
@@ -133,21 +136,21 @@ public class GameState {
     Image dashboard = ResourceManager.dashboard;
     ImageView dashboardView = new ImageView(dashboard);
     dashboardView.setX(0);
-    dashboardView.setY(620);
-    dashboardView.setFitHeight(48 + 10);
+    dashboardView.setY(0);
+    dashboardView.setFitHeight(48);
     dashboardView.setFitWidth(48 * 13);
 
     timer.setX(48 * 2 + 10);
-    timer.setY(655);
+    timer.setY(29);
 
     point.setX(48 * 5 + 20);
-    point.setY(655);
+    point.setY(29);
 
     lives.setX(48 * 8 - 10);
-    lives.setY(655);
+    lives.setY(29);
 
     namePlayer.setX(48 * 10 - 20);
-    namePlayer.setY(655);
+    namePlayer.setY(29);
 
     lives.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 16));
     lives.setFill(Color.YELLOW);
@@ -161,10 +164,10 @@ public class GameState {
   }
 
   public void updateSetText(Text point, Text timer, Text lives, Text namePlayer) {
-    Timer time_ = new Timer();
+    timePlay--;
       int heal  = world.getPlayer().getInitialHeal();
       point.setText("1000" );
-      timer.setText("" + 180 );
+      timer.setText("" + (timePlay / 60) );
       lives.setText("" + heal);
       namePlayer.setText("Bomberman-N2");
   }
