@@ -36,13 +36,12 @@ public class AIIntelligent implements EntityController<Enemy> {
     }
 
     public int getDirection(Player player, Enemy enemy) {
-        char[][] matrix = enemy.getWorld().getMatrix();
-
         if (player == null) {
             return rand.nextInt(4);
         }
-        List<Point> path = findSortPath(matrix, new Point(player.getTileX(), player.getTileY()),
-                                                new Point(enemy.getTileX(), enemy.getTileY()));
+        List<Point> path = findSortPath(
+            new EnemyMatrix(enemy), new Point(player.getTileX(), player.getTileY()),
+            new Point(enemy.getTileX(), enemy.getTileY()));
         if (path == null) {
             return rand.nextInt(4);
         } else if (path.size() == 1) {

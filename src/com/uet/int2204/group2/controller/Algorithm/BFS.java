@@ -21,19 +21,19 @@ public class BFS {
     }
 
     // BFS, Time O(n^2), Space O(n^2)
-    public static List<Point> findSortPath(char[][] matrix, Point start, Point end) {
+    public static List<Point> findSortPath(Matrix matrix, Point start, Point end) {
         int sx = start.row, sy = start.col;
         int dx = end.row, dy = end.col;
 
-        if (matrix[sx][sy] != ' ')
+        if (matrix.isBlocked(sx, sy))
             return null;
 
-        int m = matrix.length;
-        int n = matrix[0].length;
+        int m = matrix.getWidth();
+        int n = matrix.getHeight();
         Cell[][] cells = new Cell[m][n];
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (matrix[i][j] == ' ') {
+                if (matrix.isBlocked(i, j)) {
                     cells[i][j] = new Cell(i, j, Integer.MAX_VALUE, null);
                 }
             }
