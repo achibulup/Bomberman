@@ -29,6 +29,6 @@ public class LifeItem extends Item {
   
   @Override
   public void onCollect(Player player) {
-    // TODO:
+    player.setLives(player.getLives() + 1);
   }
 }
