@@ -30,6 +30,8 @@ public class ResourceManager {
   public static final AnimationData flameItem;
   public static final AnimationData bombItem;
   public static final AnimationData speedItem;
+  public static final AnimationData lifeItem;
+  public static final AnimationData wallPassItem;
 
   public static final Sprite portal;
   public static final AnimationData portalBlinking;
@@ -126,6 +128,12 @@ public class ResourceManager {
     
     Sprite[] speedItemSheet = tryLoadSpriteSheet("sprites/powerup/bonus_speed@2.png");
     speedItem = new AnimationData(speedItemSheet, 0.4);
+    
+    Sprite[] lifeItemSheet = tryLoadSpriteSheet("sprites/powerup/extra_life@2.png");
+    lifeItem = new AnimationData(lifeItemSheet, 0.4);
+
+    Sprite[] wallPassItemSheet = tryLoadSpriteSheet("sprites/powerup/go_through_brick@2.png");
+    wallPassItem = new AnimationData(wallPassItemSheet, 0.4);
 
     Sprite[] portalSheet = tryLoadSpriteSheet("sprites/map/portal@2.png");
     portal = portalSheet[0];
