@@ -44,7 +44,9 @@ public class GameMenu extends Parent {
         /**
          * Menu option.
          */
-        Instruction btnInstruction = new Instruction("");
+        Instruction btnInstruction = new Instruction(" Use the direction of key" + "\n"
+                + " to move the kernel, the" + "\n"
+                + " key space to set boom");
 
         btnStart.setOnMouseClicked(event -> {
             Bomberman.start.stopMusic();
@@ -86,7 +88,7 @@ public class GameMenu extends Parent {
         });
 
         Bomberman.scene.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
-            if(keyEvent.getCode() == KeyCode.ESCAPE) {
+            if (keyEvent.getCode() == KeyCode.ESCAPE) {
                 game.stop();
                 getChildren().add(pause);
                 getChildren().remove(menuStart);
@@ -115,6 +117,7 @@ public class GameMenu extends Parent {
         Bomberman.setInputHandlers(game.getInputHandlers());
         game.start();
     }
+
     public void ressume() {
         Bomberman.setRoot(game.getRoot());
         Bomberman.setInputHandlers(game.getInputHandlers());

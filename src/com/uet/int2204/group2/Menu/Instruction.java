@@ -1,6 +1,7 @@
 package com.uet.int2204.group2.Menu;
 
 import com.uet.int2204.group2.utils.ResourceManager;
+import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -16,12 +17,13 @@ public class Instruction extends StackPane {
     public Pane pane;
     public Instruction(String name) {
         text = new Text(name);
-        font = Font.font(30);
+        font = Font.loadFont("file:target/classes/font/ARCADE.TTF", 28);
         text.setFont(font);
         image = ResourceManager.imgOption;
         ImageView imageView = new ImageView(image);
         imageView.setTranslateX(-80);
-//        imageView.setTranslateY(0);
-        getChildren().addAll(text,imageView);
+        text.setTranslateX(-80);
+        setAlignment(Pos.CENTER);
+        getChildren().addAll(imageView,text);
     }
 }
