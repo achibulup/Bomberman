@@ -69,8 +69,8 @@ public abstract class MovableEntity extends Entity {
     return this.dying;
   }
 
-  public void setDying() {
-    this.dying = true;
+  public void setDying(boolean dying) {
+    this.dying = dying;
   }
 
   public boolean blockedBy(Class<? extends Tile> tile) {
@@ -79,7 +79,7 @@ public abstract class MovableEntity extends Entity {
 
   // called when the entity get hit (eg. by flame)
   public void getHit() {
-    setDying();
+    setDying(true);
     markExpired();
   }
 

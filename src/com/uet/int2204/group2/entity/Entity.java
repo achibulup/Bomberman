@@ -25,6 +25,10 @@ public abstract class Entity {
     return this.expired;
   }
 
+  public void setExpired(boolean expired) {
+    this.expired = expired;
+  }
+
   public void markExpired() {
     this.expired = true;
   }
@@ -63,6 +67,6 @@ public abstract class Entity {
   public abstract void update(double dt);
 
   public void renderTo(GraphicsContext target) {
-    getSprite().drawTo(target, getPixelX(), getPixelY());
+    getSprite().drawTo(target, getPixelX(), getPixelY(), TILE_SIZE, TILE_SIZE);
   }
 }

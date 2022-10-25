@@ -1,5 +1,6 @@
 package com.uet.int2204.group2.utils;
 
+import java.io.FileInputStream;
 import java.nio.file.FileSystemNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.List;
 import com.uet.int2204.group2.Sound.Sound;
 import com.uet.int2204.group2.graphics.AnimationData;
 import com.uet.int2204.group2.graphics.Sprite;
+import com.uet.int2204.group2.map.MapData;
 
 import javafx.scene.image.Image;
 
@@ -18,6 +20,8 @@ public class ResourceManager {
   public static final Image menuButton;
   public static final Image imgOption;
   public static final String[] sound = new String[10];
+
+  public static final MapData[] levels;
 
   public static final Sprite grassNormal;
   public static final Sprite grassShadowed;
@@ -39,6 +43,8 @@ public class ResourceManager {
   public static final AnimationData flameItem;
   public static final AnimationData bombItem;
   public static final AnimationData speedItem;
+  public static final AnimationData lifeItem;
+  public static final AnimationData wallPassItem;
 
   public static final Sprite portal;
   public static final AnimationData portalBlinking;
@@ -54,6 +60,8 @@ public class ResourceManager {
   public static final AnimationData playerWalkRight;
 
   public static final AnimationData playerDead;
+
+  public static final AnimationData playerEnterPortal;
 
   public static final AnimationData bomb;
   public static final AnimationData upFlame;
@@ -96,6 +104,14 @@ public class ResourceManager {
     return Sprite.makeSpriteSheet(tryLoadImage(path), spriteWidth, spriteHeight);
   }
 
+  public static MapData tryLoadMapData(String path) {
+    try {
+      return new MapData(new FileInputStream("target/classes/" + path));
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   static {
     background = tryLoadImage("sprites/background.jpg");
     logo = tryLoadImage("sprites/Logo1.png");
@@ -109,7 +125,13 @@ public class ResourceManager {
     sound[2] = "res/audio/putbomb.wav"; // đặt boom
     sound[3] = "res/audio/boom.wav"; // bom nổ
     sound[4] = "res/audio/getitem.wav"; // ăn item
-    sound[5] = "res/audio/dead2.wav"; // mất mạng
+    sound[5] = "res/audio/dead2.wav"; // mất mạng;
+
+    levels = new MapData[]{
+      tryLoadMapData("levels/level1.txt"),
+      tryLoadMapData("levels/level2.txt"),
+      tryLoadMapData("levels/level3.txt")
+    };
 
     Sprite[] grassSheet = tryLoadSpriteSheet("sprites/map/grass@2.png");
     grassNormal = grassSheet[0];
@@ -145,10 +167,16 @@ public class ResourceManager {
 
     Sprite[] speedItemSheet = tryLoadSpriteSheet("sprites/powerup/bonus_speed@2.png");
     speedItem = new AnimationData(speedItemSheet, 0.4);
+    
+    Sprite[] lifeItemSheet = tryLoadSpriteSheet("sprites/powerup/extra_life@2.png");
+    lifeItem = new AnimationData(lifeItemSheet, 0.4);
+
+    Sprite[] wallPassItemSheet = tryLoadSpriteSheet("sprites/powerup/go_through_brick@2.png");
+    wallPassItem = new AnimationData(wallPassItemSheet, 0.4);
 
     Sprite[] portalSheet = tryLoadSpriteSheet("sprites/map/portal@2.png");
     portal = portalSheet[0];
-    portalBlinking = new AnimationData(portalSheet);
+    portalBlinking = new AnimationData(portalSheet, 0.5);
 
     playerIdleUp = new AnimationData(tryLoadSpriteSheet("sprites/player/idle_up@1.png"));
     playerIdleDown = new AnimationData(tryLoadSpriteSheet("sprites/player/idle_down@1.png"));
@@ -170,6 +198,10 @@ public class ResourceManager {
     Sprite[] playerDeadSheet = tryLoadSpriteSheet("sprites/player/dead@11.png");
     playerDead = new AnimationData(playerDeadSheet, 0.15, 1);
 
+    Sprite[] playerEnterPortalSheet = 
+        tryLoadSpriteSheet("sprites/player/enter_portal@16.png", 52, 56);
+    playerEnterPortal = new AnimationData(playerEnterPortalSheet, 0.14, 1);
+    
     Sprite[] bombSheet = tryLoadSpriteSheet("sprites/bomb/bomb@4.png");
     bomb = new AnimationData(bombSheet, 0.4);
 

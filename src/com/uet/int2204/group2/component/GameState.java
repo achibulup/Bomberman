@@ -27,6 +27,9 @@ import com.uet.int2204.group2.entity.SpeedItem;
 import com.uet.int2204.group2.entity.Wall;
 import com.uet.int2204.group2.map.ActivatePortalTrigger;
 import com.uet.int2204.group2.map.BlinkBrickTrigger;
+import com.uet.int2204.group2.map.PlayerEnterPortalTrigger;
+import com.uet.int2204.group2.map.RespawnPlayer;
+import com.uet.int2204.group2.map.MapData;
 import com.uet.int2204.group2.utils.Constants;
 import com.uet.int2204.group2.utils.Conversions;
 import com.uet.int2204.group2.utils.Maths;
@@ -34,10 +37,12 @@ import com.uet.int2204.group2.utils.Maths;
 import com.uet.int2204.group2.utils.ResourceManager;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Affine;
@@ -46,69 +51,119 @@ import javafx.scene.transform.Transform;
 public class GameState {
   Sound sound = new Sound();
   public static int CANVAS_WIDTH = Bomberman.WIDTH;
-  public static int CANVAS_HEIGHT = Bomberman.HEIGHT;
+  public static int CANVAS_HEIGHT = Bomberman.HEIGHT - Constants.TILE_SIZE;
 
+  public static final int PLAYER_LIVES = 4;
+  
   private World world;
   private Canvas canvas;
   private Parent root;
   private AnimationTimer gameLoop;
   private Collection<EventHandler<KeyEvent>> inputHandlers = new ArrayList<>();
+  private Collection<GameStateTrigger> triggers = new ArrayList<>();
+
+  int currentLevel;
+  int playerLives;
 
   public GameState() {
-    int mapWidth = 21; // map width in tiles
-    int mapHeight = 16; // map height in tiles
-    this.world = new World(mapWidth, mapHeight);
     this.canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
     this.root = new Pane(this.canvas);
 
-    Random rand = new Random();
-
-    EntityController<? super Player> playerController = new KeyBoardPlayerController(inputHandlers);
-    EntityController<? super Enemy> balloomController = AILowMoveController.INSTANCE;
-    EntityController<? super Enemy> broomController = AIIntelligent.INSTANCE;
-    EntityController<? super Enemy> bearController = AIHighMoveController.INSTANCE;
-    EntityController<? super Enemy> onealController = AIMediumMoveController.INSTANCE;
-    this.world.setPlayer(new Player(1, 1, playerController));
-
-   for (int i = 0; i < 3; ++i) {
-//      this.world.addEnemy(new Balloom(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, balloomController));
-     this.world.addEnemy(new Oneal(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, onealController));
-    }
-//
-//    for (int i = 0; i < 8; ++i) {
-//      this.world.addEnemy(new Bear(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, bearController));
-//    }
-
-//    for (int i = 0; i < 5; ++i) {
-//      this.world.addEnemy(new Broom(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, broomController));
-//    }
-
-    for (int i = 1; i <= mapWidth; ++i) {
-      for (int j = 1; j <= mapHeight; ++j) {
-        if (i + j <= 3) {
-          continue;
-        }
-        if (i % 2 == 0 && j % 2 == 0) {
-          world.addTile(i, j, new Wall());
-          continue;
-        }
-        int r = rand.nextInt(80);
-        if (r == 8) {
-          world.addTile(i, j, new Brick(new FlameItem()));
-        } else if (r == 9) {
-          world.addTile(i, j, new Brick(new BombItem()));
-        } else if (r == 10) {
-          world.addTile(i, j, new Brick(new SpeedItem()));
-        } else if (r < 20) {
-          world.addTile(i, j, new Brick());
-        }
-      }
-    }
-    world.addTile(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, new Portal());
-    world.addTrigger(new BlinkBrickTrigger());
-    world.addTrigger(new ActivatePortalTrigger());
-
+    this.playerLives = PLAYER_LIVES;
+    loadMap(currentLevel = 1);
+    KeyboardLevelController levelController = new KeyboardLevelController();
+    this.inputHandlers.add(levelController);
+    this.triggers.add(levelController);
+    this.triggers.add(new NextLevelTrigger());
     this.gameLoop = new GameLoop(this);
+
+//     Random rand = new Random();
+
+//     EntityController<? super Player> playerController = new KeyBoardPlayerController(inputHandlers);
+//     EntityController<? super Enemy> balloomController = AILowMoveController.INSTANCE;
+//     EntityController<? super Enemy> broomController = AIIntelligent.INSTANCE;
+//     EntityController<? super Enemy> bearController = AIHighMoveController.INSTANCE;
+//     EntityController<? super Enemy> onealController = AIMediumMoveController.INSTANCE;
+//     this.world.setPlayer(new Player(1, 1, playerController));
+
+//    for (int i = 0; i < 3; ++i) {
+// //      this.world.addEnemy(new Balloom(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, balloomController));
+//      this.world.addEnemy(new Oneal(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, onealController));
+//     }
+// //
+// //    for (int i = 0; i < 8; ++i) {
+// //      this.world.addEnemy(new Bear(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, bearController));
+// //    }
+
+// //    for (int i = 0; i < 5; ++i) {
+// //      this.world.addEnemy(new Broom(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, broomController));
+// //    }
+
+//     for (int i = 1; i <= mapWidth; ++i) {
+//       for (int j = 1; j <= mapHeight; ++j) {
+//         if (i + j <= 3) {
+//           continue;
+//         }
+//         if (i % 2 == 0 && j % 2 == 0) {
+//           world.addTile(i, j, new Wall());
+//           continue;
+//         }
+//         int r = rand.nextInt(80);
+//         if (r == 8) {
+//           world.addTile(i, j, new Brick(new FlameItem()));
+//         } else if (r == 9) {
+//           world.addTile(i, j, new Brick(new BombItem()));
+//         } else if (r == 10) {
+//           world.addTile(i, j, new Brick(new SpeedItem()));
+//         } else if (r < 20) {
+//           world.addTile(i, j, new Brick());
+//         }
+//       }
+//     }
+//     world.addTile(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, new Portal());
+//     world.addTrigger(new BlinkBrickTrigger());
+//     world.addTrigger(new ActivatePortalTrigger());
+
+    // int mapWidth = 21; // map width in tiles
+    // int mapHeight = 15; // map height in tiles
+    // this.world = new World(mapWidth, mapHeight);
+    // EntityController<? super Player> playerController = new KeyBoardPlayerController(inputHandlers);
+    // this.world.setPlayer(new Player(1, 1, playerController));
+    // EntityController<? super Enemy> balloomController = RandomMoveController.INSTANCE;
+    // this.world.addEnemy(new Balloom(3, 3, balloomController));
+    // EntityController<? super Enemy> broomController = RandomMoveController.INSTANCE;
+    // this.world.addEnemy(new Broom(5, 7, broomController));
+    // EntityController<? super Enemy> bearController = RandomMoveController.INSTANCE;
+    // for (int i = 0; i < 10; ++i) {
+    //   this.world.addEnemy(new Bear(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, bearController));
+    // }
+    // EntityController<? super Enemy> onealController = new KeyboardEnemyController(inputHandlers);
+    // this.world.addEnemy(new Oneal(7, 3, onealController));
+
+    // for (int i = 1; i <= mapWidth; ++i) {
+    //   for (int j = 1; j <= mapHeight; ++j) {
+    //     if (i + j <= 3) {
+    //       continue;
+    //     }
+    //     if (i % 2 == 0 && j % 2 == 0) {
+    //       world.addTile(i, j, new Wall());
+    //       continue;
+    //     }
+    //     int r = rand.nextInt(80);
+    //     if (r == 8) {
+    //       world.addTile(i, j, new FlameItem());
+    //       world.addTile(i, j, new Brick(true));
+    //     } else if (r == 9) {
+    //       world.addTile(i, j, new BombItem());
+    //       world.addTile(i, j, new Brick(true));
+    //     } else if (r == 10) {
+    //       world.addTile(i, j, new SpeedItem());
+    //       world.addTile(i, j, new Brick(true));
+    //     } else if (r < 20) {
+    //       world.addTile(i, j, new Brick());
+    //     } 
+    //   }
+    // }
   }
 
   public World getWorld() {
@@ -135,36 +190,97 @@ public class GameState {
     this.gameLoop.stop();
   }
 
-  private static class GameLoop extends AnimationTimer {
-    GameState host;
-    long lastTime = -1;
-
-    public GameLoop(GameState host) {
-      this.host = host;
+  public void prevLevel() {
+    if (this.currentLevel > 1) {
+      this.loadMap(--this.currentLevel);
     }
-
-    @Override
-    public void handle(long now) {
-      double dt = this.lastTime == -1 ? 0 : Conversions.nanosToSeconds(now - this.lastTime);
-      this.lastTime = now;
-      host.update(dt);
-      host.render();
-    }
-
   }
 
-  private void update(double dt) {
+  public void nextLevel() {
+    if (this.currentLevel == ResourceManager.levels.length) {
+      Bomberman.closeApp();
+    } else {
+      this.loadMap(++this.currentLevel);
+    }
+  }
+
+  public void loadMap(int level) {
+    loadMap(ResourceManager.levels[level - 1]);
+  }
+
+  public void loadMap(MapData mapData) {
+    this.inputHandlers.removeIf((handler) -> handler instanceof EntityController);
+    this.world = new World(mapData.getWidth(), mapData.getHeight());
+    for (int i = 1; i <= world.getMapWidth(); ++i) {
+      for (int j = 1; j <= world.getMapHeight(); ++j) {
+        switch (mapData.getMap()[i][j]) {
+          case '#':
+            this.world.addTile(i, j, new Wall());
+            break;
+          case '*':
+            this.world.addTile(i, j, new Brick());
+            break;
+          case 'x':
+            this.world.addTile(i, j, new Brick(new Portal()));
+            break;
+          case 'f':
+            this.world.addTile(i, j, new Brick(new FlameItem()));
+            break;
+          case 'b':
+            this.world.addTile(i, j, new Brick(new BombItem()));
+            break;
+          case 's':
+            this.world.addTile(i, j, new Brick(new SpeedItem()));
+            break;
+          case 'p':
+            this.world.setPlayer(new Player(
+                i, j, new KeyBoardPlayerController(this.inputHandlers)));
+            this.world.getPlayer().setLives(3);
+            break;
+          case '1':
+            this.world.addEnemy(new Balloom(i, j, AILowMoveController.INSTANCE));
+            break;
+          case '2':
+            this.world.addEnemy(new Oneal(i, j, AILowMoveController.INSTANCE));
+            break;
+          case '3':
+            this.world.addEnemy(new Broom(i, j, AILowMoveController.INSTANCE));
+            break;
+          case '4':
+            this.world.addEnemy(new Bear(i, j, AILowMoveController.INSTANCE));
+            break;
+        }
+      }
+    }
+    this.world.addTrigger(new BlinkBrickTrigger());
+    this.world.addTrigger(new ActivatePortalTrigger());
+    this.world.addTrigger(new PlayerEnterPortalTrigger());
+    var respawnPlayer = new RespawnPlayer(1, 1);
+    respawnPlayer.setLivesProperty(new PlayerLivesProperty(this.world.getPlayer()));
+    this.world.addExtension(respawnPlayer);
+  }
+  
+  void update(double dt) {
     world.update(dt);
+    runTriggers();
+    if (this.world.isGameOver()) {
+      Bomberman.closeApp();
+    }
     adjustCanvasView();
   }
 
-  private void render() {
-    if (this.world.getPlayer() == null) {
-      Bomberman.closeApp();
-    }
+  void render() {
     GraphicsContext target = graphicsContext2D();
     target.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     world.renderTo(graphicsContext2D());
+  }
+
+  private void runTriggers() {
+    for (GameStateTrigger trigger : this.triggers.toArray(new GameStateTrigger[0])) {
+      if (trigger.checkCondition(this)) {
+        trigger.activate(this);
+      }
+    }
   }
 
   // adjust the canvas view to follow the player.

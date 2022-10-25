@@ -24,7 +24,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class Bomberman extends Application {
-
     public static Scene scene;
     public static Pane root;
     public static Sound start = new Sound();
@@ -55,19 +54,19 @@ public class Bomberman extends Application {
         start.playMusic(ResourceManager.sound[0]);
         start.loopMusic();
         root.getChildren().addAll(imageView, imageView1, gameMenu);
-        scene.setOnKeyPressed((keyEvent) -> {
-            if (!pressedKeys.contains(keyEvent.getCode())) {
-                pressedKeys.add(keyEvent.getCode());
-                for (var handler : inputHandlers) {
-                    handler.handle(keyEvent);
-                }
-            }
-        });
-        scene.setOnKeyReleased((keyEvent) -> {
-            pressedKeys.remove(keyEvent.getCode());
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, (keyEvent) -> {
+          if (!pressedKeys.contains(keyEvent.getCode())) {
+            pressedKeys.add(keyEvent.getCode());
             for (var handler : inputHandlers) {
-                handler.handle(keyEvent);
+              handler.handle(keyEvent);
             }
+          }
+        });
+        scene.addEventHandler(KeyEvent.KEY_RELEASED, (keyEvent) -> {
+          pressedKeys.remove(keyEvent.getCode());
+          for (var handler : inputHandlers) {
+            handler.handle(keyEvent);
+          }
         });
         scene.setCursor(new ImageCursor(ResourceManager.cursor));
         stage.setTitle("BOMBERMAN");
