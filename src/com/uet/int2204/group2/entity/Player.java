@@ -25,6 +25,7 @@ public class Player extends MovableEntity {
   private int maxBombCount = 1;
   private List<Bomb> bombList = new ArrayList<>();
   private boolean enteringPortal = false;
+  private int lives = 1;
 
   public Player(int tileX, int tileY) {
     super(tileX, tileY);
@@ -78,6 +79,14 @@ public class Player extends MovableEntity {
     this.enteringPortal = true;
     this.direction = Direction.NONE;
     this.animation = new Animation(ResourceManager.playerEnterPortal);
+  }
+
+  public int getLives() {
+    return this.lives;
+  }
+
+  public void setLives(int lives) {
+    this.lives = lives;
   }
 
   @Override

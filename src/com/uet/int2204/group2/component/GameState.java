@@ -185,6 +185,7 @@ public class GameState {
           case 'p':
             this.world.setPlayer(new Player(
                 i, j, new KeyBoardPlayerController(this.inputHandlers)));
+            this.world.getPlayer().setLives(3);
             break;
           case '1':
             this.world.addEnemy(new Balloom(i, j, RandomMoveController.INSTANCE));
@@ -205,7 +206,7 @@ public class GameState {
     this.world.addTrigger(new ActivatePortalTrigger());
     this.world.addTrigger(new PlayerEnterPortalTrigger());
     var respawnPlayer = new RespawnPlayer(1, 1);
-    respawnPlayer.setLivesProperty(new PlayerLivesProperty(this));
+    respawnPlayer.setLivesProperty(new PlayerLivesProperty(this.world.getPlayer()));
     this.world.addExtension(respawnPlayer);
   }
   
