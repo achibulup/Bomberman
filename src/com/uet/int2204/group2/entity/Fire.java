@@ -44,6 +44,14 @@ public class Fire extends Enemy implements SimpleEnemy {
   }
 
   @Override
+  public Runnable getInteractionToTile(Tile tile) {
+    if (tile instanceof Item) {
+      return () -> ((Item) tile).destroy();
+    }
+    return null;
+  }
+
+  @Override
   public Animation getAnimation() {
     return this.animation;
   }
