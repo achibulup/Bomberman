@@ -5,7 +5,7 @@ import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
 
-public class Oneal extends Enemy {
+public class Oneal extends Enemy implements SimpleSpriteEnemy {
   public static final double SPEED = 60;
 
   private Animation animation = new Animation(ResourceManager.oneal);
@@ -44,6 +44,16 @@ public class Oneal extends Enemy {
       return;
     }
     this.setDying();
+    setDyingAnimation();
+  }
+
+  @Override 
+  public Animation getAnimation() {
+    return this.animation;
+  }
+
+  @Override
+  public void setDyingAnimation() {
     this.animation = new Animation(ResourceManager.onealDie);
   }
 
