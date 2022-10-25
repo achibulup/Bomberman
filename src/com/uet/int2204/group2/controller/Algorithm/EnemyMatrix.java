@@ -21,6 +21,6 @@ public class EnemyMatrix implements Matrix {
 
   @Override
   public boolean isBlocked(int x, int y) {
-    return this.enemy.collidesWith(this.enemy.getWorld().getTile(x, y).getClass());
+    return this.enemy.blockedBy(this.enemy.getWorld().getTile(x, y).getClass());
   }
 }

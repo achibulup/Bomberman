@@ -76,6 +76,6 @@ public class RespawnPlayer extends WorldExtension {
                                     getRespawnY() * Constants.TILE_SIZE);
     getWorld().setPlayer(this.playerToBeRespawned);
     this.playerToBeRespawned = null;
-    getLivesProperty().set(getLivesProperty().get() - 1);
+    // getLivesProperty().set(getLivesProperty().get() - 1);
   }
 }
