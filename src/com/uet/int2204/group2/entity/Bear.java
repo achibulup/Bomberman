@@ -7,7 +7,7 @@ import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
 
-public class Bear extends Enemy {
+public class Bear extends Enemy implements SimpleSpriteEnemy {
   public static final double SPEED = 170;
   public static final int MAX_STREAK = 4;
 
@@ -50,6 +50,16 @@ public class Bear extends Enemy {
       return;
     }
     this.setDying(true);
+    setDyingAnimation();
+  }
+
+  @Override
+  public Animation getAnimation() {
+    return this.animation;
+  }
+
+  @Override
+  public void setDyingAnimation() {
     this.animation = new Animation(ResourceManager.bearDie);
   }
 

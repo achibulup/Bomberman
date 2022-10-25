@@ -5,26 +5,26 @@ import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
 
-public class Balloom extends Enemy implements SimpleSpriteEnemy {
-  public static final double SPEED = 70;
+public class Fire extends Enemy {
+  public static final double SPEED = 110;
 
-  private Animation animation = new Animation(ResourceManager.balloom);
-  private EntityController<? super Balloom> controller = EntityController.doNothingController;
+  private Animation animation = new Animation(ResourceManager.fire);
+  private EntityController<? super Fire> controller = EntityController.doNothingController;
 
-  public Balloom(int tileX, int tileY) {
+  public Fire(int tileX, int tileY) {
     super(tileX, tileY);
   }
 
-  public Balloom(int tileX, int tileY, EntityController<? super Balloom> controller) {
+  public Fire(int tileX, int tileY, EntityController<? super Fire> controller) {
     super(tileX, tileY);
     setController(controller);
   }
 
-  public EntityController<? super Balloom> getController() {
+  public EntityController<? super Fire> getController() {
     return this.controller;
   }
 
-  public void setController(EntityController<? super Balloom> controller) {
+  public void setController(EntityController<? super Fire> controller) {
     this.controller = controller;
   }
 
@@ -44,17 +44,7 @@ public class Balloom extends Enemy implements SimpleSpriteEnemy {
       return;
     }
     this.setDying(true);
-    setDyingAnimation();
-  }
-
-  @Override
-  public Animation getAnimation() {
-    return this.animation;
-  }
-
-  @Override
-  public void setDyingAnimation() {
-    this.animation = new Animation(ResourceManager.balloomDie);
+    this.animation = new Animation(ResourceManager.fireDie);
   }
 
   public void control() {
@@ -64,9 +54,6 @@ public class Balloom extends Enemy implements SimpleSpriteEnemy {
   @Override
   public void update(double dt) {
     if (!isDying()) {
-      if (isHalfwayBlocked(getDirection())) {
-        setDirection(getDirection().opposite());
-      }
       if (isMovable(getDirection())) {
         adjustedMove(getSpeed() * dt);
       }
@@ -81,5 +68,4 @@ public class Balloom extends Enemy implements SimpleSpriteEnemy {
       }
     }
   }
-
 }
