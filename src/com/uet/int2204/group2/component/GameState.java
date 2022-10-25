@@ -190,6 +190,18 @@ public class GameState {
     this.gameLoop.stop();
   }
 
+  public void reload() {
+    this.inputHandlers.clear();
+    loadMap(currentLevel = 1);
+    this.inputHandlers.add(new KeyboardLevelController());
+  }
+
+  // this function should be called when the instance is not used anymore.
+  public void close() {
+    this.gameLoop.stop();
+    this.inputHandlers.clear();
+  }
+
   public void prevLevel() {
     if (this.currentLevel > 1) {
       this.loadMap(--this.currentLevel);

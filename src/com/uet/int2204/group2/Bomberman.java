@@ -72,6 +72,7 @@ public class Bomberman extends Application {
         stage.setTitle("BOMBERMAN");
         stage.getIcons().add(ResourceManager.miniIcon);
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 
