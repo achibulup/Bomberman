@@ -11,7 +11,7 @@ public abstract class MovableEntity extends Entity {
   protected double pixelX;
   protected double pixelY;
 
-  protected Direction direction = Direction.DOWN;
+  protected Direction direction = Direction.NONE;
 
   protected boolean dying = false;
 
@@ -67,21 +67,17 @@ public abstract class MovableEntity extends Entity {
     return this.dying;
   }
 
-  public void setDying() {
-    this.dying = true;
+  public void setDying(boolean dying) {
+    this.dying = dying;
   }
 
-  public void setLives() {
-    this.dying = false;
-  }
-
-  public boolean collidesWith(Class<? extends Tile> tile) {
+  public boolean blockedBy(Class<? extends Tile> tile) {
     return SolidTile.class.isAssignableFrom(tile);
   }
 
   // called when the entity get hit (eg. by flame)
   public void getHit() {
-    setDying();
+    setDying(true);
     markExpired();
   }
 
@@ -101,25 +97,62 @@ public abstract class MovableEntity extends Entity {
     }
 
     Tile tileAhead = world.getTile(getTileX() + direction.x, getTileY() + direction.y);
-    if (collidesWith(tileAhead.getClass())) {
+    if (blockedBy(tileAhead.getClass())) {
       return false;
     }
     double perpProj = direction.turnLeft().dotProduct(dx, dy);
     if (perpProj > 0) {
       Tile tileAheadLeft = world.getTile(getTileX() + direction.x + direction.turnLeft().x, 
                                          getTileY() + direction.y + direction.turnLeft().y);
-      if (collidesWith(tileAheadLeft.getClass())) {
+      if (blockedBy(tileAheadLeft.getClass())) {
         return false;
       }
     } 
     if (perpProj < 0) {
       Tile tileAheadRight = world.getTile(getTileX() + direction.x + direction.turnRight().x, 
                                           getTileY() + direction.y + direction.turnRight().y);
-      if (collidesWith(tileAheadRight.getClass())) {
+      if (blockedBy(tileAheadRight.getClass())) {
         return false;
       }
     }
     return true;
+  }
+
+  public boolean isHalfwayBlocked(Direction direction) {
+    if (direction == Direction.NONE) {
+      return false;
+    }
+
+    World world = getWorld();
+    // displacement from the main tile
+    double dx = getPixelX() - getTileX() * TILE_SIZE;
+    double dy = getPixelY() - getTileY() * TILE_SIZE;
+
+    // if the entity is entering the tile or is aligned along the direction's axis, return false
+    if (direction.dotProduct(dx, dy) <= 0) {
+      return false;
+    }
+
+    Tile tileAhead = world.getTile(getTileX() + direction.x, getTileY() + direction.y);
+    if (blockedBy(tileAhead.getClass())) {
+      return true;
+    }
+    double perpProj = direction.turnLeft().dotProduct(dx, dy);
+    if (perpProj > 0) {
+      Tile tileAheadLeft = world.getTile(getTileX() + direction.x + direction.turnLeft().x, 
+                                         getTileY() + direction.y + direction.turnLeft().y);
+      if (blockedBy(tileAheadLeft.getClass())) {
+        return true;
+      }
+    } 
+    if (perpProj < 0) {
+      Tile tileAheadRight = world.getTile(getTileX() + direction.x + direction.turnRight().x, 
+                                          getTileY() + direction.y + direction.turnRight().y);
+      if (blockedBy(tileAheadRight.getClass())) {
+        return true;
+      }
+    }
+    return false;
   }
 
   // checks if this entity is perfectly aligned with a tile.

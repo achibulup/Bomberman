@@ -16,23 +16,27 @@ public class Player extends MovableEntity {
   private static double NUDGE_TOLERANCE = Constants.TILE_SIZE / 2.2;
   public static double INITIAL_SPEED = 150; // pixels per second.
 
-  public static int INITIAL_HEAL = 5;
+  public static final int INITIAL_HEALTH = 5;
 
   // private Direction faceDirection = Direction.DOWN; // should not be NONE.
 
-  private Animation animation = new Animation(ResourceManager.playerWalkDown);
+  private Animation animation = new Animation(ResourceManager.playerIdleDown);
   private EntityController<? super Player> controller = EntityController.doNothingController;
   private double speed = INITIAL_SPEED;
   private int flameLength = 1;
   private int maxBombCount = 1;
   private List<Bomb> bombList = new ArrayList<>();
+  private boolean enteringPortal = false;
+  private int lives = INITIAL_HEALTH;
 
   public Player(int tileX, int tileY) {
     super(tileX, tileY);
+    setDirection(Direction.DOWN);
+    setDirection(Direction.NONE);
   }
 
   public Player(int tileX, int tileY, EntityController<? super Player> controller) {
-    super(tileX, tileY);
+    this(tileX, tileY);
     setController(controller);
   }
 
@@ -69,6 +73,24 @@ public class Player extends MovableEntity {
     this.maxBombCount = maxBombCount;
   }
 
+  public boolean isEnteringPortal() {
+    return this.enteringPortal;
+  }
+
+  public void setEnteringPortal() {
+    this.enteringPortal = true;
+    this.direction = Direction.NONE;
+    this.animation = new Animation(ResourceManager.playerEnterPortal);
+  }
+
+  public int getLives() {
+    return this.lives;
+  }
+
+  public void setLives(int lives) {
+    this.lives = lives;
+  }
+
   @Override
   public Sprite getSprite() {
     return animation.currentSprite();
@@ -79,26 +101,34 @@ public class Player extends MovableEntity {
     if (isDying()) {
       return;
     }
-    if (INITIAL_HEAL != 0) {
-      decreaseInitialHeal();
-
-    } else {
-      this.setDying();
-      this.animation = new Animation(ResourceManager.playerDead);
+    else {
+      die();
     }
   }
 
-  public int getInitialHeal() {
-    return INITIAL_HEAL;
+  public void decreaseLives() {
+    this.lives--;
   }
 
-  public void decreaseInitialHeal() {
-    INITIAL_HEAL--;
+  public void die() {
+    decreaseLives();
+    this.setDying(true);
+    this.animation = new Animation(ResourceManager.playerDead);
+  }
+
+  @Override
+  public void onRemoval() {
+    getWorld().setGameOver(true);
   }
 
   @Override
   public void update(double dt) {
-    if (!isDying()) {
+    if (isEnteringPortal()) {
+      this.animation.update(dt);
+      if (this.animation.isEnded()) {
+        this.markExpired();
+      }
+    } else if (!isDying()) {
       this.controller.control(this);
       this.animation.update(dt);
       double moveDist = getSpeed() * dt;
@@ -184,7 +214,7 @@ public class Player extends MovableEntity {
     Direction currentDir = getDirection();
     Tile tileAhead = getWorld().getTile(getTileX() + currentDir.x, getTileY() + currentDir.y);
 
-    if (!collidesWith(tileAhead.getClass())) {
+    if (!blockedBy(tileAhead.getClass())) {
       double proj = currentDir.turnLeft().dotProduct(getPixelX() - alignX, getPixelY() - alignY);
       if (0 < proj && proj <= NUDGE_TOLERANCE) {
         adjustedMove(currentDir.turnRight(), moveDist);

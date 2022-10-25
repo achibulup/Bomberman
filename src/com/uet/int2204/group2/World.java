@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Stack;
 
 import com.uet.int2204.group2.entity.Bomb;
+import com.uet.int2204.group2.entity.Brick;
 import com.uet.int2204.group2.entity.Edge;
 import com.uet.int2204.group2.entity.Enemy;
 import com.uet.int2204.group2.entity.Entity;
@@ -13,8 +14,12 @@ import com.uet.int2204.group2.entity.Flame;
 import com.uet.int2204.group2.entity.Grass;
 import com.uet.int2204.group2.entity.Item;
 import com.uet.int2204.group2.entity.Player;
+import com.uet.int2204.group2.entity.Portal;
 import com.uet.int2204.group2.entity.SolidTile;
 import com.uet.int2204.group2.entity.Tile;
+import com.uet.int2204.group2.map.SingleUseWorldTrigger;
+import com.uet.int2204.group2.map.WorldExtension;
+import com.uet.int2204.group2.map.WorldTrigger;
 
 import javafx.scene.canvas.GraphicsContext;
 
@@ -27,6 +32,11 @@ public class World {
   private Player player;
   private TileStack[][] map;
   private List<Enemy> enemies;
+  private List<WorldTrigger> triggers = new ArrayList<>();
+  private List<WorldExtension> extensions = new ArrayList<>();
+
+  private boolean portalActive = false;
+  private boolean gameOver = false;
 
   public World(int mapWidth, int mapHeight) {
     this.mapWidth = mapWidth;
@@ -75,6 +85,17 @@ public class World {
   }
 
   /**
+   * Put a tile layer on top of the tile stack at the position (tile.tilex, tile.tileY).
+   * This will also set the tile's world to this world.
+   */
+  public void addTile(Tile tile) {
+    int tileX = tile.getTileX();
+    int tileY = tile.getTileY();
+    tile.setWorld(this);
+    this.map[tileX][tileY].push(tile);
+  }
+
+  /**
    * Put a tile layer on top of the tile stack at the position (tileX, tileY).
    * This will also set the tile's world to this world.
    */
@@ -101,11 +122,11 @@ public class World {
    * this will also set the player's world to this world.
    */
   public void setPlayer(Player player) {
-    player.setWorld(this);
+    if (player != null) player.setWorld(this);
     this.player = player;
   }
 
-  public Iterable<Enemy> getEnemies() {
+  public Collection<Enemy> getEnemies() {
     return this.enemies;
   }
 
@@ -117,10 +138,55 @@ public class World {
     this.enemies.add(enemy);
   }
 
+  public boolean isGameOver() {
+    return this.gameOver;
+  }
+
+  public void setGameOver(boolean over) {
+    this.gameOver = over;
+  }
+
+  public void addTrigger(WorldTrigger trigger) {
+    this.triggers.add(trigger);
+  }
+
+  public Collection<WorldTrigger> getTriggers() {
+    return this.triggers;
+  }
+
+  public void addExtension(WorldExtension extension) {
+    extension.setWorld(this);
+    this.extensions.add(extension);
+  }
+
+  public boolean isPortalActive() {
+    return this.portalActive;
+  }
+
+  public void setPortalActive() {
+    this.portalActive = true;
+    for (var col : this.map) {
+      for (var tiles : col) {
+        for (Tile tile : tiles) {
+          if (tile instanceof Portal) {
+            ((Portal) tile).setBlinking(true);
+          } else if (tile instanceof Brick) {
+            Entity hidden = ((Brick) tile).getHiddenEntity();
+            if (hidden instanceof Portal) {
+              ((Portal) hidden).setBlinking(true);
+            }
+          }
+        }
+      }
+    }
+  }
+
   public void update(double dt) {
     handleInteractions();
     updateEntities(dt);
     handleInteractions();
+    runTriggers();
+    runExtensions(dt);
     removeExpiredEntities();
   }
 
@@ -168,6 +234,25 @@ public class World {
       if (!enemy.isExpired()) {
         enemyInteractions(enemy);
       }
+    }
+  }
+
+  private void runTriggers() {
+    Collection<WorldTrigger> removedTriggers = new ArrayList<>();
+    for (WorldTrigger trigger : this.triggers.toArray(new WorldTrigger[0])) {
+      if (trigger.checkCondition(this)) {
+        trigger.activate(this);
+        if (trigger.isDone()) {
+          removedTriggers.add(trigger);
+        }
+      }
+    }
+    this.triggers.removeAll(removedTriggers);
+  }
+
+  private void runExtensions(double dt) {
+    for (WorldExtension extension : this.extensions) {
+      extension.update(dt);
     }
   }
 

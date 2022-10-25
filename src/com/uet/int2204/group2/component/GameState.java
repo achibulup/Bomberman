@@ -18,8 +18,14 @@ import com.uet.int2204.group2.entity.Enemy;
 import com.uet.int2204.group2.entity.FlameItem;
 import com.uet.int2204.group2.entity.Oneal;
 import com.uet.int2204.group2.entity.Player;
+import com.uet.int2204.group2.entity.Portal;
 import com.uet.int2204.group2.entity.SpeedItem;
 import com.uet.int2204.group2.entity.Wall;
+import com.uet.int2204.group2.map.ActivatePortalTrigger;
+import com.uet.int2204.group2.map.BlinkBrickTrigger;
+import com.uet.int2204.group2.map.PlayerEnterPortalTrigger;
+import com.uet.int2204.group2.map.RespawnPlayer;
+import com.uet.int2204.group2.map.MapData;
 import com.uet.int2204.group2.utils.Constants;
 import com.uet.int2204.group2.utils.Conversions;
 import com.uet.int2204.group2.utils.Maths;
@@ -27,12 +33,14 @@ import com.uet.int2204.group2.utils.Maths;
 import com.uet.int2204.group2.utils.ResourceManager;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -47,18 +55,25 @@ import javafx.scene.transform.Transform;
 public class GameState {
   public static int CANVAS_WIDTH = Bomberman.WIDTH;
   public static int CANVAS_HEIGHT = Bomberman.HEIGHT;
+
+  public static final int PLAYER_LIVES = 4;
   
   private World world;
   private Canvas canvas;
   private Parent root;
   private AnimationTimer gameLoop;
 
-  public static Text point = new Text();
-  public static Text timer = new Text();
-  public static int timePlay = 180 * 60;
-  public static Text lives = new Text();
-  public static Text namePlayer = new Text();
   private Collection<EventHandler<KeyEvent>> inputHandlers = new ArrayList<>();
+  private Collection<GameStateTrigger> triggers = new ArrayList<>();
+
+  Text point = new Text();
+  Text timer = new Text();
+  int timesLeft = 180 * 60;
+  Text lives = new Text();
+  Text namePlayer = new Text();
+  
+  int currentLevel;
+  int playerLives;
 
   public GameState() {
     int mapWidth = 21; // map width in tiles
@@ -66,59 +81,108 @@ public class GameState {
     this.world = new World(mapWidth, mapHeight);
     this.canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
     this.canvas.setTranslateX(0);
-    this.canvas.setTranslateY(48 + 8 );
+    this.canvas.setTranslateY(48 + 8);
     this.root = new Pane(this.canvas);
 
     setPoint((Pane) getRoot(), point, timer, lives, namePlayer);
 
-    Random rand = new Random();
-
-    EntityController<? super Player> playerController = new KeyBoardPlayerController(inputHandlers);
-    EntityController<? super Enemy> balloomController = AILowMoveController.INSTANCE;
-    EntityController<? super Enemy> broomController = AIIntelligent.INSTANCE;
-    EntityController<? super Enemy> bearController = AIHighMoveController.INSTANCE;
-    EntityController<? super Enemy> onealController = AIIntelligent.INSTANCE;
-    this.world.setPlayer(new Player(1, 1, playerController));
-
-    for (int i = 0; i < 3; ++i) {
-//      this.world.addEnemy(new Balloom(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, balloomController));
-      this.world.addEnemy(new Oneal(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, onealController));
-    }
-
-    for (int i = 0; i < 8; ++i) {
-//      this.world.addEnemy(new Bear(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, bearController));
-    }
-    
-    for (int i = 0; i < 5; ++i) {
-      this.world.addEnemy(new Broom(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, broomController));
-    }
-
-    for (int i = 1; i <= mapWidth; ++i) {
-      for (int j = 1; j <= mapHeight; ++j) {
-        if (i + j <= 3) {
-          continue;
-        }
-        if (i % 2 == 0 && j % 2 == 0) {
-          world.addTile(i, j, new Wall());
-          continue;
-        }
-        int r = rand.nextInt(80);
-        if (r == 8) {
-          world.addTile(i, j, new FlameItem());
-          world.addTile(i, j, new Brick(true));
-        } else if (r == 9) {
-          world.addTile(i, j, new BombItem());
-          world.addTile(i, j, new Brick(true));
-        } else if (r == 10) {
-          world.addTile(i, j, new SpeedItem());
-          world.addTile(i, j, new Brick(true));
-        } else if (r < 20) {
-          world.addTile(i, j, new Brick());
-        } 
-      }
-    }
-
+    this.playerLives = PLAYER_LIVES;
+    loadMap(currentLevel = 1);
+    KeyboardLevelController levelController = new KeyboardLevelController();
+    this.inputHandlers.add(levelController);
+    this.triggers.add(levelController);
+    this.triggers.add(new NextLevelTrigger());
     this.gameLoop = new GameLoop(this);
+
+//     Random rand = new Random();
+
+//     EntityController<? super Player> playerController = new KeyBoardPlayerController(inputHandlers);
+//     EntityController<? super Enemy> balloomController = AILowMoveController.INSTANCE;
+//     EntityController<? super Enemy> broomController = AIIntelligent.INSTANCE;
+//     EntityController<? super Enemy> bearController = AIHighMoveController.INSTANCE;
+//     EntityController<? super Enemy> onealController = AIIntelligent.INSTANCE;
+//     this.world.setPlayer(new Player(1, 1, playerController));
+
+//     for (int i = 0; i < 3; ++i) {
+// //      this.world.addEnemy(new Balloom(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, balloomController));
+//       this.world.addEnemy(new Oneal(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, onealController));
+//     }
+
+//     for (int i = 0; i < 8; ++i) {
+// //      this.world.addEnemy(new Bear(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, bearController));
+//     }
+    
+//     for (int i = 0; i < 5; ++i) {
+//       this.world.addEnemy(new Broom(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, broomController));
+//     }
+
+//     for (int i = 1; i <= mapWidth; ++i) {
+//       for (int j = 1; j <= mapHeight; ++j) {
+//         if (i + j <= 3) {
+//           continue;
+//         }
+//         if (i % 2 == 0 && j % 2 == 0) {
+//           world.addTile(i, j, new Wall());
+//           continue;
+//         }
+//         int r = rand.nextInt(80);
+//         if (r == 8) {
+//           world.addTile(i, j, new FlameItem());
+//           world.addTile(i, j, new Brick(true));
+//         } else if (r == 9) {
+//           world.addTile(i, j, new BombItem());
+//           world.addTile(i, j, new Brick(true));
+//         } else if (r == 10) {
+//           world.addTile(i, j, new SpeedItem());
+//           world.addTile(i, j, new Brick(true));
+//         } else if (r < 20) {
+//           world.addTile(i, j, new Brick());
+//         } 
+//       }
+//     }
+
+    // Random rand = new Random();
+
+    // int mapWidth = 21; // map width in tiles
+    // int mapHeight = 15; // map height in tiles
+    // this.world = new World(mapWidth, mapHeight);
+    // EntityController<? super Player> playerController = new KeyBoardPlayerController(inputHandlers);
+    // this.world.setPlayer(new Player(1, 1, playerController));
+    // EntityController<? super Enemy> balloomController = RandomMoveController.INSTANCE;
+    // this.world.addEnemy(new Balloom(3, 3, balloomController));
+    // EntityController<? super Enemy> broomController = RandomMoveController.INSTANCE;
+    // this.world.addEnemy(new Broom(5, 7, broomController));
+    // EntityController<? super Enemy> bearController = RandomMoveController.INSTANCE;
+    // for (int i = 0; i < 10; ++i) {
+    //   this.world.addEnemy(new Bear(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, bearController));
+    // }
+    // EntityController<? super Enemy> onealController = new KeyboardEnemyController(inputHandlers);
+    // this.world.addEnemy(new Oneal(7, 3, onealController));
+
+    // for (int i = 1; i <= mapWidth; ++i) {
+    //   for (int j = 1; j <= mapHeight; ++j) {
+    //     if (i + j <= 3) {
+    //       continue;
+    //     }
+    //     if (i % 2 == 0 && j % 2 == 0) {
+    //       world.addTile(i, j, new Wall());
+    //       continue;
+    //     }
+    //     int r = rand.nextInt(80);
+    //     if (r == 8) {
+    //       world.addTile(i, j, new FlameItem());
+    //       world.addTile(i, j, new Brick(true));
+    //     } else if (r == 9) {
+    //       world.addTile(i, j, new BombItem());
+    //       world.addTile(i, j, new Brick(true));
+    //     } else if (r == 10) {
+    //       world.addTile(i, j, new SpeedItem());
+    //       world.addTile(i, j, new Brick(true));
+    //     } else if (r < 20) {
+    //       world.addTile(i, j, new Brick());
+    //     } 
+    //   }
+    // }
   }
 
   public World getWorld() {
@@ -132,6 +196,7 @@ public class GameState {
   public Parent getRoot() {
     return this.root;
   }
+
   public void setPoint(Pane root_, Text timer, Text point, Text lives, Text namePlayer) {
     Image dashboard = ResourceManager.dashboard;
     ImageView dashboardView = new ImageView(dashboard);
@@ -163,15 +228,6 @@ public class GameState {
     root_.getChildren().addAll(dashboardView, point, timer, lives, namePlayer);
   }
 
-  public void updateSetText(Text point, Text timer, Text lives, Text namePlayer) {
-    timePlay--;
-      int heal  = world.getPlayer().getInitialHeal();
-      point.setText("1000" );
-      timer.setText("" + (timePlay / 60) );
-      lives.setText("" + heal);
-      namePlayer.setText("Bomberman-N2");
-  }
-
   public Iterable<EventHandler<KeyEvent>> getInputHandlers() {
     return this.inputHandlers;
   }
@@ -184,37 +240,109 @@ public class GameState {
     this.gameLoop.stop();
   }
 
-  private static class GameLoop extends AnimationTimer {
-    GameState host;
-    long lastTime = -1;
-
-    public GameLoop(GameState host) {
-      this.host = host;
+  public void prevLevel() {
+    if (this.currentLevel > 1) {
+      this.loadMap(--this.currentLevel);
     }
+  }
 
-    @Override
-    public void handle(long now) {
-      double dt = this.lastTime == -1 ? 0 : Conversions.nanosToSeconds(now - this.lastTime);
-      this.lastTime = now;
-      host.update(dt);
-      host.updateSetText(point, timer, lives, namePlayer);
-      host.render();
+  public void nextLevel() {
+    if (this.currentLevel == ResourceManager.levels.length) {
+      Bomberman.closeApp();
+    } else {
+      this.loadMap(++this.currentLevel);
     }
-    
+  }
+
+  public void loadMap(int level) {
+    loadMap(ResourceManager.levels[level - 1]);
+  }
+
+  public void loadMap(MapData mapData) {
+    this.inputHandlers.removeIf((handler) -> handler instanceof EntityController);
+    this.world = new World(mapData.getWidth(), mapData.getHeight());
+    for (int i = 1; i <= world.getMapWidth(); ++i) {
+      for (int j = 1; j <= world.getMapHeight(); ++j) {
+        switch (mapData.getMap()[i][j]) {
+          case '#':
+            this.world.addTile(i, j, new Wall());
+            break;
+          case '*':
+            this.world.addTile(i, j, new Brick());
+            break;
+          case 'x':
+            this.world.addTile(i, j, new Brick(new Portal()));
+            break;
+          case 'f':
+            this.world.addTile(i, j, new Brick(new FlameItem()));
+            break;
+          case 'b':
+            this.world.addTile(i, j, new Brick(new BombItem()));
+            break;
+          case 's':
+            this.world.addTile(i, j, new Brick(new SpeedItem()));
+            break;
+          case 'p':
+            this.world.setPlayer(new Player(
+                i, j, new KeyBoardPlayerController(this.inputHandlers)));
+            this.world.getPlayer().setLives(3);
+            break;
+          case '1':
+            this.world.addEnemy(new Balloom(i, j, AILowMoveController.INSTANCE));
+            break;
+          case '2':
+            this.world.addEnemy(new Oneal(i, j, AIIntelligent.INSTANCE));
+            break;
+          case '3':
+            this.world.addEnemy(new Broom(i, j, AILowMoveController.INSTANCE));
+            break;
+          case '4':
+            this.world.addEnemy(new Bear(i, j, AILowMoveController.INSTANCE));
+            break;
+        }
+      }
+    }
+    this.world.addTrigger(new BlinkBrickTrigger());
+    this.world.addTrigger(new ActivatePortalTrigger());
+    this.world.addTrigger(new PlayerEnterPortalTrigger());
+    var respawnPlayer = new RespawnPlayer(1, 1);
+    respawnPlayer.setLivesProperty(new PlayerLivesProperty(this.world.getPlayer()));
+    this.world.addExtension(respawnPlayer);
   }
   
-  private void update(double dt) {
+  void update(double dt) {
     world.update(dt);
-    adjustCanvasView();
-  }
-  
-  private void render() {
-    if (this.world.getPlayer() == null) {
+    runTriggers();
+    if (this.world.isGameOver()) {
       Bomberman.closeApp();
     }
+    updateSetText(dt);
+    adjustCanvasView();
+  }
+
+  void render() {
     GraphicsContext target = graphicsContext2D();
     target.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     world.renderTo(graphicsContext2D());
+  }
+
+  void updateSetText(double dt) {
+      timesLeft -= dt;
+      if (getWorld().getPlayer() != null) {
+        this.playerLives = getWorld().getPlayer().getLives();
+      }
+      point.setText("1000" );
+      timer.setText("" + (timesLeft / 60) );
+      lives.setText("" + this.playerLives);
+      namePlayer.setText("Bomberman-N2");
+  }
+
+  private void runTriggers() {
+    for (GameStateTrigger trigger : this.triggers.toArray(new GameStateTrigger[0])) {
+      if (trigger.checkCondition(this)) {
+        trigger.activate(this);
+      }
+    }
   }
 
   // adjust the canvas view to follow the player.
