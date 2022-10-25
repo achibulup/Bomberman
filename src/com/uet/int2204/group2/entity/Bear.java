@@ -49,7 +49,7 @@ public class Bear extends Enemy {
     if (isDying()) {
       return;
     }
-    this.setDying();
+    this.setDying(true);
     this.animation = new Animation(ResourceManager.bearDie);
   }
 

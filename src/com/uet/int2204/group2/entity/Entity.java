@@ -25,6 +25,10 @@ public abstract class Entity {
     return this.expired;
   }
 
+  public void setExpired(boolean expired) {
+    this.expired = expired;
+  }
+
   public void markExpired() {
     this.expired = true;
   }

@@ -90,8 +90,13 @@ public class Player extends MovableEntity {
     if (isDying()) {
       return;
     }
-    this.setDying();
+    setDying(true);
     this.animation = new Animation(ResourceManager.playerDead);
+  }
+
+  @Override
+  public void onRemoval() {
+    getWorld().setGameOver(true);
   }
 
   @Override

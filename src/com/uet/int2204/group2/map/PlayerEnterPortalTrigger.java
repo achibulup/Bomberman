@@ -9,8 +9,9 @@ public class PlayerEnterPortalTrigger implements SingleUseWorldTrigger {
   @Override
   public boolean checkCondition(World target) {
     Player player = target.getPlayer();
+    if (player == null) return false;
     Tile tile = target.getTile(player.getTileX(), player.getTileY());
-    return player != null && tile instanceof Portal && ((Portal) tile).isBlinking();
+    return tile instanceof Portal && ((Portal) tile).isBlinking();
   }
 
   @Override

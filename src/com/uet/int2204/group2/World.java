@@ -17,6 +17,7 @@ import com.uet.int2204.group2.entity.Portal;
 import com.uet.int2204.group2.entity.SolidTile;
 import com.uet.int2204.group2.entity.Tile;
 import com.uet.int2204.group2.map.SingleUseWorldTrigger;
+import com.uet.int2204.group2.map.WorldExtension;
 import com.uet.int2204.group2.map.WorldTrigger;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -31,8 +32,10 @@ public class World {
   private TileStack[][] map;
   private List<Enemy> enemies;
   private List<WorldTrigger> triggers = new ArrayList<>();
+  private List<WorldExtension> extensions = new ArrayList<>();
 
   private boolean portalActive = false;
+  private boolean gameOver = false;
 
   public World(int mapWidth, int mapHeight) {
     this.mapWidth = mapWidth;
@@ -118,7 +121,7 @@ public class World {
    * this will also set the player's world to this world.
    */
   public void setPlayer(Player player) {
-    player.setWorld(this);
+    if (player != null) player.setWorld(this);
     this.player = player;
   }
 
@@ -134,12 +137,25 @@ public class World {
     this.enemies.add(enemy);
   }
 
+  public boolean isGameOver() {
+    return this.gameOver;
+  }
+
+  public void setGameOver(boolean over) {
+    this.gameOver = over;
+  }
+
   public void addTrigger(WorldTrigger trigger) {
     this.triggers.add(trigger);
   }
 
   public Collection<WorldTrigger> getTriggers() {
     return this.triggers;
+  }
+
+  public void addExtension(WorldExtension extension) {
+    extension.setWorld(this);
+    this.extensions.add(extension);
   }
 
   public boolean isPortalActive() {
@@ -169,6 +185,7 @@ public class World {
     updateEntities(dt);
     handleInteractions();
     runTriggers();
+    runExtensions(dt);
     removeExpiredEntities();
   }
 
@@ -220,16 +237,22 @@ public class World {
   }
 
   private void runTriggers() {
-    Collection<WorldTrigger> removedSingleTriggers = new ArrayList<>();
+    Collection<WorldTrigger> removedTriggers = new ArrayList<>();
     for (WorldTrigger trigger : this.triggers.toArray(new WorldTrigger[0])) {
       if (trigger.checkCondition(this)) {
         trigger.activate(this);
         if (trigger.isDone()) {
-          removedSingleTriggers.add(trigger);
+          removedTriggers.add(trigger);
         }
       }
     }
-    this.triggers.removeAll(removedSingleTriggers);
+    this.triggers.removeAll(removedTriggers);
+  }
+
+  private void runExtensions(double dt) {
+    for (WorldExtension extension : this.extensions) {
+      extension.update(dt);
+    }
   }
 
   protected void removeExpiredEntities() {

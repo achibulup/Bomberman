@@ -25,6 +25,7 @@ import com.uet.int2204.group2.entity.Wall;
 import com.uet.int2204.group2.map.ActivatePortalTrigger;
 import com.uet.int2204.group2.map.BlinkBrickTrigger;
 import com.uet.int2204.group2.map.PlayerEnterPortalTrigger;
+import com.uet.int2204.group2.map.RespawnPlayer;
 import com.uet.int2204.group2.map.MapData;
 import com.uet.int2204.group2.utils.Constants;
 import com.uet.int2204.group2.utils.Conversions;
@@ -47,6 +48,8 @@ import javafx.scene.transform.Transform;
 public class GameState {
   public static int CANVAS_WIDTH = Bomberman.WIDTH;
   public static int CANVAS_HEIGHT = Bomberman.HEIGHT;
+
+  public static final int PLAYER_LIVES = 4;
   
   private World world;
   private Canvas canvas;
@@ -55,7 +58,8 @@ public class GameState {
   private Collection<EventHandler<KeyEvent>> inputHandlers = new ArrayList<>();
   private Collection<GameStateTrigger> triggers = new ArrayList<>();
 
-  private int currentLevel = 1;
+  int currentLevel;
+  int playerLives;
 
   public GameState() {
     this.canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -103,6 +107,7 @@ public class GameState {
     //     } 
     //   }
     // }
+    this.playerLives = PLAYER_LIVES;
     loadMap(currentLevel = 1);
     KeyboardLevelController levelController = new KeyboardLevelController();
     this.inputHandlers.add(levelController);
@@ -134,24 +139,6 @@ public class GameState {
   public void stop() {
     this.gameLoop.stop();
   }
-
-  private static class GameLoop extends AnimationTimer {
-    GameState host;
-    long lastTime = -1;
-
-    public GameLoop(GameState host) {
-      this.host = host;
-    }
-
-    @Override
-    public void handle(long now) {
-      double dt = this.lastTime == -1 ? 0 : Conversions.nanosToSeconds(now - this.lastTime);
-      this.lastTime = now;
-      host.update(dt);
-      host.render();
-    }
-  }
-
 
   public void prevLevel() {
     if (this.currentLevel > 1) {
@@ -217,12 +204,24 @@ public class GameState {
     this.world.addTrigger(new BlinkBrickTrigger());
     this.world.addTrigger(new ActivatePortalTrigger());
     this.world.addTrigger(new PlayerEnterPortalTrigger());
+    var respawnPlayer = new RespawnPlayer(1, 1);
+    respawnPlayer.setLivesProperty(new PlayerLivesProperty(this));
+    this.world.addExtension(respawnPlayer);
   }
   
-  private void update(double dt) {
+  void update(double dt) {
     world.update(dt);
     runTriggers();
+    if (this.world.isGameOver()) {
+      Bomberman.closeApp();
+    }
     adjustCanvasView();
+  }
+
+  void render() {
+    GraphicsContext target = graphicsContext2D();
+    target.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    world.renderTo(graphicsContext2D());
   }
 
   private void runTriggers() {
@@ -231,15 +230,6 @@ public class GameState {
         trigger.activate(this);
       }
     }
-  }
-  
-  private void render() {
-    if (this.world.getPlayer() == null) {
-      Bomberman.closeApp();
-    }
-    GraphicsContext target = graphicsContext2D();
-    target.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    world.renderTo(graphicsContext2D());
   }
 
   // adjust the canvas view to follow the player.
