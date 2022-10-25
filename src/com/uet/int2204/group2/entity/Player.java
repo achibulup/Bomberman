@@ -16,6 +16,8 @@ public class Player extends MovableEntity {
   private static double NUDGE_TOLERANCE = Constants.TILE_SIZE / 2.2;
   public static double INITIAL_SPEED = 150; // pixels per second.
 
+  public static int INITIAL_HEAL = 5;
+
   // private Direction faceDirection = Direction.DOWN; // should not be NONE.
 
   private Animation animation = new Animation(ResourceManager.playerWalkDown);
@@ -77,8 +79,21 @@ public class Player extends MovableEntity {
     if (isDying()) {
       return;
     }
-    this.setDying();
-    this.animation = new Animation(ResourceManager.playerDead);
+    if (INITIAL_HEAL != 0) {
+      decreaseInitialHeal();
+
+    } else {
+      this.setDying();
+      this.animation = new Animation(ResourceManager.playerDead);
+    }
+  }
+
+  public int getInitialHeal() {
+    return INITIAL_HEAL;
+  }
+
+  public void decreaseInitialHeal() {
+    INITIAL_HEAL--;
   }
 
   @Override

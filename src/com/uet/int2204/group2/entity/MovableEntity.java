@@ -71,6 +71,10 @@ public abstract class MovableEntity extends Entity {
     this.dying = true;
   }
 
+  public void setLives() {
+    this.dying = false;
+  }
+
   public boolean collidesWith(Class<? extends Tile> tile) {
     return SolidTile.class.isAssignableFrom(tile);
   }

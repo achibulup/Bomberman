@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 
 public class ResourceManager {
   public static final Image background;
+  public static final Image dashboard;
 
   public static final Sprite grassNormal;
   public static final Sprite grassShadowed;
@@ -85,6 +86,7 @@ public class ResourceManager {
   }
 
   static {
+    dashboard = tryLoadImage("sprites/dashboard.png");
     background = tryLoadImage("sprites/background.png");
 
     Sprite[] grassSheet = tryLoadSpriteSheet("sprites/map/grass@2.png");

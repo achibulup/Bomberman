@@ -12,6 +12,7 @@ import com.uet.int2204.group2.utils.ResourceManager;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -19,6 +20,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Bomberman extends Application {
@@ -37,12 +44,13 @@ public class Bomberman extends Application {
   @Override
   public void start(Stage stage) throws Exception {
     Pane root = new Pane();
-    root.setPrefSize(WIDTH, HEIGHT);
+
+    root.setPrefSize(WIDTH, HEIGHT + 48);
     Image img = ResourceManager.background;
     GameMenu gameMenu = new GameMenu();
     ImageView imageView = new ImageView(img);
-    root.getChildren().addAll(imageView, gameMenu);
 
+    root.getChildren().addAll(imageView, gameMenu);
     scene = new Scene(root);
     scene.setOnKeyPressed((keyEvent) -> {
       if (!pressedKeys.contains(keyEvent.getCode())) {

@@ -3,14 +3,12 @@ package com.uet.int2204.group2.component;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
+import java.util.Timer;
 
 import com.uet.int2204.group2.Bomberman;
 import com.uet.int2204.group2.World;
-import com.uet.int2204.group2.controller.AIHighMoveController;
-import com.uet.int2204.group2.controller.AIMediumMoveController;
-import com.uet.int2204.group2.controller.EntityController;
-import com.uet.int2204.group2.controller.KeyBoardPlayerController;
-import com.uet.int2204.group2.controller.RandomMoveController;
+import com.uet.int2204.group2.controller.*;
+import com.uet.int2204.group2.controller.Algorithm.AIIntelligent;
 import com.uet.int2204.group2.entity.Balloom;
 import com.uet.int2204.group2.entity.Bear;
 import com.uet.int2204.group2.entity.BombItem;
@@ -26,14 +24,23 @@ import com.uet.int2204.group2.utils.Constants;
 import com.uet.int2204.group2.utils.Conversions;
 import com.uet.int2204.group2.utils.Maths;
 
+import com.uet.int2204.group2.utils.ResourceManager;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 
@@ -45,6 +52,11 @@ public class GameState {
   private Canvas canvas;
   private Parent root;
   private AnimationTimer gameLoop;
+
+  public static Text point = new Text();
+  public static Text timer = new Text();
+  public static Text lives = new Text();
+  public static Text namePlayer = new Text();
   private Collection<EventHandler<KeyEvent>> inputHandlers = new ArrayList<>();
 
   public GameState() {
@@ -54,22 +66,24 @@ public class GameState {
     this.canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
     this.root = new Pane(this.canvas);
 
+    setPoint((Pane) getRoot(), point, timer, lives, namePlayer);
+
     Random rand = new Random();
 
     EntityController<? super Player> playerController = new KeyBoardPlayerController(inputHandlers);
-    EntityController<? super Enemy> balloomController = RandomMoveController.INSTANCE;
-    EntityController<? super Enemy> broomController = RandomMoveController.INSTANCE;
+    EntityController<? super Enemy> balloomController = AILowMoveController.INSTANCE;
+    EntityController<? super Enemy> broomController = AIIntelligent.INSTANCE;
     EntityController<? super Enemy> bearController = AIHighMoveController.INSTANCE;
-    EntityController<? super Enemy> onealController = AIMediumMoveController.INSTANCE;
+    EntityController<? super Enemy> onealController = AIIntelligent.INSTANCE;
     this.world.setPlayer(new Player(1, 1, playerController));
 
     for (int i = 0; i < 3; ++i) {
-      this.world.addEnemy(new Balloom(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, balloomController));
+//      this.world.addEnemy(new Balloom(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, balloomController));
       this.world.addEnemy(new Oneal(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, onealController));
     }
 
     for (int i = 0; i < 8; ++i) {
-      this.world.addEnemy(new Bear(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, bearController));
+//      this.world.addEnemy(new Bear(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, bearController));
     }
     
     for (int i = 0; i < 5; ++i) {
@@ -115,6 +129,45 @@ public class GameState {
   public Parent getRoot() {
     return this.root;
   }
+  public void setPoint(Pane root_, Text timer, Text point, Text lives, Text namePlayer) {
+    Image dashboard = ResourceManager.dashboard;
+    ImageView dashboardView = new ImageView(dashboard);
+    dashboardView.setX(0);
+    dashboardView.setY(620);
+    dashboardView.setFitHeight(48 + 10);
+    dashboardView.setFitWidth(48 * 13);
+
+    timer.setX(48 * 2 + 10);
+    timer.setY(655);
+
+    point.setX(48 * 5 + 20);
+    point.setY(655);
+
+    lives.setX(48 * 8 - 10);
+    lives.setY(655);
+
+    namePlayer.setX(48 * 10 - 20);
+    namePlayer.setY(655);
+
+    lives.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 16));
+    lives.setFill(Color.YELLOW);
+    point.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 16));
+    point.setFill(Color.YELLOW);
+    timer.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 16));
+    timer.setFill(Color.YELLOW);
+    namePlayer.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 16));
+    namePlayer.setFill(Color.YELLOW);
+    root_.getChildren().addAll(dashboardView, point, timer, lives, namePlayer);
+  }
+
+  public void updateSetText(Text point, Text timer, Text lives, Text namePlayer) {
+    Timer time_ = new Timer();
+      int heal  = world.getPlayer().getInitialHeal();
+      point.setText("1000" );
+      timer.setText("" + 180 );
+      lives.setText("" + heal);
+      namePlayer.setText("Bomberman-N2");
+  }
 
   public Iterable<EventHandler<KeyEvent>> getInputHandlers() {
     return this.inputHandlers;
@@ -141,6 +194,7 @@ public class GameState {
       double dt = this.lastTime == -1 ? 0 : Conversions.nanosToSeconds(now - this.lastTime);
       this.lastTime = now;
       host.update(dt);
+      host.updateSetText(point, timer, lives, namePlayer);
       host.render();
     }
     
