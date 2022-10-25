@@ -17,6 +17,7 @@ import com.uet.int2204.group2.entity.Brick;
 import com.uet.int2204.group2.entity.Broom;
 import com.uet.int2204.group2.entity.Enemy;
 import com.uet.int2204.group2.entity.FlameItem;
+import com.uet.int2204.group2.entity.LifeItem;
 import com.uet.int2204.group2.entity.Oneal;
 import com.uet.int2204.group2.entity.Player;
 import com.uet.int2204.group2.entity.Portal;
@@ -193,6 +194,9 @@ public class GameState {
             break;
           case 's':
             this.world.addTile(i, j, new Brick(new SpeedItem()));
+            break;
+          case 'l':
+            this.world.addTile(i, j, new Brick(new LifeItem()));
             break;
           case 'p':
             this.world.setPlayer(new Player(
