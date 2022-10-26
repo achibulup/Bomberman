@@ -6,13 +6,13 @@ import com.uet.int2204.group2.component.GameState;
 import com.uet.int2204.group2.utils.ResourceManager;
 import javafx.animation.TranslateTransition;
 import javafx.scene.Parent;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class GameMenu extends Parent {
@@ -27,6 +27,7 @@ public class GameMenu extends Parent {
         VBox menuStart = new VBox(30);
         VBox instruction = new VBox(30);
         VBox pause = new VBox(30);
+        VBox gameOver = new VBox(0);
         HBox icon = new HBox();
         HBox icon2 = new HBox();
         HBox icon3 = new HBox();
@@ -66,9 +67,9 @@ public class GameMenu extends Parent {
          */
         Instruction btnInstruction = new Instruction(
                 " Use the arrow keys to " + "\n"
-              + " move the bomber, space" + "\n"
-              + " to place bombs and D "  + "\n"
-              + " to detonate bombs");
+                        + " move the bomber, space" + "\n"
+                        + " to place bombs and D " + "\n"
+                        + " to detonate bombs");
         /**
          * Sound
          */
@@ -77,17 +78,19 @@ public class GameMenu extends Parent {
         IconSound iconSound1 = new IconSound("");
         IconSoundMute iconSoundMute1 = new IconSoundMute("");
 
+        GameOver gameOver1 = new GameOver("");
+
         game.setGameOver(() -> {
-            Image image = ResourceManager.gameOver;
-            ImageView imageView = new ImageView(image);
             effec.stopMusic();
-            Bomberman.start.playMusic(ResourceManager.sound[0],true);
-            //TranslateTransition tt = new TranslateTransition(Duration.seconds(0.5), imageView);
-//            tt.setToX(menuStart.getTranslateX());
-//            tt.play();
-            getChildren().add(imageView);
+            getChildren().add(gameOver);
+            TranslateTransition tt = new TranslateTransition(Duration.seconds(1), gameOver);
+            tt.setToX(90);
+            tt.play();
+            tt.setOnFinished(evt -> {
+                getChildren().remove(gameOver);
+            });
             game.stop();
-            getChildren().remove(imageView);
+            Bomberman.start.playMusic(ResourceManager.sound[0], true);
             getChildren().remove(game.getRoot());
         });
 
@@ -111,7 +114,7 @@ public class GameMenu extends Parent {
             checkClickVolume = false;
             getChildren().add(icon3);
             getChildren().remove(icon4);
-            effec.playMusic(ResourceManager.sound[1],true);
+            effec.playMusic(ResourceManager.sound[1], true);
         });
 
         btnStart.setOnMouseClicked(event -> {
@@ -207,6 +210,7 @@ public class GameMenu extends Parent {
         icon2.getChildren().add(iconSoundMute);
         icon3.getChildren().add(iconSound1);
         icon4.getChildren().add(iconSoundMute1);
+        gameOver.getChildren().add(gameOver1);
         getChildren().addAll(menuStart, icon);
     }
 
