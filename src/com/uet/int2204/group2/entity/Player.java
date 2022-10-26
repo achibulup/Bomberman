@@ -1,8 +1,9 @@
 package com.uet.int2204.group2.entity;
 
-import com.uet.int2204.group2.Bomberman;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.uet.int2204.group2.Menu.GameMenu;
-import com.uet.int2204.group2.Sound.Sound;
 import com.uet.int2204.group2.controller.EntityController;
 import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
@@ -10,14 +11,11 @@ import com.uet.int2204.group2.utils.Constants;
 import com.uet.int2204.group2.utils.Direction;
 import com.uet.int2204.group2.utils.ResourceManager;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Player extends MovableEntity {
   // the field MovableEntity.direction is the moving direction of the player.
 
   private static double NUDGE_TOLERANCE = Constants.TILE_SIZE / 2.2;
-  public static double INITIAL_SPEED = 250; // pixels per second.
+  public static double INITIAL_SPEED = 190; // pixels per second.
 
   public static final int INITIAL_HEALTH = 5;
   private boolean isCheckTime = false;
