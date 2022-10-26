@@ -2,8 +2,10 @@ package com.uet.int2204.group2.entity;
 
 import static com.uet.int2204.group2.utils.Constants.TILE_SIZE;
 
+import com.uet.int2204.group2.Sound.Sound;
 import com.uet.int2204.group2.World;
 import com.uet.int2204.group2.utils.Direction;
+import com.uet.int2204.group2.utils.ResourceManager;
 
 public abstract class MovableEntity extends Entity {
   protected int tileX;

@@ -57,7 +57,7 @@ public class GameState {
   public static int CANVAS_HEIGHT = Bomberman.HEIGHT;
 
   public static final int PLAYER_LIVES = 4;
-  
+
   private World world;
   private Canvas canvas;
   private Parent root;
@@ -73,7 +73,7 @@ public class GameState {
   public int level_played = 0;
   public Text lives = new Text();
   public Text namePlayer = new Text();
-  
+
   int currentLevel;
   int playerLives;
 
@@ -112,7 +112,7 @@ public class GameState {
 //     for (int i = 0; i < 8; ++i) {
 // //      this.world.addEnemy(new Bear(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, bearController));
 //     }
-    
+
 //     for (int i = 0; i < 5; ++i) {
 //       this.world.addEnemy(new Broom(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, broomController));
 //     }
@@ -138,7 +138,7 @@ public class GameState {
 //           world.addTile(i, j, new Brick(true));
 //         } else if (r < 20) {
 //           world.addTile(i, j, new Brick());
-//         } 
+//         }
 //       }
 //     }
 
@@ -181,7 +181,7 @@ public class GameState {
     //       world.addTile(i, j, new Brick(true));
     //     } else if (r < 20) {
     //       world.addTile(i, j, new Brick());
-    //     } 
+    //     }
     //   }
     // }
   }
@@ -204,27 +204,27 @@ public class GameState {
     dashboardView.setX(0);
     dashboardView.setY(0);
     dashboardView.setFitHeight(48);
-    dashboardView.setFitWidth(48 * 13);
+    dashboardView.setFitWidth(48 * 21);
 
-    point.setX(48 * 2 + 30);
+    point.setX(48 * 5);
     point.setY(29);
 
-    timer.setX(48 * 5 + 35);
+    timer.setX(48 * 9);
     timer.setY(29);
 
-    lives.setX(48 * 8 - 10);
+    lives.setX(48 * 12 + 10);
     lives.setY(29);
 
-    namePlayer.setX(48 * 10 - 20);
+    namePlayer.setX(48 * 16);
     namePlayer.setY(29);
 
-    lives.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 16));
+    lives.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
     lives.setFill(Color.YELLOW);
-    point.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 16));
+    point.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
     point.setFill(Color.YELLOW);
-    timer.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 16));
+    timer.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
     timer.setFill(Color.YELLOW);
-    namePlayer.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 16));
+    namePlayer.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
     namePlayer.setFill(Color.YELLOW);
     root_.getChildren().addAll(dashboardView, point, timer, lives, namePlayer);
   }
@@ -235,6 +235,18 @@ public class GameState {
 
   public void start() {
     this.gameLoop.start();
+  }
+
+  public void reload() {
+    this.inputHandlers.clear();
+    loadMap(currentLevel = 1);
+    this.inputHandlers.add(new KeyboardLevelController());
+  }
+
+  // this function should be called when the instance is not used anymore.
+  public void close() {
+    this.gameLoop.stop();
+    this.inputHandlers.clear();
   }
 
   public void stop() {
@@ -287,7 +299,7 @@ public class GameState {
             break;
           case 'p':
             this.world.setPlayer(new Player(
-                i, j, new KeyBoardPlayerController(this.inputHandlers)));
+                    i, j, new KeyBoardPlayerController(this.inputHandlers)));
             this.world.getPlayer().setLives(3);
             break;
           case '1':
@@ -312,7 +324,7 @@ public class GameState {
     respawnPlayer.setLivesProperty(new PlayerLivesProperty(this.world.getPlayer()));
     this.world.addExtension(respawnPlayer);
   }
-  
+
   void update(double dt) {
     world.update(dt);
     runTriggers();
@@ -330,22 +342,22 @@ public class GameState {
   }
 
   void updateSetText(double dt) {
-      timesLeft -= dt;
-      if (getWorld().getPlayer() != null) {
-        this.playerLives = getWorld().getPlayer().getLives();
-      }
-      if (timesLeft<= 0) {
-        getWorld().setGameOver(true);
-        Bomberman.closeApp();
-      }
-      Player player_ = getWorld().getPlayer();
-      if (player_ != null) {
-        init_point = player_.getPoint();
-      }
-      point.setText("" + init_point);
-      timer.setText("" + (timesLeft / 60) );
-      lives.setText("" + this.playerLives);
-      namePlayer.setText("Bomberman-N2");
+    timesLeft -= dt;
+    if (getWorld().getPlayer() != null) {
+      this.playerLives = getWorld().getPlayer().getLives();
+    }
+    if (timesLeft<= 0) {
+      getWorld().setGameOver(true);
+      Bomberman.closeApp();
+    }
+    Player player_ = getWorld().getPlayer();
+    if (player_ != null) {
+      init_point = player_.getPoint();
+    }
+    point.setText("" + init_point);
+    timer.setText("" + (timesLeft / 60) );
+    lives.setText("" + this.playerLives);
+    namePlayer.setText("Bomberman-N2");
   }
 
   private void runTriggers() {
@@ -365,7 +377,7 @@ public class GameState {
     double canvasCenterX = this.canvas.getWidth() / 2;
     double canvasCenterY = this.canvas.getHeight() / 2;
     graphicsContext2D().setTransform(new Affine(
-        Transform.translate(canvasCenterX - mapCenter.getX(), canvasCenterY - mapCenter.getY())));
+            Transform.translate(canvasCenterX - mapCenter.getX(), canvasCenterY - mapCenter.getY())));
   }
 
   // calculate the position on the map that should be placed in the center of the canvas.
@@ -374,17 +386,17 @@ public class GameState {
     double centerX = mapWidth / 2;
     if (mapWidth > canvas.getWidth()) {
       double playerCenterX = getWorld().getPlayer().getPixelX() + Constants.TILE_SIZE / 2;
-      centerX = Maths.clamp(playerCenterX, 
-          canvas.getWidth() / 2, mapWidth - canvas.getWidth() / 2);
+      centerX = Maths.clamp(playerCenterX,
+              canvas.getWidth() / 2, mapWidth - canvas.getWidth() / 2);
     }
     double mapHeight = (getWorld().getMapHeight() + 2) * Constants.TILE_SIZE; // like mapWidth
     double centerY = mapHeight / 2;
     if (mapHeight > canvas.getHeight()) {
       double playerCenterY = getWorld().getPlayer().getPixelY() + Constants.TILE_SIZE / 2;
-      centerY = Maths.clamp(playerCenterY, 
-          canvas.getHeight() / 2, mapHeight - canvas.getHeight() / 2);
+      centerY = Maths.clamp(playerCenterY,
+              canvas.getHeight() / 2, mapHeight - canvas.getHeight() / 2);
     }
     return new Point2D(centerX, centerY);
   }
-  
+
 }

@@ -1,12 +1,13 @@
 package com.uet.int2204.group2.controller;
 
 import com.uet.int2204.group2.entity.Enemy;
+import com.uet.int2204.group2.entity.MovableEntity;
 import com.uet.int2204.group2.entity.Player;
 import com.uet.int2204.group2.utils.Direction;
 
 import java.util.Random;
 
-public class AIHighMoveController implements EntityController<Enemy>{
+public class AIHighMoveController implements EntityController<Enemy> {
     public static final AIHighMoveController INSTANCE = new AIHighMoveController();
     private static final Random rand = new Random();
 
@@ -18,62 +19,61 @@ public class AIHighMoveController implements EntityController<Enemy>{
 
         int dir = aiHighrandomDir(player, enemy);
         if (getDirectionHigh(dir) == Direction.LEFT) {
+            if (!enemy.isMovable(getDirectionHigh(dir))) {
+                dir = 0;
+                enemy.setDirection(getDirectionHigh(dir));
                 if (!enemy.isMovable(getDirectionHigh(dir))) {
-                    dir =  0;
+                    dir = 1;
+                    enemy.setDirection(getDirectionHigh(dir));
+                    if (!enemy.isMovable(getDirectionHigh(dir))) {
+                        dir = 3;
+                        enemy.setDirection(getDirectionHigh(dir));
+                    }
+                }
+            } else {
+
+            }
+        } else if (getDirectionHigh(dir) == Direction.RIGHT) {
+            if (!enemy.isMovable(getDirectionHigh(dir))) {
+                dir = 0;
+                enemy.setDirection(getDirectionHigh(dir));
+                if (!enemy.isMovable(getDirectionHigh(dir))) {
+                    dir = 2;
                     enemy.setDirection(getDirectionHigh(dir));
                     if (!enemy.isMovable(getDirectionHigh(dir))) {
                         dir = 1;
                         enemy.setDirection(getDirectionHigh(dir));
-                        if (!enemy.isMovable(getDirectionHigh(dir))) {
-                            dir = 3;
-                            enemy.setDirection(getDirectionHigh(dir));
-                        }
                     }
-                } else {
-
-                }
-            } else if (getDirectionHigh(dir) == Direction.RIGHT) {
-                if (!enemy.isMovable(getDirectionHigh(dir))) {
-                    dir = 0;
-                    enemy.setDirection(getDirectionHigh(dir));
-                    if (!enemy.isMovable(getDirectionHigh(dir))) {
-                        dir = 2;
-                        enemy.setDirection(getDirectionHigh(dir));
-                        if (!enemy.isMovable(getDirectionHigh(dir))) {
-                            dir = 1;
-                            enemy.setDirection(getDirectionHigh(dir));
-                        }
-                    }
-                }
-            } else if (getDirectionHigh(dir) == Direction.UP) {
-                if (!enemy.isMovable(getDirectionHigh(dir))) {
-                    dir = 2;
-                    enemy.setDirection(getDirectionHigh(dir));
-                    if (!enemy.isMovable(getDirectionHigh(dir))) {
-                        dir = 3;
-                        enemy.setDirection(getDirectionHigh(dir));
-                        if (!enemy.isMovable(getDirectionHigh(dir))) {
-                            dir = 1;
-                            enemy.setDirection(getDirectionHigh(dir));
-                        }
-                    }
-                }
-            } else if (getDirectionHigh(dir) == Direction.DOWN) {
-                if (!enemy.isMovable(getDirectionHigh(dir))) {
-                    dir = 2;
-                    enemy.setDirection(getDirectionHigh(dir));
-                    if (!enemy.isMovable(getDirectionHigh(dir))) {
-                        dir = 3;
-                        enemy.setDirection(getDirectionHigh(dir));
-                        if (!enemy.isMovable(getDirectionHigh(dir))) {
-                            dir = 0;
-                            enemy.setDirection(getDirectionHigh(dir));
-                        }
-                    }
-
                 }
             }
+        } else if (getDirectionHigh(dir) == Direction.UP) {
+            if (!enemy.isMovable(getDirectionHigh(dir))) {
+                dir = 2;
+                enemy.setDirection(getDirectionHigh(dir));
+                if (!enemy.isMovable(getDirectionHigh(dir))) {
+                    dir = 3;
+                    enemy.setDirection(getDirectionHigh(dir));
+                    if (!enemy.isMovable(getDirectionHigh(dir))) {
+                        dir = 1;
+                        enemy.setDirection(getDirectionHigh(dir));
+                    }
+                }
+            }
+        } else if (getDirectionHigh(dir) == Direction.DOWN) {
+            if (!enemy.isMovable(getDirectionHigh(dir))) {
+                dir = 2;
+                enemy.setDirection(getDirectionHigh(dir));
+                if (!enemy.isMovable(getDirectionHigh(dir))) {
+                    dir = 3;
+                    enemy.setDirection(getDirectionHigh(dir));
+                    if (!enemy.isMovable(getDirectionHigh(dir))) {
+                        dir = 0;
+                        enemy.setDirection(getDirectionHigh(dir));
+                    }
+                }
 
+            }
+        }
     }
 
     private static int aiHighrandomDir(Player player, Enemy enemy) {
@@ -107,32 +107,37 @@ public class AIHighMoveController implements EntityController<Enemy>{
     public static Direction getDirectionHigh(int dir) {
         switch (dir) {
             case -1:
+                System.out.println("NONE");
                 return Direction.NONE;
             case 0:
+                System.out.println("UP");
                 return Direction.UP;
             case 1:
+                System.out.println("DOWN");
                 return Direction.DOWN;
             case 2:
+                System.out.println("LEFT");
                 return Direction.LEFT;
             case 3:
+                System.out.println("RIGHT");
                 return Direction.RIGHT;
         }
         throw new RuntimeException("Random.nextInt(4) return value out of range");
     }
 
     protected static int calculateColDirection(Player player, Enemy enemy) throws NullPointerException {
-        if(player.getTileX() < enemy.getTileX()) {
+        if (player.getTileX() < enemy.getTileX()) {
             return 2;
-        } else if(player.getTileX() > enemy.getTileX()) {
+        } else if (player.getTileX() > enemy.getTileX()) {
             return 3;
         }
         return -1;
     }
 
     protected static int calculateRowDirection(Player player, Enemy enemy) throws NullPointerException {
-        if(player.getTileY() < enemy.getTileY()) {
+        if (player.getTileY() < enemy.getTileY()) {
             return 0;
-        } else if(player.getTileY() > enemy.getTileY()) {
+        } else if (player.getTileY() > enemy.getTileY()) {
 
             return 1;
         }
