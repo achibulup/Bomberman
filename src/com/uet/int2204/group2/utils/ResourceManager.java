@@ -170,7 +170,7 @@ public class ResourceManager {
     flameItem = new AnimationData(flameItemSheet, 0.4);
 
     Sprite[] bombItemSheet = tryLoadSpriteSheet("sprites/powerup/extra_bomb@2.png");
-    bombItem = new AnimationData(bombItemSheet, 0.0001);
+    bombItem = new AnimationData(bombItemSheet, 0.4);
 
     Sprite[] speedItemSheet = tryLoadSpriteSheet("sprites/powerup/bonus_speed@2.png");
     speedItem = new AnimationData(speedItemSheet, 0.4);
