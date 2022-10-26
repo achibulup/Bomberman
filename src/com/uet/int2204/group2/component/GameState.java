@@ -394,9 +394,6 @@ public class GameState {
 
     if (timesLeft <= 0) {
       getWorld().setGameOver(true);
-
-      //GAME OVER
-      Bomberman.closeApp();
     }
     Player player_ = getWorld().getPlayer();
     if (player_ != null) {
