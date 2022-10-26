@@ -288,9 +288,6 @@ public class World {
             if (tileToPlayer != null) {
                 interactions.add(tileToPlayer);
             }
-            if (tile instanceof Item) {
-                player.collect((Item) tile);
-            }
             if (tile instanceof SolidTile) {
                 break;
             }
