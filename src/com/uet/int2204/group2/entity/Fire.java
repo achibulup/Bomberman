@@ -5,7 +5,7 @@ import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
 
-public class Fire extends Enemy {
+public class Fire extends Enemy implements SimpleEnemy {
   public static final double SPEED = 110;
 
   private Animation animation = new Animation(ResourceManager.fire);
@@ -40,35 +40,37 @@ public class Fire extends Enemy {
 
   @Override
   public void getHit() {
-    if (isDying()) {
-      return;
-    }
-    this.setDying(true);
-    this.animation = new Animation(ResourceManager.fireDie);
+    SimpleEnemy.super.getHit();
     if (getWorld().getPlayer() != null) {
       this.getWorld().getPlayer().increasePoint(160);
     }
   }
 
+  @Override
+  public Runnable getInteractionToTile(Tile tile) {
+    if (tile instanceof Item) {
+      return () -> ((Item) tile).destroy();
+    }
+    return null;
+  }
+
+  @Override
+  public Animation getAnimation() {
+    return this.animation;
+  }
+
+  @Override
+  public void setDyingAnimation() {
+    this.animation = new Animation(ResourceManager.fireDie);
+  }
+
+  @Override
   public void control() {
     getController().control(this);
   }
 
   @Override
   public void update(double dt) {
-    if (!isDying()) {
-      if (isMovable(getDirection())) {
-        adjustedMove(getSpeed() * dt);
-      }
-      if (isAligned()) {
-        control();
-      }
-      this.animation.update(dt);
-    } else {
-      this.animation.update(dt);
-      if (this.animation.isEnded()) {
-        markExpired();
-      }
-    }
+    SimpleEnemy.super.update(dt);
   }
 }

@@ -4,7 +4,7 @@ import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
 
-public class Portal extends Tile implements DestroyableTile {
+public class Portal extends Tile {
   private Animation animation = null;
 
   public Portal() {
@@ -26,10 +26,6 @@ public class Portal extends Tile implements DestroyableTile {
         this.animation = new Animation(ResourceManager.portalBlinking);
       }
     }
-  }
-
-  @Override
-  public void destroy() {
   }
 
   @Override

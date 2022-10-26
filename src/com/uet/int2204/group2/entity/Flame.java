@@ -59,4 +59,9 @@ public class Flame extends Tile {
       markExpired();
     }
   }
+
+  @Override
+  public Runnable getInteractionToEntity(MovableEntity entity) {
+    return () -> entity.getHit();
+  }
 }

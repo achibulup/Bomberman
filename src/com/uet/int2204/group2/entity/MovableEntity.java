@@ -78,12 +78,15 @@ public abstract class MovableEntity extends Entity {
   // called when the entity get hit (eg. by flame)
   public void getHit() {
     setDying(true);
-    setDied(true);
     markExpired();
   }
 
-  public boolean setDied(boolean died) {
-    return died;
+  public Runnable getInteractionToEntity(MovableEntity entity) {
+    return null;
+  }
+
+  public Runnable getInteractionToTile(Tile tile) {
+    return null;
   }
 
   public boolean isMovable(Direction direction) {

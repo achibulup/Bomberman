@@ -7,9 +7,29 @@ import java.util.Timer;
 
 import com.uet.int2204.group2.Bomberman;
 import com.uet.int2204.group2.World;
-import com.uet.int2204.group2.controller.*;
 import com.uet.int2204.group2.controller.Algorithm.AIIntelligent;
-import com.uet.int2204.group2.entity.*;
+import com.uet.int2204.group2.controller.EntityController;
+import com.uet.int2204.group2.controller.KeyBoardPlayerController;
+import com.uet.int2204.group2.controller.KeyboardEnemyController;
+import com.uet.int2204.group2.controller.AILowMoveController;
+import com.uet.int2204.group2.entity.Balloom;
+import com.uet.int2204.group2.entity.Bear;
+import com.uet.int2204.group2.entity.BombItem;
+import com.uet.int2204.group2.entity.Brick;
+import com.uet.int2204.group2.entity.Broom;
+import com.uet.int2204.group2.entity.DetonatorItem;
+import com.uet.int2204.group2.entity.Enemy;
+import com.uet.int2204.group2.entity.Fire;
+import com.uet.int2204.group2.entity.FlameItem;
+import com.uet.int2204.group2.entity.LifeItem;
+import com.uet.int2204.group2.entity.Frog;
+import com.uet.int2204.group2.entity.Oneal;
+import com.uet.int2204.group2.entity.PiercingFlameItem;
+import com.uet.int2204.group2.entity.Player;
+import com.uet.int2204.group2.entity.Portal;
+import com.uet.int2204.group2.entity.SpeedItem;
+import com.uet.int2204.group2.entity.TimeItem;
+import com.uet.int2204.group2.entity.Wall;
 import com.uet.int2204.group2.map.ActivatePortalTrigger;
 import com.uet.int2204.group2.map.BlinkBrickTrigger;
 import com.uet.int2204.group2.map.PlayerEnterPortalTrigger;
@@ -286,13 +306,22 @@ public class GameState {
           case 's':
             this.world.addTile(i, j, new Brick(new SpeedItem()));
             break;
+          case 'l':
+            this.world.addTile(i, j, new Brick(new LifeItem()));
+            break;
+          case 'd':
+            this.world.addTile(i, j, new Brick(new DetonatorItem()));
+            break;
+          case 'w':
+            this.world.addTile(i, j, new Brick(new PiercingFlameItem()));
+            break;
+          case 't':
+            this.world.addTile(i, j, new Brick(new TimeItem()));
+            break;
           case 'p':
             this.world.setPlayer(new Player(
                     i, j, new KeyBoardPlayerController(this.inputHandlers)));
             this.world.getPlayer().setLives(3);
-            break;
-          case 't':
-            this.world.addTile(i, j, new Brick(new TimeItem()));
             break;
           case '1':
             this.world.addEnemy(new Balloom(i, j, AILowMoveController.INSTANCE));
@@ -305,6 +334,12 @@ public class GameState {
             break;
           case '4':
             this.world.addEnemy(new Bear(i, j, AILowMoveController.INSTANCE));
+            break;
+          case '5':
+            this.world.addEnemy(new Frog(i, j, AILowMoveController.INSTANCE));
+            break;
+          case '6':
+            this.world.addEnemy(new Fire(i, j, AILowMoveController.INSTANCE));
             break;
         }
       }

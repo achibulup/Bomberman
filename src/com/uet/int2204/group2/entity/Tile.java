@@ -42,4 +42,8 @@ public abstract class Tile extends Entity {
   public void setTileY(int tileY) {
     this.tileY = tileY;
   }
+
+  public Runnable getInteractionToEntity(MovableEntity entity) {
+    return null;
+  }
 }

@@ -3,12 +3,32 @@ package com.uet.int2204.group2.entity;
 import com.uet.int2204.group2.Bomberman;
 import com.uet.int2204.group2.Menu.GameMenu;
 import com.uet.int2204.group2.Sound.Sound;
+import java.util.EnumMap;
+import java.util.Map;
+
+import com.uet.int2204.group2.entity.Flame.Type;
 import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
+import com.uet.int2204.group2.utils.Direction;
 import com.uet.int2204.group2.utils.ResourceManager;
 
 public class Bomb extends Tile implements SolidTile, DestroyableTile {
   public static final double BOMB_EXPLODE_DELAY = 2;
+
+  private static Map<Direction, Flame.Type> flameMids = new EnumMap<>(Direction.class);
+  private static Map<Direction, Flame.Type> flameEnds = new EnumMap<>(Direction.class);
+
+  static {
+    flameMids.put(Direction.UP, Type.VERTICAL);
+    flameMids.put(Direction.DOWN, Type.VERTICAL);
+    flameMids.put(Direction.LEFT, Type.HORIZONTAL);
+    flameMids.put(Direction.RIGHT, Type.HORIZONTAL);
+    
+    flameEnds.put(Direction.UP, Type.UP);
+    flameEnds.put(Direction.DOWN, Type.DOWN);
+    flameEnds.put(Direction.LEFT, Type.LEFT);
+    flameEnds.put(Direction.RIGHT, Type.RIGHT);
+  }
 
   private Animation animation = new Animation(ResourceManager.bomb);
   private Player owner;
@@ -45,74 +65,34 @@ public class Bomb extends Tile implements SolidTile, DestroyableTile {
   public void onRemoval() {
     getWorld().addTile(getTileX(), getTileY(), new Flame(Flame.Type.CENTER));
     int length = getOwner().getFlameLength();
-
-    // up direction
-    for (int i = 1; i <= length; ++i) {
-      int tileX = getTileX();
-      int tileY = getTileY() - i;
-      Tile nextTile = getOwner().getWorld().getTile(tileX, tileY);
-      if (nextTile instanceof DestroyableTile) {
-        ((DestroyableTile) nextTile).destroy();
-        break;
+    
+    for (Direction direction : Direction.values()) {
+      if (direction == Direction.NONE) {
+        continue;
       }
-      if (nextTile instanceof SolidTile) {
-        break;
-      }
-      if (i == length) {
-        getWorld().addTile(tileX, tileY, new Flame(Flame.Type.UP));
-      } else {
-        getWorld().addTile(tileX, tileY, new Flame(Flame.Type.VERTICAL));
-      }
-    }
-    // down direction
-    for (int i = 1; i <= length; ++i) {
-      int tileX = getTileX();
-      int tileY = getTileY() + i;
-      Tile nextTile = getOwner().getWorld().getTile(tileX, tileY);
-      if (nextTile instanceof DestroyableTile) {
-        ((DestroyableTile) nextTile).destroy();
-      }
-      if (!(nextTile instanceof Grass || nextTile instanceof Flame)) {
-        break;
-      }
-      if (i == length) {
-        getWorld().addTile(tileX, tileY, new Flame(Flame.Type.DOWN));
-      } else {
-        getWorld().addTile(tileX, tileY, new Flame(Flame.Type.VERTICAL));
-      }
-    }
-    // left direction
-    for (int i = 1; i <= length; ++i) {
-      int tileX = getTileX() - i;
-      int tileY = getTileY();
-      Tile nextTile = getOwner().getWorld().getTile(tileX, tileY);
-      if (nextTile instanceof DestroyableTile) {
-        ((DestroyableTile) nextTile).destroy();
-      }
-      if (!(nextTile instanceof Grass || nextTile instanceof Flame)) {
-        break;
-      }
-      if (i == length) {
-        getWorld().addTile(tileX, tileY, new Flame(Flame.Type.LEFT));
-      } else {
-        getWorld().addTile(tileX, tileY, new Flame(Flame.Type.HORIZONTAL));
-      }
-    }
-    // right direction
-    for (int i = 1; i <= length; ++i) {
-      int tileX = getTileX() + i;
-      int tileY = getTileY();
-      Tile nextTile = getOwner().getWorld().getTile(tileX, tileY);
-      if (nextTile instanceof DestroyableTile) {
-        ((DestroyableTile) nextTile).destroy();
-      }
-      if (!(nextTile instanceof Grass || nextTile instanceof Flame)) {
-        break;
-      }
-      if (i == length) {
-        getWorld().addTile(tileX, tileY, new Flame(Flame.Type.RIGHT));
-      } else {
-        getWorld().addTile(tileX, tileY, new Flame(Flame.Type.HORIZONTAL));
+      int strength = getOwner().getFlameStrength();
+      // up direction
+      for (int i = 1; i <= length; ++i) {
+        int tileX = getTileX() + direction.x * i;
+        int tileY = getTileY() + direction.y * i;
+        Tile nextTile = getOwner().getWorld().getTile(tileX, tileY);
+        if (nextTile instanceof Portal) {
+          break;
+        }
+        if (nextTile instanceof DestroyableTile) {
+          ((DestroyableTile) nextTile).destroy();
+          if (strength == 0) {
+            break;
+          }
+          --strength;
+        } else if (nextTile instanceof SolidTile) {
+          break;
+        }
+        if (i == length) {
+          getWorld().addTile(tileX, tileY, new Flame(flameEnds.get(direction)));
+        } else {
+          getWorld().addTile(tileX, tileY, new Flame(flameMids.get(direction)));
+        }
       }
     }
   }

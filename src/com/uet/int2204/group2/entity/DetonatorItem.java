@@ -29,6 +29,6 @@ public class DetonatorItem extends Item {
   
   @Override
   public void onCollect(Player player) {
-    player.setFlameLength(player.getFlameLength() + 1);
+    player.setDetonable(true);
   }
 }

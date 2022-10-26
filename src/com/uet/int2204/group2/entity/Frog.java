@@ -1,11 +1,12 @@
 package com.uet.int2204.group2.entity;
 
 import com.uet.int2204.group2.controller.EntityController;
+import com.uet.int2204.group2.controller.AILowMoveController;
 import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
 
-public class Frog extends Enemy implements SimpleSpriteEnemy {
+public class Frog extends Enemy implements SimpleEnemy {
   public static final double SPEED = 80;
 
   private Animation animation = new Animation(ResourceManager.frog);
@@ -40,14 +41,16 @@ public class Frog extends Enemy implements SimpleSpriteEnemy {
 
   @Override
   public void getHit() {
-    if (isDying()) {
-      return;
-    }
-    this.setDying(true);
-    setDyingAnimation();
+    SimpleEnemy.super.getHit();
     if (getWorld().getPlayer() != null) {
       this.getWorld().getPlayer().increasePoint(200);
     }
+  }
+
+  @Override
+  public void onRemoval() {
+    getWorld().addEnemy(createEnemy());
+    getWorld().addEnemy(createEnemy());
   }
 
   @Override 
@@ -60,25 +63,17 @@ public class Frog extends Enemy implements SimpleSpriteEnemy {
     this.animation = new Animation(ResourceManager.frogDie);
   }
 
+  @Override
   public void control() {
     getController().control(this);
   }
 
   @Override
   public void update(double dt) {
-    if (!isDying()) {
-      if (isMovable(getDirection())) {
-        adjustedMove(getSpeed() * dt);
-      }
-      if (isAligned()) {
-        control();
-      }
-      this.animation.update(dt);
-    } else {
-      this.animation.update(dt);
-      if (this.animation.isEnded()) {
-        markExpired();
-      }
-    }
+    SimpleEnemy.super.update(dt);
+  }
+
+  private Enemy createEnemy() {
+    return new Balloom(getTileX(), getTileY(), AILowMoveController.INSTANCE);
   }
 }

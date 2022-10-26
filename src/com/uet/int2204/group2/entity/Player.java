@@ -32,8 +32,9 @@ public class Player extends MovableEntity {
   private List<Bomb> bombList = new ArrayList<>();
   private boolean enteringPortal = false;
   private int lives = INITIAL_HEALTH;
+  private boolean detonable = false;
+  private int flameStrength = 0;
   private int init_point = 0;
-
 
   public Player(int tileX, int tileY) {
     super(tileX, tileY);
@@ -79,6 +80,30 @@ public class Player extends MovableEntity {
     this.maxBombCount = maxBombCount;
   }
 
+  public int getLives() {
+    return this.lives;
+  }
+
+  public void setLives(int lives) {
+    this.lives = lives;
+  }
+
+  public boolean isDetonable() {
+    return this.detonable;
+  }
+
+  public void setDetonable(boolean detonable) {
+    this.detonable = detonable;
+  }
+
+  public int getFlameStrength() {
+    return this.flameStrength;
+  }
+
+  public void setFlameStrength(int flameStrength) {
+    this.flameStrength = flameStrength;
+  }
+
   public boolean isEnteringPortal() {
     return this.enteringPortal;
   }
@@ -87,14 +112,6 @@ public class Player extends MovableEntity {
     this.enteringPortal = true;
     this.direction = Direction.NONE;
     this.animation = new Animation(ResourceManager.playerEnterPortal);
-  }
-
-  public int getLives() {
-    return this.lives;
-  }
-
-  public void setLives(int lives) {
-    this.lives = lives;
   }
 
   @Override
@@ -107,9 +124,7 @@ public class Player extends MovableEntity {
     if (isDying()) {
       return;
     }
-    else {
-      die();
-    }
+    die();
   }
 
   public void decreaseLives() {
@@ -123,6 +138,8 @@ public class Player extends MovableEntity {
   public void die() {
     decreaseLives();
     this.setDying(true);
+    setDetonable(false);
+    setFlameStrength(Math.max(getFlameStrength() - 1, 0));
     this.animation = new Animation(ResourceManager.playerDead);
     //Sound sound = new Sound();
     GameMenu.sound.playMusic(ResourceManager.sound[5], true);
@@ -150,6 +167,14 @@ public class Player extends MovableEntity {
   @Override
   public void onRemoval() {
     getWorld().setGameOver(true);
+  }
+
+  @Override
+  public Runnable getInteractionToTile(Tile tile) {
+    if (tile instanceof Item) {
+      return () -> this.collect((Item) tile);
+    }
+    return null;
   }
 
   @Override
@@ -232,12 +257,24 @@ public class Player extends MovableEntity {
   public void collect(Item item) {
     if (!item.beingDestroyed()) {
       item.onCollect(this);
+      increasePoint(100);
       item.markExpired();
     }
     //Sound sound = new Sound();
     GameMenu.sound.playMusic(ResourceManager.sound[4], true);
   }
 
+  public void detonateBomb() {
+    if (!isDetonable()) {
+      return;
+    }
+    for (Bomb bomb : this.bombList) {
+      if (!bomb.isExpired()) {
+        bomb.explode();
+        break;
+      }
+    }
+  }
 
   /**
    * makes the player nudge if the player hit a corner.
