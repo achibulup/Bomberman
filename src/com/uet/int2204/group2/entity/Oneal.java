@@ -40,10 +40,10 @@ public class Oneal extends Enemy implements SimpleEnemy {
 
   @Override
   public void getHit() {
-    SimpleEnemy.super.getHit();
-    if (getWorld().getPlayer() != null) {
+    if (!this.isDying() && getWorld().getPlayer() != null) {
       this.getWorld().getPlayer().increasePoint(180);
     }
+    SimpleEnemy.super.getHit();
   }
 
   @Override 
