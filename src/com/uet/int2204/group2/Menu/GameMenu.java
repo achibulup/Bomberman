@@ -83,7 +83,7 @@ public class GameMenu extends Parent {
         game.setGameOver(() -> {
             effec.stopMusic();
             getChildren().add(gameOver);
-            TranslateTransition tt = new TranslateTransition(Duration.seconds(1), gameOver);
+            TranslateTransition tt = new TranslateTransition(Duration.seconds(2), gameOver);
             tt.setToX(90);
             tt.play();
             tt.setOnFinished(evt -> {
@@ -182,7 +182,6 @@ public class GameMenu extends Parent {
                         getChildren().add(icon3);
                     }
                 }
-
                 TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), instruction);
                 tt1.setToX(menuStart.getTranslateX());
                 getChildren().remove(game.getRoot());

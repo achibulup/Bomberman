@@ -81,7 +81,7 @@ public class GameState {
 
   public Text point = new Text();
   public Text timer = new Text();
-  public int timesLeft = 540 * 60;
+  public int timesLeft = 180 * 60;
   public int init_point = 0;
   public int level_played = 0;
   public Text lives = new Text();
@@ -282,6 +282,7 @@ public class GameState {
     } else {
       this.loadMap(++this.currentLevel);
       level_played++;
+      timesLeft = 180 * 60;
       this.world.getPlayer().setPoint(init_point + level_played * 1000);
     }
   }
