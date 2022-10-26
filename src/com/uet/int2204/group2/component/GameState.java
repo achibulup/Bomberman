@@ -68,7 +68,7 @@ public class GameState {
 
   public Text point = new Text();
   public Text timer = new Text();
-  public int timesLeft = 600 * 60;
+  public int timesLeft = 540 * 60;
   public int init_point = 0;
   public int level_played = 0;
   public Text lives = new Text();

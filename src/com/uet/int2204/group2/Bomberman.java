@@ -40,12 +40,13 @@ public class Bomberman extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         root = new Pane();
-        root.setPrefSize(WIDTH, HEIGHT);
+        root.setPrefSize(WIDTH, HEIGHT + 48 + 6);
         scene = new Scene(root);
         Image img = ResourceManager.background;
         Image imageLogo = ResourceManager.logo;
         GameMenu gameMenu = new GameMenu();
         ImageView imageView = new ImageView(img);
+        imageView.setScaleY(1.03);
         ImageView imageView1 = new ImageView(imageLogo);
         imageView1.setTranslateX(30);
         imageView1.setTranslateY(50);
