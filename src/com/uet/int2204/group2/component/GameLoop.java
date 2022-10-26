@@ -12,6 +12,12 @@ class GameLoop extends AnimationTimer {
   }
 
   @Override
+  public void start() {
+    lastTime = -1;
+    super.start();
+  }
+
+  @Override
   public void handle(long now) {
     double dt = this.lastTime == -1 ? 0 : Conversions.nanosToSeconds(now - this.lastTime);
     this.lastTime = now;
