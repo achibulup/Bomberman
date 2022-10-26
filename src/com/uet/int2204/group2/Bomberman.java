@@ -86,7 +86,7 @@ public class Bomberman extends Application {
         scene.setRoot(node);
     }
 
-    public static void closeApp( ) {
+    public static void closeApp() {
         ((Stage) scene.getWindow()).close();
     }
 
