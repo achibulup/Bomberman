@@ -16,7 +16,6 @@ public class KeyboardLevelController implements GameStateTrigger, EventHandler<K
   @Override 
   public void handle(KeyEvent event) {
     if (event.getEventType() == KeyEvent.KEY_PRESSED) {
-      System.out.println(event.getCode());
       if (event.getCode() == KeyCode.OPEN_BRACKET) {
         levelChange = LevelChange.PREV;
       }
