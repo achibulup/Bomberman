@@ -33,6 +33,7 @@ public class ResourceManager {
   public static final AnimationData lifeItem;
   public static final AnimationData wallPassItem;
   public static final AnimationData detonatorItem;
+  public static final AnimationData timeItem;
 
   public static final Sprite portal;
   public static final AnimationData portalBlinking;
@@ -145,6 +146,9 @@ public class ResourceManager {
 
     Sprite[] detonatorItemSheet = tryLoadSpriteSheet("sprites/powerup/detonator@2.png");
     detonatorItem = new AnimationData(detonatorItemSheet, 0.4);
+
+    Sprite[] timeItemSheet = tryLoadSpriteSheet("sprites/powerup/clock_time_item@2.png");
+    timeItem = new AnimationData(timeItemSheet, 0.4);
 
     Sprite[] portalSheet = tryLoadSpriteSheet("sprites/map/portal@2.png");
     portal = portalSheet[0];
