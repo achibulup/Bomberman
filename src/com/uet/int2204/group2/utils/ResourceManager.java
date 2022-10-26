@@ -117,7 +117,7 @@ public class ResourceManager {
     dashboard = tryLoadImage("sprites/dashboard.png");
     background = tryLoadImage("sprites/background.jpg");
     logo = tryLoadImage("sprites/Logo1.png");
-    miniIcon = tryLoadImage("sprites/powerup/extra_life@2.png");
+    miniIcon = tryLoadImage("sprites/icon.png");
     menuButton = tryLoadImage("sprites/play8.png");
     cursor = tryLoadImage("sprites/cursor.png");
     imgOption = tryLoadImage("sprites/option.png");
