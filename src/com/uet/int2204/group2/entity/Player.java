@@ -119,6 +119,7 @@ public class Player extends MovableEntity {
     }
     setDying(true);
     setDetonable(false);
+    setFlameStrength(Math.max(getFlameStrength() - 1, 0));
     this.animation = new Animation(ResourceManager.playerDead);
   }
 
