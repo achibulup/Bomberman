@@ -17,7 +17,6 @@ public class GameMenu extends Parent {
     GameState game = new GameState();
     public static Sound sound = new Sound();
     public static Sound effec = new Sound();
-    public static final int count = 0;
 
     public GameMenu() {
         VBox menuStart = new VBox(30);
@@ -147,7 +146,7 @@ public class GameMenu extends Parent {
                 getChildren().add(icon3);
                 TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), instruction);
                 tt1.setToX(menuStart.getTranslateX());
-                Bomberman.setRoot(Bomberman.root);
+                getChildren().remove(game.getRoot());
             }
         });
 
@@ -177,11 +176,7 @@ public class GameMenu extends Parent {
 
     public void switchToGame() {
         game.start();
-        Bomberman.setRoot(game.getRoot());
+        getChildren().add(game.getRoot());
         Bomberman.setInputHandlers(game.getInputHandlers());
-    }
-
-    public void ressume() {
-        game.stop();
     }
 }

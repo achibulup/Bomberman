@@ -42,18 +42,20 @@ public class Bomberman extends Application {
         root = new Pane();
         root.setPrefSize(WIDTH, HEIGHT + 48 + 6);
         scene = new Scene(root);
-        Image img = ResourceManager.background;
+        
+        Image backgroundImg = ResourceManager.background;
         Image imageLogo = ResourceManager.logo;
         GameMenu gameMenu = new GameMenu();
-        ImageView imageView = new ImageView(img);
-        imageView.setScaleY(1.03);
+        ImageView background = new ImageView(backgroundImg);
+        background.setScaleY(1.03);
         ImageView imageView1 = new ImageView(imageLogo);
         imageView1.setTranslateX(30);
         imageView1.setTranslateY(50);
         imageView1.setScaleY(1.6);
         start.playMusic(ResourceManager.sound[0],true);
         start.loopMusic();
-        root.getChildren().addAll(imageView, imageView1, gameMenu);
+        root.getChildren().addAll(background, imageView1, gameMenu);
+
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (keyEvent) -> {
           if (!pressedKeys.contains(keyEvent.getCode())) {
             pressedKeys.add(keyEvent.getCode());
@@ -80,7 +82,7 @@ public class Bomberman extends Application {
         scene.setRoot(loadFXML(fxml));
     }
 
-    public static void setRoot(Parent node) {
+    static void setRoot(Parent node) {
         scene.setRoot(node);
     }
 
