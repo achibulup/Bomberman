@@ -1,11 +1,10 @@
-package com.uet.int2204.group2.Sound;
+package com.uet.int2204.group2.sound;
 
+
+import java.io.File;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-
-import java.io.File;
-import java.io.PushbackReader;
 
 public class Sound {
     private Media media;

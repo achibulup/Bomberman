@@ -1,14 +1,14 @@
-package com.uet.int2204.group2.controller.Algorithm;
+package com.uet.int2204.group2.controller.algorithm;
 
 import com.uet.int2204.group2.controller.EntityController;
-import com.uet.int2204.group2.entity.Enemy;
-import com.uet.int2204.group2.entity.Player;
+import com.uet.int2204.group2.entity.movable.Enemy;
+import com.uet.int2204.group2.entity.movable.Player;
 import com.uet.int2204.group2.utils.Direction;
+
+import static com.uet.int2204.group2.controller.algorithm.BFS.findSortPath;
 
 import java.util.List;
 import java.util.Random;
-
-import static com.uet.int2204.group2.controller.Algorithm.BFS.findSortPath;
 
 public class AIIntelligent implements EntityController<Enemy> {
     public static AIIntelligent INSTANCE = new AIIntelligent();

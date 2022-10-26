@@ -1,7 +1,8 @@
 package com.uet.int2204.group2.entity;
 
-import com.uet.int2204.group2.World;
 import com.uet.int2204.group2.graphics.Sprite;
+import com.uet.int2204.group2.map.World;
+
 import javafx.scene.canvas.GraphicsContext;
 
 import static com.uet.int2204.group2.utils.Constants.TILE_SIZE;

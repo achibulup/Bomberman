@@ -1,9 +1,15 @@
 package com.uet.int2204.group2;
 
-import com.uet.int2204.group2.Menu.GameMenu;
-import com.uet.int2204.group2.Sound.Sound;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+import com.uet.int2204.group2.menu.GameMenu;
+import com.uet.int2204.group2.sound.Sound;
 import com.uet.int2204.group2.utils.Constants;
 import com.uet.int2204.group2.utils.ResourceManager;
+
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -16,11 +22,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 public class Bomberman extends Application {
     public static Scene scene;

@@ -1,6 +1,6 @@
-package com.uet.int2204.group2.controller.Algorithm;
+package com.uet.int2204.group2.controller.algorithm;
 
-import com.uet.int2204.group2.entity.MovableEntity;
+import com.uet.int2204.group2.entity.movable.MovableEntity;
 
 public class EnemyMatrix implements Matrix {
   private MovableEntity enemy;

@@ -1,6 +1,6 @@
 package com.uet.int2204.group2.controller;
 
-import com.uet.int2204.group2.entity.MovableEntity;
+import com.uet.int2204.group2.entity.movable.MovableEntity;
 import com.uet.int2204.group2.utils.Direction;
 
 import java.util.Random;

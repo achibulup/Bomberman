@@ -1,9 +1,8 @@
 package com.uet.int2204.group2.map;
 
-import com.uet.int2204.group2.World;
-import com.uet.int2204.group2.entity.Brick;
-import com.uet.int2204.group2.entity.Item;
-import com.uet.int2204.group2.entity.Tile;
+import com.uet.int2204.group2.entity.tile.Brick;
+import com.uet.int2204.group2.entity.tile.Tile;
+import com.uet.int2204.group2.entity.tile.item.Item;
 
 public class BlinkBrickTrigger implements SingleUseWorldTrigger {
   @Override

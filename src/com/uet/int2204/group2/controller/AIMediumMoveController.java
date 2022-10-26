@@ -2,8 +2,8 @@ package com.uet.int2204.group2.controller;
 
 import java.util.Random;
 
-import com.uet.int2204.group2.entity.Enemy;
-import com.uet.int2204.group2.entity.Player;
+import com.uet.int2204.group2.entity.movable.Enemy;
+import com.uet.int2204.group2.entity.movable.Player;
 import com.uet.int2204.group2.utils.Direction;
 
 public class AIMediumMoveController implements EntityController<Enemy> {

@@ -1,9 +1,10 @@
-package com.uet.int2204.group2.Menu;
+package com.uet.int2204.group2.menu;
 
 import com.uet.int2204.group2.Bomberman;
-import com.uet.int2204.group2.Sound.Sound;
 import com.uet.int2204.group2.component.GameState;
+import com.uet.int2204.group2.sound.Sound;
 import com.uet.int2204.group2.utils.ResourceManager;
+
 import javafx.animation.TranslateTransition;
 import javafx.scene.Parent;
 import javafx.scene.input.KeyCode;
@@ -11,8 +12,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class GameMenu extends Parent {

@@ -1,13 +1,13 @@
 package com.uet.int2204.group2.utils;
 
+import java.io.FileInputStream;
+import java.nio.file.FileSystemNotFoundException;
+
 import com.uet.int2204.group2.graphics.AnimationData;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.map.MapData;
-import javafx.scene.image.Image;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.nio.file.FileSystemNotFoundException;
+import javafx.scene.image.Image;
 
 public class ResourceManager {
   public static final Image background;

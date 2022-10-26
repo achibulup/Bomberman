@@ -1,7 +1,5 @@
 package com.uet.int2204.group2.map;
 
-import com.uet.int2204.group2.World;
-
 public class ActivatePortalTrigger implements SingleUseWorldTrigger {
   @Override
   public boolean checkCondition(World target) {

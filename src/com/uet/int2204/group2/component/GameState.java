@@ -2,63 +2,56 @@ package com.uet.int2204.group2.component;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Random;
-import java.util.Timer;
 
 import com.uet.int2204.group2.Bomberman;
-import com.uet.int2204.group2.World;
-import com.uet.int2204.group2.controller.Algorithm.AIIntelligent;
-import com.uet.int2204.group2.controller.EntityController;
-import com.uet.int2204.group2.controller.KeyBoardPlayerController;
-import com.uet.int2204.group2.controller.KeyboardEnemyController;
+import com.uet.int2204.group2.component.trigger.GameStateTrigger;
+import com.uet.int2204.group2.component.trigger.KeyboardLevelController;
+import com.uet.int2204.group2.component.trigger.NextLevelTrigger;
 import com.uet.int2204.group2.controller.AIHighMoveController;
 import com.uet.int2204.group2.controller.AILowMoveController;
 import com.uet.int2204.group2.controller.AIMediumMoveController;
-import com.uet.int2204.group2.entity.Balloom;
-import com.uet.int2204.group2.entity.Bear;
-import com.uet.int2204.group2.entity.BombItem;
-import com.uet.int2204.group2.entity.Brick;
-import com.uet.int2204.group2.entity.Broom;
-import com.uet.int2204.group2.entity.DetonatorItem;
-import com.uet.int2204.group2.entity.Enemy;
-import com.uet.int2204.group2.entity.Fire;
-import com.uet.int2204.group2.entity.FlameItem;
-import com.uet.int2204.group2.entity.LifeItem;
-import com.uet.int2204.group2.entity.Frog;
-import com.uet.int2204.group2.entity.Oneal;
-import com.uet.int2204.group2.entity.PiercingFlameItem;
-import com.uet.int2204.group2.entity.Player;
-import com.uet.int2204.group2.entity.Portal;
-import com.uet.int2204.group2.entity.SpeedItem;
-import com.uet.int2204.group2.entity.TimeItem;
-import com.uet.int2204.group2.entity.Wall;
+import com.uet.int2204.group2.controller.EntityController;
+import com.uet.int2204.group2.controller.KeyBoardPlayerController;
+import com.uet.int2204.group2.controller.Algorithm.AIIntelligent;
+import com.uet.int2204.group2.entity.movable.Balloom;
+import com.uet.int2204.group2.entity.movable.Bear;
+import com.uet.int2204.group2.entity.movable.Broom;
+import com.uet.int2204.group2.entity.movable.Fire;
+import com.uet.int2204.group2.entity.movable.Frog;
+import com.uet.int2204.group2.entity.movable.Oneal;
+import com.uet.int2204.group2.entity.movable.Player;
+import com.uet.int2204.group2.entity.tile.Brick;
+import com.uet.int2204.group2.entity.tile.Portal;
+import com.uet.int2204.group2.entity.tile.Wall;
+import com.uet.int2204.group2.entity.tile.item.BombItem;
+import com.uet.int2204.group2.entity.tile.item.DetonatorItem;
+import com.uet.int2204.group2.entity.tile.item.FlameItem;
+import com.uet.int2204.group2.entity.tile.item.LifeItem;
+import com.uet.int2204.group2.entity.tile.item.PiercingFlameItem;
+import com.uet.int2204.group2.entity.tile.item.SpeedItem;
+import com.uet.int2204.group2.entity.tile.item.TimeItem;
 import com.uet.int2204.group2.map.ActivatePortalTrigger;
 import com.uet.int2204.group2.map.BlinkBrickTrigger;
+import com.uet.int2204.group2.map.MapData;
 import com.uet.int2204.group2.map.PlayerEnterPortalTrigger;
 import com.uet.int2204.group2.map.RespawnPlayer;
-import com.uet.int2204.group2.map.MapData;
+import com.uet.int2204.group2.map.World;
 import com.uet.int2204.group2.utils.Constants;
-import com.uet.int2204.group2.utils.Conversions;
 import com.uet.int2204.group2.utils.Maths;
-
 import com.uet.int2204.group2.utils.ResourceManager;
+
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
@@ -91,9 +84,6 @@ public class GameState {
   int playerLives;
 
   public GameState() {
-    int mapWidth = 21; // map width in tiles
-    int mapHeight = 15; // map height in tiles
-    this.world = new World(mapWidth, mapHeight);
     this.canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
     this.canvas.setTranslateX(0);
     this.canvas.setTranslateY(48 + 8);
@@ -107,96 +97,6 @@ public class GameState {
     this.triggers.add(levelController);
     this.triggers.add(new NextLevelTrigger());
     this.gameLoop = new GameLoop(this);
-
-//     Random rand = new Random();
-
-//     EntityController<? super Player> playerController = new KeyBoardPlayerController(inputHandlers);
-//     EntityController<? super Enemy> balloomController = AILowMoveController.INSTANCE;
-//     EntityController<? super Enemy> broomController = AIIntelligent.INSTANCE;
-//     EntityController<? super Enemy> bearController = AIHighMoveController.INSTANCE;
-//     EntityController<? super Enemy> onealController = AIIntelligent.INSTANCE;
-//     this.world.setPlayer(new Player(1, 1, playerController));
-
-//     for (int i = 0; i < 3; ++i) {
-// //      this.world.addEnemy(new Balloom(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, balloomController));
-//       this.world.addEnemy(new Oneal(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, onealController));
-//     }
-
-//     for (int i = 0; i < 8; ++i) {
-// //      this.world.addEnemy(new Bear(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, bearController));
-//     }
-
-//     for (int i = 0; i < 5; ++i) {
-//       this.world.addEnemy(new Broom(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, broomController));
-//     }
-
-//     for (int i = 1; i <= mapWidth; ++i) {
-//       for (int j = 1; j <= mapHeight; ++j) {
-//         if (i + j <= 3) {
-//           continue;
-//         }
-//         if (i % 2 == 0 && j % 2 == 0) {
-//           world.addTile(i, j, new Wall());
-//           continue;
-//         }
-//         int r = rand.nextInt(80);
-//         if (r == 8) {
-//           world.addTile(i, j, new FlameItem());
-//           world.addTile(i, j, new Brick(true));
-//         } else if (r == 9) {
-//           world.addTile(i, j, new BombItem());
-//           world.addTile(i, j, new Brick(true));
-//         } else if (r == 10) {
-//           world.addTile(i, j, new SpeedItem());
-//           world.addTile(i, j, new Brick(true));
-//         } else if (r < 20) {
-//           world.addTile(i, j, new Brick());
-//         }
-//       }
-//     }
-
-    // Random rand = new Random();
-
-    // int mapWidth = 21; // map width in tiles
-    // int mapHeight = 15; // map height in tiles
-    // this.world = new World(mapWidth, mapHeight);
-    // EntityController<? super Player> playerController = new KeyBoardPlayerController(inputHandlers);
-    // this.world.setPlayer(new Player(1, 1, playerController));
-    // EntityController<? super Enemy> balloomController = RandomMoveController.INSTANCE;
-    // this.world.addEnemy(new Balloom(3, 3, balloomController));
-    // EntityController<? super Enemy> broomController = RandomMoveController.INSTANCE;
-    // this.world.addEnemy(new Broom(5, 7, broomController));
-    // EntityController<? super Enemy> bearController = RandomMoveController.INSTANCE;
-    // for (int i = 0; i < 10; ++i) {
-    //   this.world.addEnemy(new Bear(rand.nextInt(mapWidth) + 1, rand.nextInt(mapHeight) + 1, bearController));
-    // }
-    // EntityController<? super Enemy> onealController = new KeyboardEnemyController(inputHandlers);
-    // this.world.addEnemy(new Oneal(7, 3, onealController));
-
-    // for (int i = 1; i <= mapWidth; ++i) {
-    //   for (int j = 1; j <= mapHeight; ++j) {
-    //     if (i + j <= 3) {
-    //       continue;
-    //     }
-    //     if (i % 2 == 0 && j % 2 == 0) {
-    //       world.addTile(i, j, new Wall());
-    //       continue;
-    //     }
-    //     int r = rand.nextInt(80);
-    //     if (r == 8) {
-    //       world.addTile(i, j, new FlameItem());
-    //       world.addTile(i, j, new Brick(true));
-    //     } else if (r == 9) {
-    //       world.addTile(i, j, new BombItem());
-    //       world.addTile(i, j, new Brick(true));
-    //     } else if (r == 10) {
-    //       world.addTile(i, j, new SpeedItem());
-    //       world.addTile(i, j, new Brick(true));
-    //     } else if (r < 20) {
-    //       world.addTile(i, j, new Brick());
-    //     }
-    //   }
-    // }
   }
 
   public World getWorld() {

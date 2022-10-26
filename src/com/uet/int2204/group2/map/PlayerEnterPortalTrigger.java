@@ -1,9 +1,8 @@
 package com.uet.int2204.group2.map;
 
-import com.uet.int2204.group2.World;
-import com.uet.int2204.group2.entity.Player;
-import com.uet.int2204.group2.entity.Portal;
-import com.uet.int2204.group2.entity.Tile;
+import com.uet.int2204.group2.entity.movable.Player;
+import com.uet.int2204.group2.entity.tile.Portal;
+import com.uet.int2204.group2.entity.tile.Tile;
 
 public class PlayerEnterPortalTrigger implements SingleUseWorldTrigger {
   @Override

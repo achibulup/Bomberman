@@ -1,6 +1,6 @@
 package com.uet.int2204.group2.controller;
 
-import com.uet.int2204.group2.entity.Player;
+import com.uet.int2204.group2.entity.movable.Player;
 import com.uet.int2204.group2.utils.Direction;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
