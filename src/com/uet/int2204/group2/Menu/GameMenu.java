@@ -78,11 +78,17 @@ public class GameMenu extends Parent {
         IconSoundMute iconSoundMute1 = new IconSoundMute("");
 
         game.setGameOver(() -> {
+            Image image = ResourceManager.gameOver;
+            ImageView imageView = new ImageView(image);
+            effec.stopMusic();
+            Bomberman.start.playMusic(ResourceManager.sound[0],true);
+            //TranslateTransition tt = new TranslateTransition(Duration.seconds(0.5), imageView);
+//            tt.setToX(menuStart.getTranslateX());
+//            tt.play();
+            getChildren().add(imageView);
             game.stop();
+            getChildren().remove(imageView);
             getChildren().remove(game.getRoot());
-            // Image image = ResourceManager.gameOver;
-            // ImageView imageView = new ImageView(image);
-            // getChildren().add(imageView);
         });
 
         iconSound.setOnMouseClicked(mouseEvent -> {
