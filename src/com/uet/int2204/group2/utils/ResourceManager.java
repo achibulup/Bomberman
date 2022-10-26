@@ -144,6 +144,7 @@ public class ResourceManager {
     sound[6] = "res/audio/dead1.wav"; // qua màn
 
     levels = new MapData[]{
+      tryLoadMapData("levels/level0.txt"),
       tryLoadMapData("levels/level1.txt"),
       tryLoadMapData("levels/level2.txt"),
       tryLoadMapData("levels/level3.txt")
