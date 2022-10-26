@@ -1,14 +1,14 @@
 package com.uet.int2204.group2.entity;
 
+import java.util.Random;
+
 import com.uet.int2204.group2.controller.EntityController;
 import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
 
-import java.util.Random;
-
-public class Bear extends Enemy {
-  public static final double SPEED = 70;
+public class Bear extends Enemy implements SimpleSpriteEnemy {
+  public static final double SPEED = 170;
   public static final int MAX_STREAK = 4;
 
   private static final Random rand = new Random();
@@ -49,11 +49,18 @@ public class Bear extends Enemy {
     if (isDying()) {
       return;
     }
-    this.setDying(true);
+    this.setDying();
+    setDyingAnimation();
+  }
+
+  @Override
+  public Animation getAnimation() {
+    return this.animation;
+  }
+
+  @Override
+  public void setDyingAnimation() {
     this.animation = new Animation(ResourceManager.bearDie);
-    if (getWorld().getPlayer() != null) {
-      this.getWorld().getPlayer().increasePoint(120);
-    }
   }
 
   public void control() {
@@ -63,9 +70,6 @@ public class Bear extends Enemy {
   @Override
   public void update(double dt) {
     if (!isDying()) {
-      if (isHalfwayBlocked(getDirection())) {
-        setDirection(getDirection().opposite());
-      }
       if (isMovable(getDirection())) {
         adjustedMove(getSpeed() * dt);
       } else {

@@ -337,8 +337,11 @@ public class GameState {
 
   void render() {
     GraphicsContext target = graphicsContext2D();
+    Affine transform = graphicsContext2D().getTransform();
+    graphicsContext2D().setTransform(new Affine());
     target.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    world.renderTo(graphicsContext2D());
+    graphicsContext2D().setTransform(transform);
+    world.renderTo(graphicsContext2D()); 
   }
 
   void updateSetText(double dt) {

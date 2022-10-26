@@ -5,32 +5,27 @@ import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
 
-public class Broom extends Enemy implements SimpleSpriteEnemy {
-  public static final double SPEED = 80;
+public class Fire extends Enemy {
+  public static final double SPEED = 110;
 
-  private Animation animation = new Animation(ResourceManager.broom);
-  private EntityController<? super Broom> controller = EntityController.doNothingController;
+  private Animation animation = new Animation(ResourceManager.fire);
+  private EntityController<? super Fire> controller = EntityController.doNothingController;
 
-  public Broom(int tileX, int tileY) {
+  public Fire(int tileX, int tileY) {
     super(tileX, tileY);
   }
 
-  public Broom(int tileX, int tileY, EntityController<? super Broom> controller) {
+  public Fire(int tileX, int tileY, EntityController<? super Fire> controller) {
     super(tileX, tileY);
     setController(controller);
   }
 
-  public EntityController<? super Broom> getController() {
+  public EntityController<? super Fire> getController() {
     return this.controller;
   }
 
-  public void setController(EntityController<? super Broom> controller) {
+  public void setController(EntityController<? super Fire> controller) {
     this.controller = controller;
-  }
-
-  @Override
-  public boolean blockedBy(Class<? extends Tile> tile) {
-    return tile != Brick.class && super.blockedBy(tile);
   }
 
   @Override
@@ -49,17 +44,7 @@ public class Broom extends Enemy implements SimpleSpriteEnemy {
       return;
     }
     this.setDying();
-    setDyingAnimation();
-  }
-
-  @Override
-  public Animation getAnimation() {
-    return this.animation;
-  }
-
-  @Override
-  public void setDyingAnimation() {
-    this.animation = new Animation(ResourceManager.broomDie);
+    this.animation = new Animation(ResourceManager.fireDie);
   }
 
   public void control() {

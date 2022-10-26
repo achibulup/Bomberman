@@ -5,7 +5,7 @@ import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
 
-public class Balloom extends Enemy {
+public class Balloom extends Enemy implements SimpleSpriteEnemy {
   public static final double SPEED = 70;
 
   private Animation animation = new Animation(ResourceManager.balloom);
@@ -43,11 +43,18 @@ public class Balloom extends Enemy {
     if (isDying()) {
       return;
     }
-    this.setDying(true);
+    this.setDying();
+    setDyingAnimation();
+  }
+
+  @Override
+  public Animation getAnimation() {
+    return this.animation;
+  }
+
+  @Override
+  public void setDyingAnimation() {
     this.animation = new Animation(ResourceManager.balloomDie);
-    if (getWorld().getPlayer() != null) {
-      this.getWorld().getPlayer().increasePoint(50);
-    }
   }
 
   public void control() {
@@ -57,9 +64,6 @@ public class Balloom extends Enemy {
   @Override
   public void update(double dt) {
     if (!isDying()) {
-      if (isHalfwayBlocked(getDirection())) {
-        setDirection(getDirection().opposite());
-      }
       if (isMovable(getDirection())) {
         adjustedMove(getSpeed() * dt);
       }
