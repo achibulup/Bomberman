@@ -13,6 +13,7 @@ public class ResourceManager {
   public static final Image background;
 
   public static final Image dashboard;
+  public static final Image gameOver;
   public static final Image logo;
   public static final Image miniIcon;
   public static final Image cursor;
@@ -123,6 +124,7 @@ public class ResourceManager {
     imgOption = tryLoadImage("sprites/option.png");
     imgIconSound = tryLoadImage("sprites/iconsound2.png");
     imgIconSoundMute = tryLoadImage("sprites/iconsound.png");
+    gameOver = tryLoadImage("sprites/game_over.png");
 
     sound[0] = "res/audio/homestart.mp3"; // bắt đầu game
     sound[1] = "res/audio/gameaudio.wav"; // âm nền chơi game

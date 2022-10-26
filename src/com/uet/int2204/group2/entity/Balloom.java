@@ -45,7 +45,9 @@ public class Balloom extends Enemy {
     }
     this.setDying(true);
     this.animation = new Animation(ResourceManager.balloomDie);
-    this.getWorld().getPlayer().increasePoint(50);
+    if (getWorld().getPlayer() != null) {
+      this.getWorld().getPlayer().increasePoint(50);
+    }
   }
 
   public void control() {

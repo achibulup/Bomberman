@@ -18,6 +18,7 @@ public class GameMenu extends Parent {
     public static Sound sound = new Sound();
     public static Sound effec = new Sound();
     public static final int count = 0;
+    public static boolean checkClickVolume = false;
 
     public GameMenu() {
         VBox menuStart = new VBox(30);
@@ -71,6 +72,7 @@ public class GameMenu extends Parent {
         IconSound iconSound1 = new IconSound("");
         IconSoundMute iconSoundMute1 = new IconSoundMute("");
 
+
         iconSound.setOnMouseClicked(mouseEvent -> {
             getChildren().add(icon2);
             getChildren().remove(icon);
@@ -82,11 +84,13 @@ public class GameMenu extends Parent {
             Bomberman.start.playMusic(ResourceManager.sound[0], true);
         });
         iconSound1.setOnMouseClicked(mouseEvent -> {
+            checkClickVolume = true;
             getChildren().add(icon4);
             getChildren().remove(icon3);
             effec.stopMusic();
         });
         iconSoundMute1.setOnMouseClicked(mouseEvent -> {
+            checkClickVolume = false;
             getChildren().add(icon3);
             getChildren().remove(icon4);
             effec.playMusic(ResourceManager.sound[1],true);
@@ -140,11 +144,17 @@ public class GameMenu extends Parent {
         });
 
         Bomberman.scene.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
+
             if (keyEvent.getCode() == KeyCode.ESCAPE) {
                 game.stop();
                 getChildren().remove(menuStart);
                 getChildren().add(pause);
-                getChildren().add(icon3);
+
+                if (checkClickVolume) {
+                    getChildren().add(icon4);
+                } else {
+                    getChildren().add(icon3);
+                }
                 TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), instruction);
                 tt1.setToX(menuStart.getTranslateX());
                 Bomberman.setRoot(Bomberman.root);
