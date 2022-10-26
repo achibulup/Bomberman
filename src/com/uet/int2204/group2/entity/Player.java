@@ -20,6 +20,7 @@ public class Player extends MovableEntity {
   public static double INITIAL_SPEED = 250; // pixels per second.
 
   public static final int INITIAL_HEALTH = 5;
+  private boolean isCheckTime = false;
 
   // private Direction faceDirection = Direction.DOWN; // should not be NONE.
 
@@ -130,6 +131,14 @@ public class Player extends MovableEntity {
   public void increasePoint(int bonus) {
     init_point += bonus;
   }
+  public void setIncreaseTime(boolean check) {
+    isCheckTime = check;
+  }
+
+  public boolean getTime() {
+    return isCheckTime;
+  }
+
 
   public int getPoint() {
     return init_point;

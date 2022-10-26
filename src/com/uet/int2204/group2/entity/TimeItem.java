@@ -30,5 +30,8 @@ public class TimeItem extends Item {
   @Override
   public void onCollect(Player player) {
     // TODO:
+    if (player != null) {
+      player.setIncreaseTime(true);
+    }
   }
 }

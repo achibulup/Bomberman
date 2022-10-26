@@ -43,8 +43,11 @@ public class Balloom extends Enemy implements SimpleSpriteEnemy {
     if (isDying()) {
       return;
     }
-    this.setDying();
+    this.setDying(true);
     setDyingAnimation();
+    if (getWorld().getPlayer() != null) {
+      this.getWorld().getPlayer().increasePoint(50);
+    }
   }
 
   @Override

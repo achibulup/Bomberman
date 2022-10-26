@@ -9,18 +9,7 @@ import com.uet.int2204.group2.Bomberman;
 import com.uet.int2204.group2.World;
 import com.uet.int2204.group2.controller.*;
 import com.uet.int2204.group2.controller.Algorithm.AIIntelligent;
-import com.uet.int2204.group2.entity.Balloom;
-import com.uet.int2204.group2.entity.Bear;
-import com.uet.int2204.group2.entity.BombItem;
-import com.uet.int2204.group2.entity.Brick;
-import com.uet.int2204.group2.entity.Broom;
-import com.uet.int2204.group2.entity.Enemy;
-import com.uet.int2204.group2.entity.FlameItem;
-import com.uet.int2204.group2.entity.Oneal;
-import com.uet.int2204.group2.entity.Player;
-import com.uet.int2204.group2.entity.Portal;
-import com.uet.int2204.group2.entity.SpeedItem;
-import com.uet.int2204.group2.entity.Wall;
+import com.uet.int2204.group2.entity.*;
 import com.uet.int2204.group2.map.ActivatePortalTrigger;
 import com.uet.int2204.group2.map.BlinkBrickTrigger;
 import com.uet.int2204.group2.map.PlayerEnterPortalTrigger;
@@ -302,6 +291,9 @@ public class GameState {
                     i, j, new KeyBoardPlayerController(this.inputHandlers)));
             this.world.getPlayer().setLives(3);
             break;
+          case 't':
+            this.world.addTile(i, j, new Brick(new TimeItem()));
+            break;
           case '1':
             this.world.addEnemy(new Balloom(i, j, AILowMoveController.INSTANCE));
             break;
@@ -349,7 +341,15 @@ public class GameState {
     if (getWorld().getPlayer() != null) {
       this.playerLives = getWorld().getPlayer().getLives();
     }
-    if (timesLeft<= 0) {
+
+    if (getWorld().getPlayer() != null) {
+      if (getWorld().getPlayer().getTime()) {
+        timesLeft += 60 * 60;
+        getWorld().getPlayer().setIncreaseTime(false);
+      }
+    }
+
+    if (timesLeft <= 0) {
       getWorld().setGameOver(true);
 
       //GAME OVER

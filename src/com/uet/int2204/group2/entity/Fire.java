@@ -43,8 +43,11 @@ public class Fire extends Enemy {
     if (isDying()) {
       return;
     }
-    this.setDying();
+    this.setDying(true);
     this.animation = new Animation(ResourceManager.fireDie);
+    if (getWorld().getPlayer() != null) {
+      this.getWorld().getPlayer().increasePoint(160);
+    }
   }
 
   public void control() {
