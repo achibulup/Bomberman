@@ -15,12 +15,14 @@ import com.uet.int2204.group2.entity.Bear;
 import com.uet.int2204.group2.entity.BombItem;
 import com.uet.int2204.group2.entity.Brick;
 import com.uet.int2204.group2.entity.Broom;
+import com.uet.int2204.group2.entity.DetonatorItem;
 import com.uet.int2204.group2.entity.Enemy;
 import com.uet.int2204.group2.entity.Fire;
 import com.uet.int2204.group2.entity.FlameItem;
 import com.uet.int2204.group2.entity.LifeItem;
 import com.uet.int2204.group2.entity.Frog;
 import com.uet.int2204.group2.entity.Oneal;
+import com.uet.int2204.group2.entity.PiercingFlameItem;
 import com.uet.int2204.group2.entity.Player;
 import com.uet.int2204.group2.entity.Portal;
 import com.uet.int2204.group2.entity.SpeedItem;
@@ -199,6 +201,12 @@ public class GameState {
             break;
           case 'l':
             this.world.addTile(i, j, new Brick(new LifeItem()));
+            break;
+          case 'd':
+            this.world.addTile(i, j, new Brick(new DetonatorItem()));
+            break;
+          case 'w':
+            this.world.addTile(i, j, new Brick(new PiercingFlameItem()));
             break;
           case 'p':
             this.world.setPlayer(new Player(
