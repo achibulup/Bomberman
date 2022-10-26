@@ -1,4 +1,4 @@
-package com.uet.int2204.group2.controller.Algorithm;
+package com.uet.int2204.group2.controller.algorithm;
 
 public class Point {
     protected int row;

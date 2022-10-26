@@ -12,7 +12,7 @@ import com.uet.int2204.group2.controller.AILowMoveController;
 import com.uet.int2204.group2.controller.AIMediumMoveController;
 import com.uet.int2204.group2.controller.EntityController;
 import com.uet.int2204.group2.controller.KeyBoardPlayerController;
-import com.uet.int2204.group2.controller.Algorithm.AIIntelligent;
+import com.uet.int2204.group2.controller.algorithm.AIIntelligent;
 import com.uet.int2204.group2.entity.movable.Balloom;
 import com.uet.int2204.group2.entity.movable.Bear;
 import com.uet.int2204.group2.entity.movable.Broom;

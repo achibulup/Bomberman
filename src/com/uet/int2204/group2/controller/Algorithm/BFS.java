@@ -1,4 +1,4 @@
-package com.uet.int2204.group2.controller.Algorithm;
+package com.uet.int2204.group2.controller.algorithm;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
