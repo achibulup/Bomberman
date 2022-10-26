@@ -1,7 +1,6 @@
 package com.uet.int2204.group2.controller;
 
 import com.uet.int2204.group2.entity.Enemy;
-import com.uet.int2204.group2.entity.MovableEntity;
 import com.uet.int2204.group2.entity.Player;
 import com.uet.int2204.group2.utils.Direction;
 

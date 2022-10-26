@@ -1,16 +1,13 @@
 package com.uet.int2204.group2.utils;
 
-import java.io.FileInputStream;
-import java.nio.file.FileSystemNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.uet.int2204.group2.Sound.Sound;
 import com.uet.int2204.group2.graphics.AnimationData;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.map.MapData;
-
 import javafx.scene.image.Image;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.nio.file.FileSystemNotFoundException;
 
 public class ResourceManager {
   public static final Image background;
@@ -21,6 +18,8 @@ public class ResourceManager {
   public static final Image cursor;
   public static final Image menuButton;
   public static final Image imgOption;
+  public static final Image imgIconSound;
+  public static final Image imgIconSoundMute;
   public static final String[] sound = new String[10];
 
   public static final MapData[] levels;
@@ -122,13 +121,16 @@ public class ResourceManager {
     menuButton = tryLoadImage("sprites/play8.png");
     cursor = tryLoadImage("sprites/cursor.png");
     imgOption = tryLoadImage("sprites/option.png");
+    imgIconSound = tryLoadImage("sprites/iconsound2.png");
+    imgIconSoundMute = tryLoadImage("sprites/iconsound.png");
 
     sound[0] = "res/audio/homestart.mp3"; // bắt đầu game
     sound[1] = "res/audio/gameaudio.wav"; // âm nền chơi game
     sound[2] = "res/audio/putbomb.wav"; // đặt boom
     sound[3] = "res/audio/boom.wav"; // bom nổ
     sound[4] = "res/audio/getitem.wav"; // ăn item
-    sound[5] = "res/audio/dead2.wav"; // mất mạng;
+    sound[5] = "res/audio/dead2.wav"; // mất mạng
+    sound[6] = "res/audio/dead1.wav"; // qua màn
 
     levels = new MapData[]{
       tryLoadMapData("levels/level1.txt"),
@@ -166,7 +168,7 @@ public class ResourceManager {
     flameItem = new AnimationData(flameItemSheet, 0.4);
 
     Sprite[] bombItemSheet = tryLoadSpriteSheet("sprites/powerup/extra_bomb@2.png");
-    bombItem = new AnimationData(bombItemSheet, 0.4);
+    bombItem = new AnimationData(bombItemSheet, 0.0001);
 
     Sprite[] speedItemSheet = tryLoadSpriteSheet("sprites/powerup/bonus_speed@2.png");
     speedItem = new AnimationData(speedItemSheet, 0.4);

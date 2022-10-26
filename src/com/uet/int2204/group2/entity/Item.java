@@ -3,7 +3,6 @@ package com.uet.int2204.group2.entity;
 import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.utils.Constants;
 import com.uet.int2204.group2.utils.ResourceManager;
-
 import javafx.scene.canvas.GraphicsContext;
 
 public abstract class Item extends Tile implements DestroyableTile {

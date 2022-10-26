@@ -1,17 +1,22 @@
 package com.uet.int2204.group2.Sound;
 
 
-import java.io.File;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+
+import java.io.File;
+import java.io.PushbackReader;
 
 public class Sound {
     private Media media;
     private MediaPlayer mediaPlayer;
-    public void playMusic(String path) {
-        media = new Media(new File(path).toURI().toString());
-        mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.play();
+    public static boolean playCheck = true;
+    public void playMusic(String path, boolean playCheck) {
+        if(playCheck) {
+            media = new Media(new File(path).toURI().toString());
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+        }
     }
     public void stopMusic() {
         mediaPlayer.stop();
@@ -21,5 +26,13 @@ public class Sound {
     }
     public void changeVolume(double volume) {
         mediaPlayer.setVolume(volume);
+    }
+
+    public static boolean isPlayCheck() {
+        return playCheck;
+    }
+
+    public static void setPlayCheck(boolean playCheck) {
+        Sound.playCheck = playCheck;
     }
 }

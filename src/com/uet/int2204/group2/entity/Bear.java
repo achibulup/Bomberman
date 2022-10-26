@@ -1,11 +1,11 @@
 package com.uet.int2204.group2.entity;
 
-import java.util.Random;
-
 import com.uet.int2204.group2.controller.EntityController;
 import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.ResourceManager;
+
+import java.util.Random;
 
 public class Bear extends Enemy {
   public static final double SPEED = 70;

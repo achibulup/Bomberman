@@ -206,25 +206,25 @@ public class GameState {
     dashboardView.setFitHeight(48);
     dashboardView.setFitWidth(48 * 21);
 
-    point.setX(48 * 5);
+    point.setX(48 * 5-30);
     point.setY(29);
 
-    timer.setX(48 * 9);
+    timer.setX(48 * 9 + 17);
     timer.setY(29);
 
-    lives.setX(48 * 12 + 10);
+    lives.setX(48 * 12 + 35);
     lives.setY(29);
 
     namePlayer.setX(48 * 16);
     namePlayer.setY(29);
 
-    lives.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+    lives.setFont(Font.loadFont("file:target/classes/font/Minecrafter_Alt.ttf", 18));
     lives.setFill(Color.YELLOW);
-    point.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+    point.setFont(Font.loadFont("file:target/classes/font/Minecrafter_Alt.ttf", 18));
     point.setFill(Color.YELLOW);
-    timer.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+    timer.setFont(Font.loadFont("file:target/classes/font/Minecrafter_Alt.ttf", 18));
     timer.setFill(Color.YELLOW);
-    namePlayer.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+    namePlayer.setFont(Font.loadFont("file:target/classes/font/Minecrafter_Alt.ttf", 18));
     namePlayer.setFill(Color.YELLOW);
     root_.getChildren().addAll(dashboardView, point, timer, lives, namePlayer);
   }

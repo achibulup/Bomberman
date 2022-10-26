@@ -1,6 +1,7 @@
 package com.uet.int2204.group2.entity;
 
 import com.uet.int2204.group2.Bomberman;
+import com.uet.int2204.group2.Menu.GameMenu;
 import com.uet.int2204.group2.Sound.Sound;
 import com.uet.int2204.group2.graphics.Animation;
 import com.uet.int2204.group2.graphics.Sprite;
@@ -118,14 +119,14 @@ public class Bomb extends Tile implements SolidTile, DestroyableTile {
 
   @Override
   public void destroy() {
-    Sound sound = new Sound();
-    sound.playMusic(ResourceManager.sound[3]);
+    //Sound sound = new Sound();
+    GameMenu.sound.playMusic(ResourceManager.sound[3], true);
     explode();
   }
 
   public void explode() {
-    Sound sound = new Sound();
-    sound.playMusic(ResourceManager.sound[3]);
+    //Sound sound = new Sound();
+    GameMenu.sound.playMusic(ResourceManager.sound[3], true);
     markExpired();
   }
 }

@@ -1,9 +1,9 @@
 package com.uet.int2204.group2.controller;
 
-import java.util.Random;
-
 import com.uet.int2204.group2.entity.MovableEntity;
 import com.uet.int2204.group2.utils.Direction;
+
+import java.util.Random;
 
 
 public class AILowMoveController implements EntityController<MovableEntity> {

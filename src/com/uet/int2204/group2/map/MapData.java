@@ -1,10 +1,6 @@
 package com.uet.int2204.group2.map;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public class MapData {
   private int width;

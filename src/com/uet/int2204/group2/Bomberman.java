@@ -1,15 +1,9 @@
 package com.uet.int2204.group2;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import com.uet.int2204.group2.Menu.GameMenu;
 import com.uet.int2204.group2.Sound.Sound;
 import com.uet.int2204.group2.utils.Constants;
 import com.uet.int2204.group2.utils.ResourceManager;
-
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +16,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Bomberman extends Application {
     public static Scene scene;
@@ -51,7 +50,7 @@ public class Bomberman extends Application {
         imageView1.setTranslateX(30);
         imageView1.setTranslateY(50);
         imageView1.setScaleY(1.6);
-        start.playMusic(ResourceManager.sound[0]);
+        start.playMusic(ResourceManager.sound[0],true);
         start.loopMusic();
         root.getChildren().addAll(imageView, imageView1, gameMenu);
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (keyEvent) -> {
@@ -84,7 +83,7 @@ public class Bomberman extends Application {
         scene.setRoot(node);
     }
 
-    public static void closeApp() {
+    public static void closeApp( ) {
         ((Stage) scene.getWindow()).close();
     }
 

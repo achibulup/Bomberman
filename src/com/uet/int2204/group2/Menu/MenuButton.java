@@ -1,23 +1,15 @@
 package com.uet.int2204.group2.Menu;
 
-import com.uet.int2204.group2.Sound.Sound;
 import com.uet.int2204.group2.utils.ResourceManager;
 import javafx.geometry.Pos;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-
-import java.io.File;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class MenuButton extends StackPane {
     private Text text;

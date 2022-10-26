@@ -9,19 +9,17 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-public class Instruction extends StackPane {
+public class IconSound extends StackPane {
     private Text text;
     private Font font;
     private Image image;
-    public Pane pane;
-    public Instruction(String name) {
+
+    public IconSound(String name) {
         text = new Text(name);
-        font = Font.loadFont("file:target/classes/font/ARCADE.TTF", 28);
         text.setFont(font);
-        image = ResourceManager.imgOption;
+        image = ResourceManager.imgIconSound;
         ImageView imageView = new ImageView(image);
         imageView.setTranslateX(-80);
-        text.setTranslateX(-80);
         setAlignment(Pos.CENTER);
         getChildren().addAll(imageView,text);
     }

@@ -1,9 +1,7 @@
 package com.uet.int2204.group2.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.uet.int2204.group2.Bomberman;
+import com.uet.int2204.group2.Menu.GameMenu;
 import com.uet.int2204.group2.Sound.Sound;
 import com.uet.int2204.group2.controller.EntityController;
 import com.uet.int2204.group2.graphics.Animation;
@@ -11,6 +9,9 @@ import com.uet.int2204.group2.graphics.Sprite;
 import com.uet.int2204.group2.utils.Constants;
 import com.uet.int2204.group2.utils.Direction;
 import com.uet.int2204.group2.utils.ResourceManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Player extends MovableEntity {
   // the field MovableEntity.direction is the moving direction of the player.
@@ -122,8 +123,8 @@ public class Player extends MovableEntity {
     decreaseLives();
     this.setDying(true);
     this.animation = new Animation(ResourceManager.playerDead);
-    Sound sound = new Sound();
-    sound.playMusic(ResourceManager.sound[5]);
+    //Sound sound = new Sound();
+    GameMenu.sound.playMusic(ResourceManager.sound[5], true);
   }
 
   public void increasePoint(int bonus) {
@@ -215,8 +216,8 @@ public class Player extends MovableEntity {
     Bomb newBomb = new Bomb(getTileX(), getTileY(), this);
     this.bombList.add(newBomb);
     getWorld().addTile(getTileX(), getTileY(), newBomb);
-    Sound sound1 = new Sound();
-    sound1.playMusic(ResourceManager.sound[2]);
+    //Sound sound1 = new Sound();
+    GameMenu.sound.playMusic(ResourceManager.sound[2], true);
   }
 
   public void collect(Item item) {
@@ -224,8 +225,8 @@ public class Player extends MovableEntity {
       item.onCollect(this);
       item.markExpired();
     }
-    Sound sound = new Sound();
-    sound.playMusic(ResourceManager.sound[4]);
+    //Sound sound = new Sound();
+    GameMenu.sound.playMusic(ResourceManager.sound[4], true);
   }
 
 
