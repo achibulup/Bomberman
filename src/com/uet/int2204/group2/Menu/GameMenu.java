@@ -6,6 +6,8 @@ import com.uet.int2204.group2.component.GameState;
 import com.uet.int2204.group2.utils.ResourceManager;
 import javafx.animation.TranslateTransition;
 import javafx.scene.Parent;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -62,9 +64,11 @@ public class GameMenu extends Parent {
         /**
          * Menu option.
          */
-        Instruction btnInstruction = new Instruction(" Use the direction of key" + "\n"
-                + " to move the kernel, the" + "\n"
-                + " key space to set boom");
+        Instruction btnInstruction = new Instruction(
+                " Use the arrow keys to " + "\n"
+              + " move the bomber, space" + "\n"
+              + " to place bombs and D "  + "\n"
+              + " to detonate bombs");
         /**
          * Sound
          */
@@ -73,6 +77,13 @@ public class GameMenu extends Parent {
         IconSound iconSound1 = new IconSound("");
         IconSoundMute iconSoundMute1 = new IconSoundMute("");
 
+        game.setGameOver(() -> {
+            game.stop();
+            getChildren().remove(game.getRoot());
+            // Image image = ResourceManager.gameOver;
+            // ImageView imageView = new ImageView(image);
+            // getChildren().add(imageView);
+        });
 
         iconSound.setOnMouseClicked(mouseEvent -> {
             getChildren().add(icon2);
@@ -102,6 +113,7 @@ public class GameMenu extends Parent {
             effec.playMusic(ResourceManager.sound[1], true);
             effec.changeVolume(0.5);
             effec.loopMusic();
+            game.reload();
             switchToGame();
         });
 

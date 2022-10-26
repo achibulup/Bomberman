@@ -11,7 +11,9 @@ import com.uet.int2204.group2.controller.Algorithm.AIIntelligent;
 import com.uet.int2204.group2.controller.EntityController;
 import com.uet.int2204.group2.controller.KeyBoardPlayerController;
 import com.uet.int2204.group2.controller.KeyboardEnemyController;
+import com.uet.int2204.group2.controller.AIHighMoveController;
 import com.uet.int2204.group2.controller.AILowMoveController;
+import com.uet.int2204.group2.controller.AIMediumMoveController;
 import com.uet.int2204.group2.entity.Balloom;
 import com.uet.int2204.group2.entity.Bear;
 import com.uet.int2204.group2.entity.BombItem;
@@ -74,6 +76,8 @@ public class GameState {
 
   private Collection<EventHandler<KeyEvent>> inputHandlers = new ArrayList<>();
   private Collection<GameStateTrigger> triggers = new ArrayList<>();
+
+  private Runnable gameOver;
 
   public Text point = new Text();
   public Text timer = new Text();
@@ -207,6 +211,10 @@ public class GameState {
     return this.root;
   }
 
+  public void setGameOver(Runnable gameOver) {
+    this.gameOver = gameOver;
+  }
+
   public void setPoint(Pane root_, Text point, Text timer, Text lives, Text namePlayer) {
     Image dashboard = ResourceManager.dashboard;
     ImageView dashboardView = new ImageView(dashboard);
@@ -333,10 +341,10 @@ public class GameState {
             this.world.addEnemy(new Broom(i, j, AILowMoveController.INSTANCE));
             break;
           case '4':
-            this.world.addEnemy(new Bear(i, j, AILowMoveController.INSTANCE));
+            this.world.addEnemy(new Bear(i, j, AIHighMoveController.INSTANCE));
             break;
           case '5':
-            this.world.addEnemy(new Frog(i, j, AILowMoveController.INSTANCE));
+            this.world.addEnemy(new Frog(i, j, AIMediumMoveController.INSTANCE));
             break;
           case '6':
             this.world.addEnemy(new Fire(i, j, AILowMoveController.INSTANCE));
@@ -356,7 +364,7 @@ public class GameState {
     world.update(dt);
     runTriggers();
     if (this.world.isGameOver()) {
-      Bomberman.closeApp();
+      this.gameOver.run();
     }
     updateSetText(dt);
     adjustCanvasView();
