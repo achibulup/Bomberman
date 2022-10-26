@@ -226,6 +226,10 @@ public class GameState {
     this.gameLoop.start();
   }
 
+  public void stop() {
+    this.gameLoop.stop();
+  }
+
   public void reload() {
     this.inputHandlers.clear();
     loadMap(currentLevel = 1);
@@ -236,10 +240,6 @@ public class GameState {
   public void close() {
     this.gameLoop.stop();
     this.inputHandlers.clear();
-  }
-
-  public void stop() {
-    this.gameLoop.stop();
   }
 
   public void prevLevel() {
