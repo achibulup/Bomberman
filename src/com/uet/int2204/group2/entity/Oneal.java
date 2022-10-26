@@ -45,6 +45,7 @@ public class Oneal extends Enemy {
     }
     this.setDying(true);
     this.animation = new Animation(ResourceManager.onealDie);
+    this.getWorld().getPlayer().increasePoint(120);
   }
 
   public void control() {

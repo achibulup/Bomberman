@@ -51,6 +51,7 @@ public class Bear extends Enemy {
     }
     this.setDying(true);
     this.animation = new Animation(ResourceManager.bearDie);
+    this.getWorld().getPlayer().increasePoint(150);
   }
 
   public void control() {

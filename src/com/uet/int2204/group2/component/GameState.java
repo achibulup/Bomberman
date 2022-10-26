@@ -66,11 +66,13 @@ public class GameState {
   private Collection<EventHandler<KeyEvent>> inputHandlers = new ArrayList<>();
   private Collection<GameStateTrigger> triggers = new ArrayList<>();
 
-  Text point = new Text();
-  Text timer = new Text();
-  int timesLeft = 180 * 60;
-  Text lives = new Text();
-  Text namePlayer = new Text();
+  public Text point = new Text();
+  public Text timer = new Text();
+  public int timesLeft = 600 * 60;
+  public int init_point = 0;
+  public int level_played = 0;
+  public Text lives = new Text();
+  public Text namePlayer = new Text();
   
   int currentLevel;
   int playerLives;
@@ -83,7 +85,6 @@ public class GameState {
     this.canvas.setTranslateX(0);
     this.canvas.setTranslateY(48 + 8);
     this.root = new Pane(this.canvas);
-
     setPoint((Pane) getRoot(), point, timer, lives, namePlayer);
 
     this.playerLives = PLAYER_LIVES;
@@ -197,7 +198,7 @@ public class GameState {
     return this.root;
   }
 
-  public void setPoint(Pane root_, Text timer, Text point, Text lives, Text namePlayer) {
+  public void setPoint(Pane root_, Text point, Text timer, Text lives, Text namePlayer) {
     Image dashboard = ResourceManager.dashboard;
     ImageView dashboardView = new ImageView(dashboard);
     dashboardView.setX(0);
@@ -205,11 +206,11 @@ public class GameState {
     dashboardView.setFitHeight(48);
     dashboardView.setFitWidth(48 * 13);
 
-    timer.setX(48 * 2 + 10);
-    timer.setY(29);
-
-    point.setX(48 * 5 + 20);
+    point.setX(48 * 2 + 30);
     point.setY(29);
+
+    timer.setX(48 * 5 + 35);
+    timer.setY(29);
 
     lives.setX(48 * 8 - 10);
     lives.setY(29);
@@ -251,6 +252,8 @@ public class GameState {
       Bomberman.closeApp();
     } else {
       this.loadMap(++this.currentLevel);
+      level_played++;
+      this.world.getPlayer().setPoint(init_point + level_played * 1000);
     }
   }
 
@@ -331,7 +334,15 @@ public class GameState {
       if (getWorld().getPlayer() != null) {
         this.playerLives = getWorld().getPlayer().getLives();
       }
-      point.setText("1000" );
+      if (timesLeft<= 0) {
+        getWorld().setGameOver(true);
+        Bomberman.closeApp();
+      }
+      Player player_ = getWorld().getPlayer();
+      if (player_ != null) {
+        init_point = player_.getPoint();
+      }
+      point.setText("" + init_point);
       timer.setText("" + (timesLeft / 60) );
       lives.setText("" + this.playerLives);
       namePlayer.setText("Bomberman-N2");

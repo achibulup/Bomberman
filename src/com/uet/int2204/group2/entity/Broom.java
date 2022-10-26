@@ -50,6 +50,7 @@ public class Broom extends Enemy {
     }
     this.setDying(true);
     this.animation = new Animation(ResourceManager.broomDie);
+    this.getWorld().getPlayer().increasePoint(10);
   }
 
   public void control() {

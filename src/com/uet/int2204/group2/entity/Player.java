@@ -28,6 +28,8 @@ public class Player extends MovableEntity {
   private List<Bomb> bombList = new ArrayList<>();
   private boolean enteringPortal = false;
   private int lives = INITIAL_HEALTH;
+  private int init_point = 0;
+
 
   public Player(int tileX, int tileY) {
     super(tileX, tileY);
@@ -108,12 +110,27 @@ public class Player extends MovableEntity {
 
   public void decreaseLives() {
     this.lives--;
+    init_point -= 100;
+    if (init_point < 0) {
+      init_point = 0;
+    }
   }
 
   public void die() {
     decreaseLives();
     this.setDying(true);
     this.animation = new Animation(ResourceManager.playerDead);
+  }
+
+  public void increasePoint(int bonus) {
+    init_point += bonus;
+  }
+
+  public int getPoint() {
+    return init_point;
+  }
+  public void setPoint(int point) {
+    this.init_point = point;
   }
 
   @Override
@@ -202,6 +219,7 @@ public class Player extends MovableEntity {
       item.markExpired();
     }
   }
+
 
   /**
    * makes the player nudge if the player hit a corner.
