@@ -79,7 +79,7 @@ public class GameMenu extends Parent {
 
         GameOver gameOver1 = new GameOver("");
 
-        game.setGameOver(() -> {
+        game.setOnGameOver(() -> {
             effec.stopMusic();
             getChildren().add(gameOver);
             TranslateTransition tt = new TranslateTransition(Duration.seconds(2), gameOver);
@@ -93,6 +93,15 @@ public class GameMenu extends Parent {
             Bomberman.start.playMusic(ResourceManager.sound[0], true);
             getChildren().remove(game);
         });
+
+        game.setOnWin(() -> {
+          effec.stopMusic();
+          game.stop();
+          Bomberman.start.playMusic(ResourceManager.sound[0], true);
+          getChildren().add(menuStart);
+          getChildren().remove(game);
+        });
+        
 
         iconSound.setOnMouseClicked(mouseEvent -> {
             getChildren().add(icon2);

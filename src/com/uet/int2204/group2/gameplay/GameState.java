@@ -70,7 +70,8 @@ public class GameState extends Pane implements Closeable {
   private Collection<EventHandler<KeyEvent>> inputHandlers = new ArrayList<>();
   private Collection<GameStateTrigger> triggers = new ArrayList<>();
 
-  private Runnable gameOver;
+  private Runnable onWin;
+  private Runnable onGameOver;
 
   public Text point = new Text();
   public Text timer = new Text();
@@ -111,8 +112,11 @@ public class GameState extends Pane implements Closeable {
     return this;
   }
 
-  public void setGameOver(Runnable gameOver) {
-    this.gameOver = gameOver;
+  public void setOnGameOver(Runnable onGameOver) {
+    this.onGameOver = onGameOver;
+  }
+  public void setOnWin(Runnable onWin) {
+    this.onWin = onWin;
   }
 
   public void setPoint(Text point, Text timer, Text lives, Text namePlayer) {
@@ -265,7 +269,9 @@ public class GameState extends Pane implements Closeable {
     world.update(dt);
     runTriggers();
     if (this.world.isGameOver()) {
-      this.gameOver.run();
+      if (this.onGameOver != null) {
+        this.onGameOver.run();
+      }
     }
     updateSetText(dt);
     adjustCanvasView();
