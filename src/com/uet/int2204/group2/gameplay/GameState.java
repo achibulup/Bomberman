@@ -188,7 +188,6 @@ public class GameState extends Pane implements Closeable {
     } else {
       this.loadMap(++this.currentLevel);
       level_played++;
-      timesLeft = 180 * 60;
       this.world.getPlayer().setPoint(init_point + level_played * 1000);
     }
   }
@@ -198,6 +197,7 @@ public class GameState extends Pane implements Closeable {
   }
 
   public void loadMap(MapData mapData) {
+    this.timesLeft = 180 * 60;
     this.inputHandlers.removeIf((handler) -> handler instanceof EntityController);
     this.world = new World(mapData.getWidth(), mapData.getHeight());
     for (int i = 1; i <= world.getMapWidth(); ++i) {
@@ -289,19 +289,19 @@ public class GameState extends Pane implements Closeable {
   }
 
   void updateSetText(double dt) {
-    timesLeft -= dt;
+    this.timesLeft -= dt;
     if (getWorld().getPlayer() != null) {
       this.playerLives = getWorld().getPlayer().getLives();
     }
 
     if (getWorld().getPlayer() != null) {
       if (getWorld().getPlayer().getTime()) {
-        timesLeft += 60 * 60;
+        this.timesLeft += 60 * 60;
         getWorld().getPlayer().setIncreaseTime(false);
       }
     }
 
-    if (timesLeft <= 0) {
+    if (this.timesLeft <= 0) {
       getWorld().setGameOver(true);
     }
     Player player_ = getWorld().getPlayer();
@@ -309,7 +309,7 @@ public class GameState extends Pane implements Closeable {
       init_point = player_.getPoint();
     }
     point.setText("" + init_point);
-    timer.setText("" + (timesLeft / 60) );
+    timer.setText("" + (this.timesLeft / 60) );
     lives.setText("" + this.playerLives);
     namePlayer.setText("Bomberman-N2");
   }
