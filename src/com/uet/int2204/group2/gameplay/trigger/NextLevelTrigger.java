@@ -1,6 +1,6 @@
-package com.uet.int2204.group2.component.trigger;
+package com.uet.int2204.group2.gameplay.trigger;
 
-import com.uet.int2204.group2.component.GameState;
+import com.uet.int2204.group2.gameplay.GameState;
 import com.uet.int2204.group2.map.PlayerEnterPortalTrigger;
 
 public class NextLevelTrigger implements GameStateTrigger {

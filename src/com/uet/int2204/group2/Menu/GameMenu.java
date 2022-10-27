@@ -1,7 +1,7 @@
 package com.uet.int2204.group2.menu;
 
 import com.uet.int2204.group2.Bomberman;
-import com.uet.int2204.group2.component.GameState;
+import com.uet.int2204.group2.gameplay.GameState;
 import com.uet.int2204.group2.sound.Sound;
 import com.uet.int2204.group2.utils.ResourceManager;
 

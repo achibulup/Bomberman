@@ -1,4 +1,4 @@
-package com.uet.int2204.group2.component;
+package com.uet.int2204.group2.gameplay;
 
 import com.uet.int2204.group2.entity.movable.Player;
 import com.uet.int2204.group2.utils.IntProperty;

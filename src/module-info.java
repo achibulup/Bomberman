@@ -6,7 +6,7 @@ module com.uet.int2204.group2 {
 
     opens com.uet.int2204.group2 to javafx.fxml;
     exports com.uet.int2204.group2;
-    exports com.uet.int2204.group2.component;
+    exports com.uet.int2204.group2.gameplay;
     exports com.uet.int2204.group2.controller;
     exports com.uet.int2204.group2.entity;
     exports com.uet.int2204.group2.entity.movable;

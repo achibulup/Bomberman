@@ -1,13 +1,10 @@
-package com.uet.int2204.group2.component;
+package com.uet.int2204.group2.gameplay;
 
 import java.io.Closeable;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import com.uet.int2204.group2.Bomberman;
-import com.uet.int2204.group2.component.trigger.GameStateTrigger;
-import com.uet.int2204.group2.component.trigger.KeyboardLevelController;
-import com.uet.int2204.group2.component.trigger.NextLevelTrigger;
 import com.uet.int2204.group2.controller.AIHighMoveController;
 import com.uet.int2204.group2.controller.AILowMoveController;
 import com.uet.int2204.group2.controller.AIMediumMoveController;
@@ -31,6 +28,9 @@ import com.uet.int2204.group2.entity.tile.item.LifeItem;
 import com.uet.int2204.group2.entity.tile.item.PiercingFlameItem;
 import com.uet.int2204.group2.entity.tile.item.SpeedItem;
 import com.uet.int2204.group2.entity.tile.item.TimeItem;
+import com.uet.int2204.group2.gameplay.trigger.GameStateTrigger;
+import com.uet.int2204.group2.gameplay.trigger.KeyboardLevelController;
+import com.uet.int2204.group2.gameplay.trigger.NextLevelTrigger;
 import com.uet.int2204.group2.map.ActivatePortalTrigger;
 import com.uet.int2204.group2.map.BlinkBrickTrigger;
 import com.uet.int2204.group2.map.MapData;
