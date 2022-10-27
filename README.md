@@ -1,6 +1,6 @@
 # Bài tập lớn OOP - Bomberman Game
 
-Một phiên bản Java mô phỏng lại trò chơi [Bomberman](https://www.youtube.com/watch?v=mKIOVwqgSXM) kinh điển của NES.
+Một phiên bản Java mô phỏng lại trò chơi Bomberman kinh điển của NES.
 
 ---
 
@@ -11,6 +11,8 @@ Một phiên bản Java mô phỏng lại trò chơi [Bomberman](https://www.you
 #### - Lâm Trọng Vinh https://github.com/lamtrongvinh
 
 ---
+
+- [Video demo](https://youtu.be/_ZtJpHBUFIs)
 
 ## Mô tả về trò chơi
 
