@@ -1,10 +1,10 @@
 package com.uet.int2204.group2.controller;
 
-import com.uet.int2204.group2.entity.Enemy;
-import com.uet.int2204.group2.entity.Player;
-import com.uet.int2204.group2.utils.Direction;
-
 import java.util.Random;
+
+import com.uet.int2204.group2.entity.movable.Enemy;
+import com.uet.int2204.group2.entity.movable.Player;
+import com.uet.int2204.group2.utils.Direction;
 
 public class AIMediumMoveController implements EntityController<Enemy> {
 
@@ -13,15 +13,13 @@ public class AIMediumMoveController implements EntityController<Enemy> {
 
     @Override
     public void control(Enemy enemy) {
-        Player player = (Player) enemy.getWorld().getPlayer();
-        enemy.setDirection(mediumRanDir(player, enemy));
+        enemy.setDirection(mediumRanDir(enemy.getWorld().getPlayer(), enemy));
     }
 
     private static Direction mediumRanDir(Player player, Enemy enemy) {
         int dir = -1;
         if (player == null) {
             dir = rand.nextInt(4);
-
         } else {
             int vertical = rand.nextInt(2);
             if (vertical == 1) {

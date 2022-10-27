@@ -1,12 +1,11 @@
 package com.uet.int2204.group2.entity;
 
 import com.uet.int2204.group2.graphics.Sprite;
-
-import static com.uet.int2204.group2.utils.Constants.TILE_SIZE;
-
-import com.uet.int2204.group2.World;
+import com.uet.int2204.group2.map.World;
 
 import javafx.scene.canvas.GraphicsContext;
+
+import static com.uet.int2204.group2.utils.Constants.TILE_SIZE;
 
 public abstract class Entity {
   private World world; // the world this entity is in.
@@ -23,6 +22,10 @@ public abstract class Entity {
   // tells whether the entity is expired and should be removed from worlds and lists.
   public boolean isExpired() {
     return this.expired;
+  }
+
+  public void setExpired(boolean expired) {
+    this.expired = expired;
   }
 
   public void markExpired() {
@@ -63,6 +66,6 @@ public abstract class Entity {
   public abstract void update(double dt);
 
   public void renderTo(GraphicsContext target) {
-    getSprite().drawTo(target, getPixelX(), getPixelY());
+    getSprite().drawTo(target, getPixelX(), getPixelY(), TILE_SIZE, TILE_SIZE);
   }
 }

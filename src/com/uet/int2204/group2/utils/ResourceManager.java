@@ -1,14 +1,29 @@
 package com.uet.int2204.group2.utils;
 
+import java.io.FileInputStream;
 import java.nio.file.FileSystemNotFoundException;
 
 import com.uet.int2204.group2.graphics.AnimationData;
 import com.uet.int2204.group2.graphics.Sprite;
+import com.uet.int2204.group2.map.MapData;
 
 import javafx.scene.image.Image;
 
 public class ResourceManager {
   public static final Image background;
+
+  public static final Image dashboard;
+  public static final Image gameOver;
+  public static final Image logo;
+  public static final Image miniIcon;
+  public static final Image cursor;
+  public static final Image menuButton;
+  public static final Image imgOption;
+  public static final Image imgIconSound;
+  public static final Image imgIconSoundMute;
+  public static final String[] sound = new String[10];
+
+  public static final MapData[] levels;
 
   public static final Sprite grassNormal;
   public static final Sprite grassShadowed;
@@ -30,6 +45,13 @@ public class ResourceManager {
   public static final AnimationData flameItem;
   public static final AnimationData bombItem;
   public static final AnimationData speedItem;
+  public static final AnimationData lifeItem;
+  public static final AnimationData wallPassItem;
+  public static final AnimationData detonatorItem;
+  public static final AnimationData timeItem;
+
+  public static final Sprite portal;
+  public static final AnimationData portalBlinking;
 
   public static final AnimationData playerIdleUp;
   public static final AnimationData playerIdleDown;
@@ -42,6 +64,8 @@ public class ResourceManager {
   public static final AnimationData playerWalkRight;
 
   public static final AnimationData playerDead;
+
+  public static final AnimationData playerEnterPortal;
 
   public static final AnimationData bomb;
   public static final AnimationData upFlame;
@@ -64,6 +88,13 @@ public class ResourceManager {
   public static final AnimationData bear;
   public static final AnimationData bearDie;
 
+  public static final AnimationData frog;
+  public static final AnimationData frogDie;
+
+  public static final AnimationData fire;
+  public static final AnimationData fireDie;
+
+
   // call this function to force initialization of the class, thereby load all the resources
   public static void load() {
   }
@@ -84,8 +115,40 @@ public class ResourceManager {
     return Sprite.makeSpriteSheet(tryLoadImage(path), spriteWidth, spriteHeight);
   }
 
+  public static MapData tryLoadMapData(String path) {
+    try {
+      return new MapData(new FileInputStream("target/classes/" + path));
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   static {
-    background = tryLoadImage("sprites/background.png");
+    dashboard = tryLoadImage("sprites/dashboard.png");
+    background = tryLoadImage("sprites/background.jpg");
+    logo = tryLoadImage("sprites/Logo1.png");
+    miniIcon = tryLoadImage("sprites/icon.png");
+    menuButton = tryLoadImage("sprites/play8.png");
+    cursor = tryLoadImage("sprites/cursor.png");
+    imgOption = tryLoadImage("sprites/option.png");
+    imgIconSound = tryLoadImage("sprites/iconsound2.png");
+    imgIconSoundMute = tryLoadImage("sprites/iconsound.png");
+    gameOver = tryLoadImage("sprites/game_over.png");
+
+    sound[0] = "res/audio/homestart.mp3"; // bắt đầu game
+    sound[1] = "res/audio/gameaudio.wav"; // âm nền chơi game
+    sound[2] = "res/audio/putbomb.wav"; // đặt boom
+    sound[3] = "res/audio/boom.wav"; // bom nổ
+    sound[4] = "res/audio/getitem.wav"; // ăn item
+    sound[5] = "res/audio/dead2.wav"; // mất mạng
+    sound[6] = "res/audio/dead1.wav"; // qua màn
+
+    levels = new MapData[]{
+      tryLoadMapData("levels/level0.txt"),
+      tryLoadMapData("levels/level1.txt"),
+      tryLoadMapData("levels/level2.txt"),
+      tryLoadMapData("levels/level3.txt")
+    };
 
     Sprite[] grassSheet = tryLoadSpriteSheet("sprites/map/grass@2.png");
     grassNormal = grassSheet[0];
@@ -100,7 +163,7 @@ public class ResourceManager {
 
     Sprite wallImg = new Sprite(tryLoadImage("sprites/map/wall@1.png"));
     wall = wallImg;
-    
+
     Sprite[] edgesSheet = tryLoadSpriteSheet("sprites/map/edges@10.png");
     topEdge = edgesSheet[2];
     topLeftEdge = edgesSheet[1];
@@ -110,7 +173,7 @@ public class ResourceManager {
     bottomEdge = edgesSheet[5];
 
     Sprite[] itemExplosionSheet = tryLoadSpriteSheet(
-        "sprites/powerup/powerup_explosion@7.png", 52, 56);
+            "sprites/powerup/powerup_explosion@7.png", 52, 56);
     itemExplosion = new AnimationData(itemExplosionSheet, 0.075, 1);
 
     Sprite[] flameItemSheet = tryLoadSpriteSheet("sprites/powerup/longer_flame@2.png");
@@ -118,33 +181,53 @@ public class ResourceManager {
 
     Sprite[] bombItemSheet = tryLoadSpriteSheet("sprites/powerup/extra_bomb@2.png");
     bombItem = new AnimationData(bombItemSheet, 0.4);
-    
+
     Sprite[] speedItemSheet = tryLoadSpriteSheet("sprites/powerup/bonus_speed@2.png");
     speedItem = new AnimationData(speedItemSheet, 0.4);
+    
+    Sprite[] lifeItemSheet = tryLoadSpriteSheet("sprites/powerup/extra_life@2.png");
+    lifeItem = new AnimationData(lifeItemSheet, 0.4);
+
+    Sprite[] wallPassItemSheet = tryLoadSpriteSheet("sprites/powerup/go_through_brick@2.png");
+    wallPassItem = new AnimationData(wallPassItemSheet, 0.4);
+
+    Sprite[] detonatorItemSheet = tryLoadSpriteSheet("sprites/powerup/detonator@2.png");
+    detonatorItem = new AnimationData(detonatorItemSheet, 0.4);
+
+    Sprite[] timeItemSheet = tryLoadSpriteSheet("sprites/powerup/clock_time_item@2.png");
+    timeItem = new AnimationData(timeItemSheet, 0.4);
+
+    Sprite[] portalSheet = tryLoadSpriteSheet("sprites/map/portal@2.png");
+    portal = portalSheet[0];
+    portalBlinking = new AnimationData(portalSheet, 0.5);
 
     playerIdleUp = new AnimationData(tryLoadSpriteSheet("sprites/player/idle_up@1.png"));
     playerIdleDown = new AnimationData(tryLoadSpriteSheet("sprites/player/idle_down@1.png"));
     playerIdleLeft = new AnimationData(tryLoadSpriteSheet("sprites/player/idle_left@1.png"));
     playerIdleRight = new AnimationData(tryLoadSpriteSheet("sprites/player/idle_right@1.png"));
-    
+
     Sprite[] playerWalkUpSheet = tryLoadSpriteSheet("sprites/player/walking_up@4.png");
     playerWalkUp = new AnimationData(playerWalkUpSheet);
 
     Sprite[] playerWalkDownSheet = tryLoadSpriteSheet("sprites/player/walking_down@4.png");
     playerWalkDown = new AnimationData(playerWalkDownSheet);
-    
+
     Sprite[] playerWalkLeftSheet = tryLoadSpriteSheet("sprites/player/walking_left@4.png");
     playerWalkLeft = new AnimationData(playerWalkLeftSheet);
-    
+
     Sprite[] playerWalkRightSheet = tryLoadSpriteSheet("sprites/player/walking_right@4.png");
     playerWalkRight = new AnimationData(playerWalkRightSheet);
 
     Sprite[] playerDeadSheet = tryLoadSpriteSheet("sprites/player/dead@11.png");
     playerDead = new AnimationData(playerDeadSheet, 0.15, 1);
+
+    Sprite[] playerEnterPortalSheet = 
+        tryLoadSpriteSheet("sprites/player/enter_portal@16.png", 52, 56);
+    playerEnterPortal = new AnimationData(playerEnterPortalSheet, 0.14, 1);
     
     Sprite[] bombSheet = tryLoadSpriteSheet("sprites/bomb/bomb@4.png");
     bomb = new AnimationData(bombSheet, 0.4);
-    
+
     Sprite[] upFlameSheet = tryLoadSpriteSheet("sprites/bomb/explosion_up@6.png");
     upFlame = new AnimationData(upFlameSheet, 0.15, 1);
     Sprite[] downFlameSheet = tryLoadSpriteSheet("sprites/bomb/explosion_down@6.png");
@@ -162,13 +245,13 @@ public class ResourceManager {
 
     Sprite[] balloomSheet = tryLoadSpriteSheet("sprites/enemy/balloom@3.png");
     balloom = new AnimationData(balloomSheet);
-    
+
     Sprite[] balloomDieSheet = tryLoadSpriteSheet("sprites/enemy/balloom_die@5.png");
     balloomDie = new AnimationData(balloomDieSheet, 0.15, 1);
 
     Sprite[] onealSheet = tryLoadSpriteSheet("sprites/enemy/oneal@4.png");
     oneal = new AnimationData(onealSheet);
-    
+
     Sprite[] onealDieSheet = tryLoadSpriteSheet("sprites/enemy/oneal_die@5.png");
     onealDie = new AnimationData(onealDieSheet, 0.15, 1);
 
@@ -183,5 +266,17 @@ public class ResourceManager {
 
     Sprite[] bearDieSheet = tryLoadSpriteSheet("sprites/enemy/bear_die@5.png");
     bearDie = new AnimationData(bearDieSheet, 0.15, 1);
+
+    Sprite[] frogSheet = tryLoadSpriteSheet("sprites/enemy/frog@3.png");
+    frog = new AnimationData(frogSheet);
+    
+    Sprite[] frogDieSheet = tryLoadSpriteSheet("sprites/enemy/frog_die@7.png");
+    frogDie = new AnimationData(frogDieSheet, 0.15, 1);
+
+    Sprite[] fireSheet = tryLoadSpriteSheet("sprites/enemy/fire@4.png");
+    fire = new AnimationData(fireSheet);
+    
+    Sprite[] fireDieSheet = tryLoadSpriteSheet("sprites/enemy/fire_die@7.png");
+    fireDie = new AnimationData(fireDieSheet, 0.15, 1);
   }
 }

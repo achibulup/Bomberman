@@ -1,47 +1,47 @@
-package com.uet.int2204.group2.Menu;
+package com.uet.int2204.group2.menu;
 
+import com.uet.int2204.group2.utils.ResourceManager;
 import javafx.geometry.Pos;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.Glow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 public class MenuButton extends StackPane {
     private Text text;
+    private Font font;
+    private Image menuButton;
+
     public MenuButton(String name) {
         text = new Text(name);
-        text.setFont(Font.font(50));
-        Rectangle bg = new Rectangle(200,50);
-        bg.setOpacity(0);
-        //bg.setFill(Color.YELLOW);
-        bg.setEffect(new GaussianBlur(3.5));
-        setAlignment(Pos.CENTER_LEFT);
-        //setRotate(-1);
-        getChildren().addAll(bg,text);
+        font = Font.loadFont("file:target/classes/font/Minecrafter_Alt.ttf", 25);
+        text.setFont(font);
+        menuButton = ResourceManager.menuButton;
+        ImageView imageView = new ImageView(menuButton);
+        imageView.setScaleY(1.5);
+        setAlignment(Pos.CENTER);
+        getChildren().addAll(imageView, text);
         setOnMouseEntered(event -> {
-            bg.setTranslateX(20);
+            imageView.setTranslateX(20);
             text.setTranslateX(20);
-            bg.setFill(Color.BLACK);
-            text.setFill(Color.WHITE);
+            text.setFill(Color.GREEN);
         });
-//
+
         setOnMouseExited(event -> {
-            bg.setTranslateX(0);
+            imageView.setTranslateX(0);
             text.setTranslateX(0);
-            bg.setFill(Color.BLACK);
             text.setFill(Color.BLACK);
 
         });
 
-        DropShadow drop = new DropShadow(50, Color.BLUE);
+        DropShadow drop = new DropShadow(100, Color.BLUE);
         drop.setInput(new Glow());
 
         setOnMousePressed(event -> setEffect(drop));
         setOnMouseReleased(event -> setEffect(null));
-
     }
 }

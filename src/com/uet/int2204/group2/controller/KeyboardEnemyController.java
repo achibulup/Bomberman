@@ -1,12 +1,11 @@
 package com.uet.int2204.group2.controller;
 
-import java.util.Collection;
-
-import com.uet.int2204.group2.entity.Enemy;
+import com.uet.int2204.group2.entity.movable.Enemy;
 import com.uet.int2204.group2.utils.Direction;
-
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
+
+import java.util.Collection;
 
 public class KeyboardEnemyController extends KeyBoardEntityController<Enemy> {
   private Direction direction = Direction.NONE;

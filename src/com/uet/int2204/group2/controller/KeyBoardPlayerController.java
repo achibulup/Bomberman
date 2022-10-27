@@ -1,18 +1,18 @@
 package com.uet.int2204.group2.controller;
 
+import com.uet.int2204.group2.entity.movable.Player;
+import com.uet.int2204.group2.utils.Direction;
+import javafx.event.EventHandler;
+import javafx.scene.input.KeyEvent;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.uet.int2204.group2.entity.Player;
-import com.uet.int2204.group2.utils.Direction;
-
-import javafx.event.EventHandler;
-import javafx.scene.input.KeyEvent;
-
 public class KeyBoardPlayerController extends KeyBoardEntityController<Player> {
   private List<Direction> directions = new ArrayList<>();
   private boolean placeBomb = false;
+  private boolean detonate = false;
 
   public KeyBoardPlayerController() {
     super();
@@ -26,6 +26,10 @@ public class KeyBoardPlayerController extends KeyBoardEntityController<Player> {
   public void control(Player player) {
     if (this.placeBomb) {
       player.placeBomb();
+    }
+    if (this.detonate) {
+      player.detonateBomb();
+      this.detonate = false;
     }
     if (this.directions.isEmpty()) {
       player.setDirection(Direction.NONE);
@@ -53,6 +57,9 @@ public class KeyBoardPlayerController extends KeyBoardEntityController<Player> {
           break;
         case SPACE:
           placeBomb = true;
+          break;
+        case D:
+          detonate = true;
           break;
         default:
       }
