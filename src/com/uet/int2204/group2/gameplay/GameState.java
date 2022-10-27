@@ -182,7 +182,9 @@ public class GameState extends Pane implements Closeable {
 
   public void nextLevel() {
     if (this.currentLevel == ResourceManager.levels.length) {
-      Bomberman.closeApp();
+      if (this.onWin != null) {
+        this.onWin.run();
+      }
     } else {
       this.loadMap(++this.currentLevel);
       level_played++;
