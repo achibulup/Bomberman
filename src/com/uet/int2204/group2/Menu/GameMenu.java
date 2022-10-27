@@ -88,10 +88,11 @@ public class GameMenu extends Parent {
             tt.play();
             tt.setOnFinished(evt -> {
                 getChildren().remove(gameOver);
+                getChildren().add(menuStart);
             });
             game.stop();
             Bomberman.start.playMusic(ResourceManager.sound[0], true);
-            getChildren().remove(game.getRoot());
+            getChildren().remove(game);
         });
 
         iconSound.setOnMouseClicked(mouseEvent -> {
@@ -123,6 +124,7 @@ public class GameMenu extends Parent {
             effec.changeVolume(0.5);
             effec.loopMusic();
             game.reload();
+            getChildren().remove(menuStart);
             switchToGame();
         });
 
@@ -167,10 +169,8 @@ public class GameMenu extends Parent {
         });
 
         Bomberman.scene.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
-
             if (keyEvent.getCode() == KeyCode.ESCAPE) {
                 game.stop();
-                getChildren().remove(menuStart);
                 getChildren().add(pause);
                 if (isClickNewGame) {
                     getChildren().add(icon3);
@@ -184,7 +184,7 @@ public class GameMenu extends Parent {
                 }
                 TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), instruction);
                 tt1.setToX(menuStart.getTranslateX());
-                getChildren().remove(game.getRoot());
+                getChildren().remove(game);
             }
         });
 
@@ -215,7 +215,7 @@ public class GameMenu extends Parent {
 
     public void switchToGame() {
         game.start();
-        getChildren().add(game.getRoot());
+        getChildren().add(game);
         Bomberman.setInputHandlers(game.getInputHandlers());
     }
 

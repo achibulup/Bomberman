@@ -1,5 +1,6 @@
 package com.uet.int2204.group2.component;
 
+import java.io.Closeable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
@@ -63,7 +64,7 @@ import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 
-public class GameState {
+public class GameState extends Pane implements Closeable {
   public static int CANVAS_WIDTH = Bomberman.WIDTH;
   public static int CANVAS_HEIGHT = Bomberman.HEIGHT;
 
@@ -71,7 +72,6 @@ public class GameState {
 
   private World world;
   private Canvas canvas;
-  private Parent root;
   private AnimationTimer gameLoop;
 
   private Collection<EventHandler<KeyEvent>> inputHandlers = new ArrayList<>();
@@ -97,8 +97,8 @@ public class GameState {
     this.canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
     this.canvas.setTranslateX(0);
     this.canvas.setTranslateY(48 + 8);
-    this.root = new Pane(this.canvas);
-    setPoint((Pane) getRoot(), point, timer, lives, namePlayer);
+    getChildren().add(this.canvas);
+    setPoint(point, timer, lives, namePlayer);
 
     this.playerLives = PLAYER_LIVES;
     loadMap(currentLevel = 1);
@@ -208,14 +208,14 @@ public class GameState {
   }
 
   public Parent getRoot() {
-    return this.root;
+    return this;
   }
 
   public void setGameOver(Runnable gameOver) {
     this.gameOver = gameOver;
   }
 
-  public void setPoint(Pane root_, Text point, Text timer, Text lives, Text namePlayer) {
+  public void setPoint(Text point, Text timer, Text lives, Text namePlayer) {
     Image dashboard = ResourceManager.dashboard;
     ImageView dashboardView = new ImageView(dashboard);
     dashboardView.setX(0);
@@ -243,7 +243,7 @@ public class GameState {
     timer.setFill(Color.YELLOW);
     namePlayer.setFont(Font.loadFont("file:target/classes/font/Minecrafter_Alt.ttf", 18));
     namePlayer.setFill(Color.YELLOW);
-    root_.getChildren().addAll(dashboardView, point, timer, lives, namePlayer);
+    getChildren().addAll(dashboardView, point, timer, lives, namePlayer);
   }
 
   public Iterable<EventHandler<KeyEvent>> getInputHandlers() {
@@ -264,7 +264,7 @@ public class GameState {
     this.inputHandlers.add(new KeyboardLevelController());
   }
 
-  // this function should be called when the instance is not used anymore.
+  @Override
   public void close() {
     this.gameLoop.stop();
     this.inputHandlers.clear();
