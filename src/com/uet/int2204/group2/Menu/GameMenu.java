@@ -82,15 +82,16 @@ public class GameMenu extends Parent {
         game.setGameOver(() -> {
             effec.stopMusic();
             getChildren().add(gameOver);
-            TranslateTransition tt = new TranslateTransition(Duration.seconds(1), gameOver);
+            TranslateTransition tt = new TranslateTransition(Duration.seconds(2), gameOver);
             tt.setToX(90);
             tt.play();
             tt.setOnFinished(evt -> {
                 getChildren().remove(gameOver);
+                getChildren().add(menuStart);
             });
             game.stop();
             Bomberman.start.playMusic(ResourceManager.sound[0], true);
-            getChildren().remove(game.getRoot());
+            getChildren().remove(game);
         });
 
         iconSound.setOnMouseClicked(mouseEvent -> {
@@ -122,6 +123,7 @@ public class GameMenu extends Parent {
             effec.changeVolume(0.5);
             effec.loopMusic();
             game.reload();
+            getChildren().remove(menuStart);
             switchToGame();
         });
 
@@ -166,10 +168,8 @@ public class GameMenu extends Parent {
         });
 
         Bomberman.scene.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
-
             if (keyEvent.getCode() == KeyCode.ESCAPE) {
                 game.stop();
-                getChildren().remove(menuStart);
                 getChildren().add(pause);
                 if (isClickNewGame) {
                     getChildren().add(icon3);
@@ -181,10 +181,9 @@ public class GameMenu extends Parent {
                         getChildren().add(icon3);
                     }
                 }
-
                 TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), instruction);
                 tt1.setToX(menuStart.getTranslateX());
-                getChildren().remove(game.getRoot());
+                getChildren().remove(game);
             }
         });
 
@@ -215,7 +214,7 @@ public class GameMenu extends Parent {
 
     public void switchToGame() {
         game.start();
-        getChildren().add(game.getRoot());
+        getChildren().add(game);
         Bomberman.setInputHandlers(game.getInputHandlers());
     }
 
