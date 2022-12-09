@@ -10,7 +10,7 @@ public class PlayerEnterPortalTrigger implements SingleUseWorldTrigger {
     Player player = target.getPlayer();
     if (player == null) return false;
     Tile tile = target.getTile(player.getTileX(), player.getTileY());
-    return tile instanceof Portal && ((Portal) tile).isBlinking();
+    return tile instanceof Portal portal && portal.isBlinking();
   }
 
   @Override
@@ -19,14 +19,14 @@ public class PlayerEnterPortalTrigger implements SingleUseWorldTrigger {
     if (player == null) {
       throw new AssertionError("Player is null!");
     }
-    Tile portal = target.getTile(player.getTileX(), player.getTileY());
-    if (!(portal instanceof Portal)) {
+    Tile tile = target.getTile(player.getTileX(), player.getTileY());
+    if (!(tile instanceof Portal portal)) {
       throw new AssertionError(
           String.format("the player's tile: (%d, %d) is not a portal!",
                         player.getTileX(), player.getTileY()));
     }
     player.setEnteringPortal();
     player.moveTo(portal.getPixelX(), portal.getPixelY());
-    ((Portal) portal).setBlinking(false);
+    portal.setBlinking(false);
   }
 }

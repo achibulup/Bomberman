@@ -78,8 +78,8 @@ public class Bomb extends Tile implements SolidTile, DestroyableTile {
         if (nextTile instanceof Portal) {
           break;
         }
-        if (nextTile instanceof DestroyableTile) {
-          ((DestroyableTile) nextTile).destroy();
+        if (nextTile instanceof DestroyableTile tile) {
+          tile.destroy();
           if (strength == 0) {
             break;
           }

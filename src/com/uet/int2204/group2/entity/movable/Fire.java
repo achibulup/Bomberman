@@ -50,8 +50,8 @@ public class Fire extends Enemy implements SimpleEnemy {
 
   @Override
   public Runnable getInteractionToTile(Tile tile) {
-    if (tile instanceof Item) {
-      return () -> ((Item) tile).destroy();
+    if (tile instanceof Item item) {
+      return () -> item.destroy();
     }
     return null;
   }

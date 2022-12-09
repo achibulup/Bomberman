@@ -162,12 +162,12 @@ public class World {
         for (var col : this.map) {
             for (var tiles : col) {
                 for (Tile tile : tiles) {
-                    if (tile instanceof Portal) {
-                        ((Portal) tile).setBlinking(true);
-                    } else if (tile instanceof Brick) {
-                        Entity hidden = ((Brick) tile).getHiddenEntity();
-                        if (hidden instanceof Portal) {
-                            ((Portal) hidden).setBlinking(true);
+                    if (tile instanceof Portal portal) {
+                        portal.setBlinking(true);
+                    } else if (tile instanceof Brick brick) {
+                        Entity hidden = brick.getHiddenEntity();
+                        if (hidden instanceof Portal portal) {
+                            portal.setBlinking(true);
                         }
                     }
                 }

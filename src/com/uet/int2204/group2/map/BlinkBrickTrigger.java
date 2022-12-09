@@ -17,10 +17,9 @@ public class BlinkBrickTrigger implements SingleUseWorldTrigger {
     for (int i = 1; i <= width; ++i) {
       for (int j = 1; j <= height; ++j) {
         Tile tile = target.getTile(i, j);
-        if (tile instanceof Brick) {
-          Brick brick = (Brick) tile;
+        if (tile instanceof Brick brick) {
           if (brick.getHiddenEntity() instanceof Item) {
-            ((Brick) tile).setSparky(true);
+            brick.setSparky(true);
           }
         }
       }

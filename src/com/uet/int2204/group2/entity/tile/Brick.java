@@ -55,10 +55,10 @@ public class Brick extends Tile implements SolidTile, DestroyableTile {
 
   @Override
   public void onRemoval() {
-    if (this.hidden instanceof Tile) {
-      getWorld().addTile(getTileX(), getTileY(), (Tile) getHiddenEntity());
-    } else if (this.hidden instanceof Enemy) {
-      getWorld().addEnemy((Enemy) getHiddenEntity());
+    if (this.hidden instanceof Tile tile) {
+      getWorld().addTile(getTileX(), getTileY(), tile);
+    } else if (this.hidden instanceof Enemy enemy) {
+      getWorld().addEnemy(enemy);
     }
   }
 

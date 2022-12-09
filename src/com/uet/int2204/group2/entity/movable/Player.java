@@ -173,8 +173,8 @@ public class Player extends MovableEntity {
 
   @Override
   public Runnable getInteractionToTile(Tile tile) {
-    if (tile instanceof Item) {
-      return () -> this.collect((Item) tile);
+    if (tile instanceof Item item) {
+      return () -> this.collect(item);
     }
     return null;
   }
